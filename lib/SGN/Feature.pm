@@ -28,6 +28,8 @@ sub feature_name {
     return lc $name;
 }
 
+*name = \&feature_name;
+
 has 'description' => (
     documentation => <<'',
 short plaintext description of the feature, user-visible.  May be used in default views for crossreferences and so forth.
