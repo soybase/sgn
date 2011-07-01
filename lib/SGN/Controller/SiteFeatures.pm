@@ -29,7 +29,8 @@ xrefs.
 
 Public path: /api/v1/feature_xrefs
 
-Web service interface to C<$c-E<gt>feature_xrefs>.
+Web service interface to C<$c-E<gt>feature_xrefs>.  Depending on the
+requested Content-Type, will return HTML, JSON, etc, for the xrefs.
 
 =cut
 
