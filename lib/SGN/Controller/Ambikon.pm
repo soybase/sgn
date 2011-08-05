@@ -25,5 +25,17 @@ sub theme_template : Path('/ambikon/theme_template') {
     $c->stash->{template} = '/ambikon/theme_template.mas';
 }
 
+=head2 search_xrefs
+
+service to provide Ambikon xrefs for all the defined SiteFeatures
+
+=cut
+
+sub search_xrefs :Path('/ambikon/xrefs/search') Args(0) {
+    my ( $self, $c ) = @_;
+
+    $c->go('/sitefeatures/feature_xrefs');
+}
+
 
 1;
