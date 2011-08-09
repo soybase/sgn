@@ -289,8 +289,8 @@ my $ontology_subtitle =  !(grep { /^$user_type$/ } ('curator', 'submitter', 'seq
      collapsible => 1,
  &>
 
-     <& /sitefeatures/mixed/xref_set/link.mas,
-        xrefs => [ grep { $_->feature->feature_name ne 'gbrowse2' } @$xrefs ],
+     <& /ambikon/xrefs/mixed/xref_set/link.mas,
+        xrefs => [ grep { $_->subsite->name ne 'gbrowse2' } @$xrefs ],
       &>
 
 </&>

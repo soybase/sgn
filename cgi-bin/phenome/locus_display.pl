@@ -48,20 +48,6 @@ if ( !$locus->get_locus_id() && $action ne 'new' && $action ne 'store' ) {
     $c->throw_404('No locus exists for this identifier');
 }
 
-my @locus_xrefs =
-
-  # 4. look up xrefs for all of them
-  map $c->feature_xrefs( $_, { exclude => 'locuspages' } ),
-
-  # 3. plus primary locus name
-  $locus->get_locus_name,
-
-  # 2. list of locus alias strings
-  map $_->get_locus_alias,
-
-  # 1. list of locus alias objects
-  $locus->get_locus_aliases( 'f', 'f' );
-
 $c->forward_to_mason_view(
     '/locus/index.mas',
     action   => $action,
@@ -69,8 +55,31 @@ $c->forward_to_mason_view(
     locus_id => $locus_id,
     user     => $user,
     dbh      => $dbh,
-    xrefs    => \@locus_xrefs,
+    xrefs    => [ get_locus_xrefs( $c, $locus ) ],
 );
 
 #############
 
+
+sub get_locus_xrefs {
+    my ( $c, $locus ) = @_;
+
+    my @queries = (
+        # 3. plus primary locus name
+        $locus->get_locus_name,
+        # 2. convert to list of locus alias strings
+        map $_->get_locus_alias,
+        # 1. list of locus alias objects
+        $locus->get_locus_aliases( 'f', 'f' )
+     );
+
+    if( my $ais = $c->forward('/ambikon/server') ) {
+        my $data = $ais->search_xrefs(
+            queries => \@queries,
+            hints => { exclude => ['loci','locuspages', 'locus pages'] },
+           );
+        return map @{$_->{xrefs} || []}, map values %{$data->{$_} || {}}, @queries;
+    } else {
+        return map $c->feature_xrefs( $_, { exclude => 'locuspages' } ), @queries;
+    }
+}
