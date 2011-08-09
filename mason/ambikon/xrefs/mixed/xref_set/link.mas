@@ -1,0 +1,39 @@
+<%args>
+  $xrefs
+  $exclude => []
+</%args>
+
+% if( %by_subsite ) {
+    <dl class="xref">
+%     for my $f ( sort keys %by_subsite ) {
+        <dt><% $f |h %></dt>
+        <dd>
+%         my $multi_comp = resolve_xref_component( $m, $by_subsite{$f}->[0]->subsite, '/ambikon/xrefs/%f/xref_set/link.mas' );
+          <& $multi_comp, xrefs => $by_subsite{$f} &>
+        </dd>
+%     }
+    </dl>
+% } else {
+
+  <div class="ghosted">none found</div>
+
+% }
+
+<%once>
+   use SGN::View::Mason::CrossReference 'resolve_xref_component';
+</%once>
+
+<%init>
+
+  # group the xrefs by subsite name
+  my %by_subsite;
+  for my $x ( @$xrefs ) {
+      push @{$by_subsite{$x->subsite->description}}, $x;
+  }
+
+  #filter xrefs if necessary
+  $exclude = [ $exclude ] unless ref $exclude;
+
+  delete $by_subsite{$_} for @$exclude;
+
+</%init>
