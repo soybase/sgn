@@ -2,8 +2,6 @@ package SGN::Controller::SiteFeatures;
 use Moose;
 use namespace::autoclean;
 
-use SGN::View::Mason::CrossReference 'resolve_xref_component';
-
 BEGIN {extends 'Catalyst::Controller::REST'; }
 
 __PACKAGE__->config(
