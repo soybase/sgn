@@ -42,6 +42,9 @@ sub search_xrefs : Path('/api/v1/feature_xrefs') Path('/ambikon/xrefs/search') :
     }
 
     my $xrefs = [ map $c->feature_xrefs( $_, $args ), $c->req->param('q') ];
+
+    $_->tags( [ $_->feature->description || $_->feature->name ] ) for @$xrefs;
+
     $c->stash(
         template => "/ambikon/xrefs/mixed/xref_set/$type.mas",
 
