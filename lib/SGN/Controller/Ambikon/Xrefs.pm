@@ -1,4 +1,4 @@
-package SGN::Controller::SiteFeatures;
+package SGN::Controller::Ambikon::Xrefs;
 use Moose;
 use namespace::autoclean;
 
@@ -14,25 +14,22 @@ __PACKAGE__->config(
 
 =head1 NAME
 
-SGN::Controller::SiteFeatures - Catalyst Controller
-
-=head1 DESCRIPTION
-
-Catalyst controller for web services involving site features and
-xrefs.
+SGN::Controller::Ambikon::Xrefs - controller for emitting Ambikon
+xrefs with the Ambikon subsite web service API
 
 =head1 PUBLIC ACTIONS
 
-=head2 feature_xrefs
+=head2 search_xrefs
 
-Public path: /api/v1/feature_xrefs
+Public paths: /ambikon/xrefs/search /api/v1/feature_xrefs
 
-Web service interface to C<$c-E<gt>feature_xrefs>.  Depending on the
-requested Content-Type, will return HTML, JSON, etc, for the xrefs.
+Ambikon-compatible web service interface to C<$c-E<gt>feature_xrefs>.
+Depending on the requested Content-Type, will return HTML, JSON, etc,
+for the xrefs.
 
 =cut
 
-sub feature_xrefs :Path('/api/v1/feature_xrefs') :Args(0) {
+sub search_xrefs : Path('/api/v1/feature_xrefs') Path('/ambikon/xrefs/search') :Args(0) {
     my ( $self, $c ) = @_;
 
     no warnings 'uninitialized';
@@ -46,7 +43,7 @@ sub feature_xrefs :Path('/api/v1/feature_xrefs') :Args(0) {
 
     my $xrefs = [ map $c->feature_xrefs( $_, $args ), $c->req->param('q') ];
     $c->stash(
-        template => "/sitefeatures/mixed/xref_set/$type.mas",
+        template => "/ambikon/xrefs/mixed/xref_set/$type.mas",
 
         xrefs => $xrefs,
         rest  => $xrefs,
