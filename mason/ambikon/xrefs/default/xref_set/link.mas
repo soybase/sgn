@@ -2,7 +2,7 @@
   $xrefs => []
 </%args>
 % if( @$xrefs ) {
-%   my $single_comp = resolve_xref_component( $m, $xrefs->[0]->subsite, '/ambikon/xrefs/%f/xref/link.mas' );
+%   my $single_comp = resolve_xref_component( $m, $xrefs->[0]->tags, '/ambikon/xrefs/%f/xref/link.mas' );
     <ul class="xref xref_link xref_link_<% $xrefs->[0]->subsite->name %>">
 %     for my $x (@$xrefs) {
         <li><& $single_comp, xref => $x &>

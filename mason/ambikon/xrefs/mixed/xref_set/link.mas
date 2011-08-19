@@ -3,13 +3,14 @@
   $exclude => []
 </%args>
 
-% if( %by_subsite ) {
+% if( %by_category ) {
     <dl class="xref">
-%     for my $f ( sort keys %by_subsite ) {
+%     for my $f ( sort keys %by_category ) {
         <dt><% $f |h %></dt>
         <dd>
-%         my $multi_comp = resolve_xref_component( $m, $by_subsite{$f}->[0]->subsite, '/ambikon/xrefs/%f/xref_set/link.mas' );
-          <& $multi_comp, xrefs => $by_subsite{$f} &>
+%         my $x1 = $by_category{$f}->[0];
+%         my $multi_comp = resolve_xref_component( $m, $x1->tags, '/ambikon/xrefs/%f/xref_set/link.mas' );
+          <& $multi_comp, xrefs => $by_category{$f} &>
         </dd>
 %     }
     </dl>
@@ -25,15 +26,15 @@
 
 <%init>
 
-  # group the xrefs by subsite name
-  my %by_subsite;
+  # group the xrefs by their first tag
+  my %by_category;
   for my $x ( @$xrefs ) {
-      push @{$by_subsite{$x->subsite->description}}, $x;
+      push @{$by_category{ $x->tags->[0] }}, $x;
   }
 
   #filter xrefs if necessary
   $exclude = [ $exclude ] unless ref $exclude;
 
-  delete $by_subsite{$_} for @$exclude;
+  delete $by_category{$_} for @$exclude;
 
 </%init>
