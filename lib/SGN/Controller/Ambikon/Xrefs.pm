@@ -29,7 +29,14 @@ for the xrefs.
 
 =cut
 
-sub search_xrefs : Path('/api/v1/feature_xrefs') Path('/ambikon/xrefs/search') :Args(0) {
+sub search_xrefs :
+      ActionClass('REST')
+      Path('/api/v1/feature_xrefs')
+      Path('/ambikon/xrefs/search')
+      Args(0) {
+}
+
+sub search_xrefs_GET {
     my ( $self, $c ) = @_;
 
     no warnings 'uninitialized';
