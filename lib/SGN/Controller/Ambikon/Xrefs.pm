@@ -48,16 +48,26 @@ sub search_xrefs_GET {
         $args->{exclude} = \@exclude;
     }
 
-    my $xrefs = [ map $c->feature_xrefs( $_, $args ), $c->req->param('q') ];
+    my $xref_set = Ambikon::XrefSet->new({ xrefs => [ map $c->feature_xrefs( $_, $args ), $c->req->param('q') ] });
 
-    $_->tags( [ $_->feature->description || $_->feature->name ] ) for @$xrefs;
+    $_->tags( [ $_->feature->description || $_->feature->name ] ) for @{$xref_set->xrefs};
 
     $c->stash(
         template => "/ambikon/xrefs/mixed/xref_set/$type.mas",
 
-        xrefs => $xrefs,
-        rest  => $xrefs,
+        xrefs => $xref_set->xrefs,
+        rest  => $xref_set,
        );
+
+    if( my $renderings = $c->req->param('renderings') ) {
+        my %r = map { lc $_ => 1 } ( ref $renderings eq 'ARRAY' ? @$renderings : ( $renderings ) );
+        if( $r{'text/html'} ) {
+            my $set_html =
+            $xref_set->renderings->{'text/html'} =
+                $c->view('BareMason')->render( $c, $c->stash->{template} );
+        }
+    }
+
 }
 
 =head1 AUTHOR
