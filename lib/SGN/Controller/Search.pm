@@ -42,7 +42,7 @@ sub stash_tab_data :Private {
             ['/search/family', 'Unigene Families' ],
             ['/search/markers','Markers'],
             ['/search/bacs','Genomic Clones'],
-            ['/search/est_library','ESTs'],
+            ['/search/est','ESTs'],
             ['/search/images','Images'],
             ['/search/directory','People'],
             ['/search/template_experiment_platform', 'Expression'],
@@ -58,8 +58,7 @@ sub stash_tab_data :Private {
                 \&family_tab,
                 \&marker_tab,
                 \&bac_tab,
-               # \&est_library_submenu,
-                \&est_tab,
+                \&est_library_submenu,
                 \&images_tab,
                 \&directory_tab,
                 \&template_experiment_platform_submenu,
@@ -70,6 +69,7 @@ sub stash_tab_data :Private {
         phenotype                    => 2,
         phenotypes                   => 2,
         phenotype_qtl_trait          => 2,
+        cvterm_name                  => 2,
         qtl                          => 2,
         trait                        => 2,
         unigene                      => 3,
@@ -147,10 +147,11 @@ sub search :Path('/search/') :Args() {
 
     if( $term eq 'direct_search.pl' ) {
         $term = $c->req->param('search');
+        if ($term eq 'cvterm_name') {$term = 'qtl';}
         $c->res->redirect('/search/'.$term, 301 );
         return;
     }
-
+    
     $c->stash->{term} = $term;
     my $tab_html      = $c->stash->{tab_html_function}($term);
 
@@ -185,19 +186,23 @@ sub annotation_tab {
 #display a second level of tabs, allowing the user to choose between EST and library searches
 sub est_library_submenu {
         my @tabs = (
-                    ['?search=est','ESTs'],
-                    ['?search=library','Libraries']);
-        my @tabfuncs = (\&est_tab, \&library_tab);
+                    ['/search/est','ESTs'],
+                    ['/search/est_library','Libraries']);
+        my $tabfuncs = {
+            est         => \&est_tab,
+            est_library => \&library_tab,
+            library     => \&library_tab,
+        };
+        my $tab_nums = {
+            est         => 0,
+            est_library => 1,
+            library     => 1,
+        };
 
         my $term = $c->stash->{term} || 'est';
-        my $tabsel =
-            ($term=~ /est/i)        ? 0
-          : ($term =~ /library/i)   ? 1
-          : 0 ;
 
-        my $tabs = modesel(\@tabs, $tabsel); #print out the tabs
-        my $response = sprintf "$tabs<div>%s</div>",
-            $c->stash->{tab_functions}[$c->stash->{name_to_num}->($term)];
+        my $tabs = modesel(\@tabs, $tab_nums->{$term});
+        my $response = sprintf "$tabs<div>%s</div>", $tabfuncs->{$term}();
         return $response;
 }
 
@@ -301,7 +306,7 @@ sub phenotype_submenu {
 
         my $term = $c->stash->{term} || 'phenotype';
 
-        $term = 'qt' if $term eq 'cvterm_name';
+        $term = 'qtl' if $term eq 'cvterm_name';
 
         my $tabsel =
             ($term =~ /phenotype/i)  ? 0
