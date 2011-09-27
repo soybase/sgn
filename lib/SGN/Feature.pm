@@ -29,6 +29,7 @@ sub feature_name {
 }
 
 *name = \&feature_name;
+*shortname = \&feature_name;
 
 has 'description' => (
     documentation => <<'',

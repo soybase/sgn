@@ -4,10 +4,14 @@ use warnings;
 use Test::More;
 use Test::MockObject;
 
+use SGN::Devel::MyDevLibs;
+
 use_ok( 'SGN::SiteFeatures::CrossReference' );
 
 my $mock_feature = Test::MockObject->new;
 $mock_feature->set_always( 'name', 'fakefeature' );
+$mock_feature->set_always( 'description', 'A fake feature' );
+$mock_feature->set_always( 'shortname', 'fakefeature' );
 
 my $cr1 = SGN::SiteFeatures::CrossReference->new({
     url  => '/foo/bar.txt',
@@ -27,6 +31,8 @@ my $cr3 = SGN::SiteFeatures::CrossReference->new({
     feature => $mock_feature,
 });
 
+is( $cr1->tags->[0], 'A fake feature' );
+
 ok(   $cr2->cr_eq( $cr1 ), 'cr eq finds equal'     );
 ok( ! $cr2->cr_eq( $cr3 ), 'cr eq finds not equal' );
 
@@ -41,6 +47,6 @@ is( $cr3,   $u[1], 'uniq seems to work 2' );
 
 my $js_hash = $cr3->TO_JSON;
 is( $js_hash->{text}, 'Noggin' );
-can_ok( $js_hash->{url}, 'scheme', 'path' );
+is( $js_hash->{url}, '/foo/baz.txt' );
 
 done_testing;

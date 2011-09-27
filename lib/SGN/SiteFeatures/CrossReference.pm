@@ -2,6 +2,7 @@ package SGN::SiteFeatures::CrossReference;
 use Moose;
 
 use MooseX::Aliases;
+use List::MoreUtils ();
 
 extends 'Ambikon::Xref';
 
@@ -11,6 +12,15 @@ around BUILDARGS => sub {
       my $args = $class->$orig(@_);
       if( $args->{feature} && !$args->{subsite} ) {
           $args->{subsite} = delete $args->{feature};
+      }
+      if( $args->{subsite} && !$args->{tags} ) {
+          $args->{tags} = [
+              List::MoreUtils::uniq
+              grep defined,
+              $args->{subsite}->description,
+              $args->{subsite}->name,
+              $args->{subsite}->shortname,
+          ];
       }
       return $args;
   };
@@ -24,6 +34,6 @@ alias 'cr_cmp' => 'xref_cmp';
 alias 'cr_eq' => 'xref_eq';
 
 
-
+__PACKAGE__->meta->make_immutable;
 1;
 
