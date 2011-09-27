@@ -192,8 +192,9 @@ sub search_with_xrefs: Private {
     my ( $self, $c ) = @_;
 
     my $b = time;
-    my @xrefs = $c->feature_xrefs( $c->stash->{term} );
-    $c->stash->{xrefs} = \@xrefs;
+    my $xrefs = $c->forward( '/ambikon/search_xrefs', [ $c->stash->{term} ] );
+    $c->stash->{xrefs} = $xrefs;
+    $c->stash->{xrefs} = [ map $_->{xref_set}->xrefs, values %{ $xrefs->{ $c->stash->{term} } } ];
     $c->stash->{xrefs_time} = time - $b;
 }
 
