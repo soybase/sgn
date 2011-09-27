@@ -31,8 +31,9 @@ sub theme_template : Path('/ambikon/theme_template') {
 
 =head2 server
 
-get the server handle for the current Ambikon Integration
-Server (AIS) in use.  returns nothing if not running under an AIS.
+Returns the L<Ambikon::ServerHandle> for the current Ambikon Integration Server
+(AIS) in use.  Also stashes it in C<< $c->stash->{ambikon_server} >>.
+Returns nothing if not running under an AIS.
 
 =cut
 
@@ -45,7 +46,8 @@ sub server : Private {
 
     return if not $server_url;
 
-    return Ambikon::ServerHandle->new( base_url => $server_url );
+    return $c->stash->{ambikon_server} =
+        Ambikon::ServerHandle->new( base_url => $server_url );
 }
 
 
