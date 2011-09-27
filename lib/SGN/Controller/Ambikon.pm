@@ -50,5 +50,16 @@ sub server : Private {
         Ambikon::ServerHandle->new( base_url => $server_url );
 }
 
+=head2 search_xrefs
+
+Shortcut to call the search_xrefs method on the server handle returned
+by server() above.
+
+=cut
+
+sub search_xrefs : Private {
+    my ( $self, $c, @args ) = @_;
+    $self->server( $c )->search_xrefs( @args );
+}
 
 1;
