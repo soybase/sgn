@@ -10,9 +10,10 @@ our @EXPORT_OK = qw( resolve_xref_component );
 sub resolve_xref_component {
     my ( $m, $tags, $comp_pattern ) = @_;
 
-    $tags = [$tags] unless ref $tags;
+    my @tags = ref $tags ? @$tags : ( $tags );
+    tr/A-Z /a-z_/ for @tags; # lowercase and replace spaces with underscores
 
-    for my $fname ( @$tags, 'default' ) {
+    for my $fname ( @tags, 'default' ) {
         my $comp = $comp_pattern;
         $comp =~ s/(?<!%)%f/$fname/g;
 
