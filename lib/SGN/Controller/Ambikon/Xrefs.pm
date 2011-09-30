@@ -1,6 +1,7 @@
 package SGN::Controller::Ambikon::Xrefs;
 use Moose;
 use namespace::autoclean;
+use SGN::View::Mason::CrossReference 'resolve_xref_component';
 
 BEGIN {extends 'Catalyst::Controller::REST'; }
 
@@ -62,9 +63,19 @@ sub search_xrefs_GET {
     if( my $renderings = $c->req->param('renderings') ) {
         my %r = map { lc $_ => 1 } ( ref $renderings eq 'ARRAY' ? @$renderings : ( $renderings ) );
         if( $r{'text/html'} ) {
-            my $set_html =
-            $xref_set->renderings->{'text/html'} =
-                $c->view('BareMason')->render( $c, $c->stash->{template} );
+            my $mason = $c->view('BareMason');
+
+            # render the whole resultset
+            $xref_set->renderings->{'text/html'} = $mason->render( $c, $c->stash->{template} );
+
+            # and also render each individual xref
+            for my $x ( @{ $xref_set->xrefs } ) {
+                my $comp =
+                      resolve_xref_component( $mason->interp, $x->tags, '/ambikon/xrefs/%f/xref/rich.mas' )
+                   || resolve_xref_component( $mason->interp, $x->tags, '/ambikon/xrefs/%f/xref/link.mas' );
+
+                $x->renderings->{'text/html'} = $mason->render( $c, $comp, { xref => $x } );
+            }
         }
     }
 
