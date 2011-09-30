@@ -20,7 +20,7 @@ sub resolve_xref_component {
         return $comp if $m->comp_exists( $comp );
     }
 
-    croak "Cannot find Mason component for pattern '$comp_pattern' and tags (@$tags)";
+    return;
 }
 
 
