@@ -42,14 +42,18 @@ sub search_xrefs_GET {
 
     no warnings 'uninitialized';
 
-    my $type = $c->req->param('render_type') || 'link';
+    # process our query parameters to figure out what we're doing,
+    # unless this has already been done by something else
+    $c->stash->{xref_queries} ||= [ $c->req->param('q') ];
+    $c->stash->{xref_hints}   ||= {
+        render_type => $c->req->param('render_type') || 'link',
+        exclude     => [ split /,/, $c->req->param('exclude') ],
+    };
 
-    my $args = {};
-    if( my @exclude = split /,/, $c->req->param('exclude') ) {
-        $args->{exclude} = \@exclude;
-    }
+    my $hints = $c->stash->{xref_hints};
+    my $type = $hints->{render_type};
 
-    my $xref_set = Ambikon::XrefSet->new({ xrefs => [ map $c->feature_xrefs( $_, $args ), $c->req->param('q') ] });
+    my $xref_set = Ambikon::XrefSet->new({ xrefs => [ map $c->feature_xrefs( $_, $hints ), @{$c->stash->{xref_queries}} ] });
 
     $_->tags( [ $_->feature->description || $_->feature->name ] ) for @{$xref_set->xrefs};
 
