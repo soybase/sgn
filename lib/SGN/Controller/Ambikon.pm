@@ -59,7 +59,33 @@ by server() above.
 
 sub search_xrefs : Private {
     my ( $self, $c, @args ) = @_;
-    $self->server( $c )->search_xrefs( @args );
+    my %args = $self->_xref_args( \@args );
+    if( my $s = $self->server( $c ) ) {
+        # if running under an ambikon server, query it for xrefs
+        return $s->inflate( $s->search_xrefs( %args ) );
+    } else {
+        # if not running under an Ambikon server, call our own
+        # xrefs-serving code and use those
+        $c->stash->{xref_queries} = $args{queries};
+        $c->stash->{xref_hints}   = $args{hints};
+        $c->forward( '/ambikon/xrefs/search_xrefs' );
+        return $c->stash->{rest};
+    }
+}
+
+sub _xref_args {
+    my ( $self, $args ) = @_;
+    return @$args == 1 ? ( queries => $args, hints => {} ) : @$args;
+}
+
+sub search_xrefs_html : Private {
+    my ( $self, $c, @args ) = @_;
+    my %args = $self->_xref_args( \@args );
+
+    my $s = $self->server( $c )
+        or return;
+
+    return $s->search_xrefs_html( %args );
 }
 
 1;

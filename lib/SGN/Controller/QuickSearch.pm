@@ -5,6 +5,7 @@ use namespace::autoclean;
 BEGIN { extends 'Catalyst::Controller' }
 
 use Class::MOP;
+use Data::Visitor::Callback;
 use HTML::Entities;
 use List::MoreUtils 'uniq';
 use Time::HiRes 'time';
@@ -149,15 +150,24 @@ sub redirect_by_ident : Private {
 sub redirect_if_only_one_possible : Private {
     my ( $self, $c ) = @_;
 
-    my @possible_urls = uniq(
+    my @possible_urls;
+
+    # get the urls for any xrefs we have
+    Data::Visitor::Callback
+        ->new( 'object_no_class' => 'visit_ref',
+               'Ambikon::Xref' => sub { push @possible_urls, $_->url.''; }
+             )
+        ->visit( $c->stash->{xrefs} );
+
+    # combine them with the urls from other sources, and filter out
+    # any external links
+    @possible_urls = uniq(
          grep $_ !~ m!^https?://!,
          grep defined,
          ( map $_->{result}->[0],
            values %{$c->stash->{results}}
          ),
-         ( map ''.$_->url,
-           @{ $c->stash->{xrefs} || [] }
-         ),
+         @possible_urls,
        );
 
     if( @possible_urls == 1 ) {
@@ -184,7 +194,6 @@ sub execute_predefined_searches: Private {
              time   => time - $b,
              exact  => $search->{exact}
            };
-
     }
 }
 
@@ -192,9 +201,7 @@ sub search_with_xrefs: Private {
     my ( $self, $c ) = @_;
 
     my $b = time;
-    my $xrefs = $c->forward( '/ambikon/search_xrefs', [ $c->stash->{term} ] );
-    $c->stash->{xrefs} = $xrefs;
-    $c->stash->{xrefs} = [ map $_->{xref_set}->xrefs, values %{ $xrefs->{ $c->stash->{term} } } ];
+    $c->stash->{xrefs} = $c->forward( '/ambikon/search_xrefs', [ queries => [$c->stash->{term}], hints => { renderings => 'text/html' } ] );
     $c->stash->{xrefs_time} = time - $b;
 }
 

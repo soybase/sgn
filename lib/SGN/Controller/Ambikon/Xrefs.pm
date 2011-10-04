@@ -46,12 +46,12 @@ sub search_xrefs_GET {
     # unless this has already been done by something else
     $c->stash->{xref_queries} ||= [ $c->req->param('q') ];
     $c->stash->{xref_hints}   ||= {
-        render_type => $c->req->param('render_type') || 'link',
+        render_type => $c->req->params->{'render_type'} || 'link',
         exclude     => [ split /,/, $c->req->param('exclude') ],
     };
 
     my $hints = $c->stash->{xref_hints};
-    my $type = $hints->{render_type};
+    my $type = $hints->{render_type} || 'link';
 
     my $xref_set = Ambikon::XrefSet->new({ xrefs => [ map $c->feature_xrefs( $_, $hints ), @{$c->stash->{xref_queries}} ] });
 
