@@ -46,14 +46,18 @@ sub search_xrefs_GET {
     # unless this has already been done by something else
     $c->stash->{xref_queries} ||= [ $c->req->param('q') ];
     $c->stash->{xref_hints}   ||= {
-        render_type => $c->req->params->{'render_type'} || 'link',
+        render_type => $c->req->params->{'render_type'},
         exclude     => [ split /,/, $c->req->param('exclude') ],
     };
 
     my $hints = $c->stash->{xref_hints};
     my $type = $hints->{render_type} || 'link';
 
-    my $xref_set = Ambikon::XrefSet->new({ xrefs => [ map $c->feature_xrefs( $_, $hints ), @{$c->stash->{xref_queries}} ] });
+    my $xref_set = Ambikon::XrefSet->new({
+        xrefs => [
+            map $c->feature_xrefs( $_, $hints ), @{$c->stash->{xref_queries}}
+        ],
+    });
 
     $_->tags( [ $_->feature->description || $_->feature->name ] ) for @{$xref_set->xrefs};
 
@@ -61,10 +65,11 @@ sub search_xrefs_GET {
         template => "/ambikon/xrefs/mixed/xref_set/$type.mas",
 
         xrefs => $xref_set->xrefs,
+        xref_set => $xref_set,
         rest  => $xref_set,
        );
 
-    if( my $renderings = $c->req->param('renderings') ) {
+    if( my $renderings = $hints->{renderings} ) {
         my %r = map { lc $_ => 1 } ( ref $renderings eq 'ARRAY' ? @$renderings : ( $renderings ) );
         if( $r{'text/html'} ) {
             my $mason = $c->view('BareMason');

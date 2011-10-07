@@ -104,7 +104,6 @@ sub quick_search: Path('/search/quick') {
         quick_search_term => $term,
         term              => $term,
         show_times        => $c->req->parameters->{showtimes},
-        template          => '/search/quick_search.mas',
         );
 
     return if $c->forward('redirect_by_ident');
@@ -112,6 +111,8 @@ sub quick_search: Path('/search/quick') {
     $c->forward('execute_predefined_searches');
     $c->forward('search_with_xrefs');
     $c->forward('redirect_if_only_one_possible');
+
+    $c->stash( template          => '/search/quick_search.mas' );
 }
 
 #run the term through CXGN::Tools::Identifiers, and if it's

@@ -69,7 +69,11 @@ sub search_xrefs : Private {
         $c->stash->{xref_queries} = $args{queries};
         $c->stash->{xref_hints}   = $args{hints};
         $c->forward( '/ambikon/xrefs/search_xrefs' );
-        return $c->stash->{rest};
+        my $xref_set = $c->stash->{xref_set};
+        return {
+            renderings => $c->stash->{xref_set}->renderings,
+            'all_queries' => { SGN => { xref_set => $xref_set } },
+        };
     }
 }
 
