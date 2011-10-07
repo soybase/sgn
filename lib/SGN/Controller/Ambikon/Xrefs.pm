@@ -24,9 +24,9 @@ xrefs with the Ambikon subsite web service API
 
 Public paths: /ambikon/xrefs/search /api/v1/feature_xrefs
 
-Ambikon-compatible web service interface to C<$c-E<gt>feature_xrefs>.
-Depending on the requested Content-Type, will return HTML, JSON, etc,
-for the xrefs.
+Ambikon-compatible web service interface to serve xrefs.  Uses
+C<$c-E<gt>feature_xrefs>.  Depending on the requested Content-Type,
+will return HTML, JSON, etc, for the xrefs.
 
 =cut
 
