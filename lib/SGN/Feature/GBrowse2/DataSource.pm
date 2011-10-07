@@ -1,12 +1,15 @@
 package SGN::Feature::GBrowse2::DataSource;
 use Moose;
 use namespace::autoclean;
+
 use Scalar::Util qw/ blessed /;
 use Text::ParseWords;
 use Path::Class ();
 use URI::Escape;
 
 use Bio::Range;
+
+use aliased 'SGN::Feature::GBrowse2::DataSource::CrossReference';
 
 extends 'SGN::Feature::GBrowse::DataSource';
 
@@ -151,7 +154,7 @@ sub _make_feature_xrefs {
 
 sub _make_cross_ref {
     shift;
-    return (__PACKAGE__.'::CrossReference')->new( @_ );
+    return CrossReference->new( @_ );
 }
 
 sub _make_region_xref {
@@ -223,31 +226,6 @@ sub image_url {
     $q->{grid}     ||= 1;
     return $self->_url( 'gbrowse_img', $q );
 }
-
-
-package SGN::Feature::GBrowse2::DataSource::CrossReference;
-use Moose;
-use MooseX::Types::URI qw/ Uri /;
-extends 'SGN::SiteFeatures::CrossReference';
-
-with 'SGN::SiteFeatures::CrossReference::WithPreviewImage',
-     'SGN::SiteFeatures::CrossReference::WithSeqFeatures';
-
-has 'data_source' => ( is => 'ro', required => 1 );
-
-has 'is_whole_sequence' => (
-    is => 'ro',
-    isa => 'Bool',
-    documentation => 'true if this cross-reference points to the entire reference sequence',
-    );
-
-has 'seq_id' => (
-    is  => 'ro',
-    isa => 'Str',
-    );
-
-has $_ => ( is => 'ro', isa => 'Int' )
-  for 'start', 'end';
 
 __PACKAGE__->meta->make_immutable;
 1;
