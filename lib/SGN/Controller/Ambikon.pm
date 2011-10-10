@@ -73,14 +73,20 @@ sub search_xrefs : Private {
         $c->stash->{xref_hints}{renderings} ||= 'text/html';
         $c->forward( '/ambikon/xrefs/search_xrefs' );
         my $json = JSON->new->convert_blessed;
-        my $xref_set = Ambikon::Serializer->new->inflate( $json->decode( $json->encode( $c->stash->{xref_set} ) ) );
+        my $response = {
+            'all_queries' => {
+                SGN => {
+                    xref_set => $json->decode( $json->encode( $c->stash->{xref_set} ) ),
+                },
+            },
+        };
+        Ambikon::Serializer->new->inflate( $response );
+        $response->{renderings} = $response->{all_queries}{SGN}{xref_set}->renderings;
+
         if( $hints->{format} eq 'flat_array' ) {
-            return $xref_set->xrefs;
+            return $response->{all_queries}{SGN}{xref_set}->xrefs;
         } else {
-            return {
-                renderings => $c->stash->{xref_set}->renderings,
-                'all_queries' => { SGN => { xref_set => $xref_set } },
-            }
+            return $response;
         }
     }
 }
