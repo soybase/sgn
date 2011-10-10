@@ -104,16 +104,29 @@ sub delegate_component
     $c->stash->{featurelocs} = $feature->featureloc_features;
     $c->stash->{seq_download_url} = '/api/v1/sequence/download/single/'.$feature->feature_id;
 
-    # look up site xrefs for this feature
-    my @xrefs = map $c->feature_xrefs( $_, { exclude => 'featurepages' } ),
-                ( $feature->name, $feature->synonyms->get_column('name')->all );
-    unless( @xrefs ) {
-        @xrefs = map {
-            $c->feature_xrefs( $_->srcfeature->name.':'.($_->fmin+1).'..'.$_->fmax, { exclude => 'featurepages' } )
-        }
-        $c->stash->{featurelocs}->all
-    }
-    $c->stash->{xrefs} = \@xrefs;
+    # look up xrefs for this feature
+    $c->stash->{xrefs} = $c->forward(
+        '/ambikon/search_xrefs',
+        # look up xrefs for:
+        [ queries => [
+            # the feature's name
+            $feature->name,
+            # all the feature's synonyms
+            $feature->synonyms->get_column('name')->all,
+            # and all the feature's locations (formatted as strings)
+            ( map {
+                $_->srcfeature->name.':'.($_->fmin+1).'..'.$_->fmax
+              }
+              $c->stash->{featurelocs}->all
+            ),
+          ],
+          hints => {
+              renderings  => 'text/html',
+              exclude     => 'featurepages',
+              render_type => 'rich',
+          },
+        ],
+      );
 
     if ($c->view('Mason')->component_exists("/feature/types/$type_name.mas")) {
         $template         = "/feature/types/$type_name.mas";

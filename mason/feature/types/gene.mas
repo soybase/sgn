@@ -1,7 +1,7 @@
 <%args>
     $feature
     $blast_url => undef
-    $xrefs     => []
+    $xrefs     => {}
     $featurelocs
 </%args>
 <%once>
@@ -152,8 +152,7 @@
      title       => 'Related views',
      collapsible => 1,
  &>
-     <& /sitefeatures/mixed/xref_set/link.mas,
+     <& /ambikon/xrefs/consume/response.mas,
         xrefs   => $xrefs,
-        exclude => 'gbrowse2',
       &>
 </&>

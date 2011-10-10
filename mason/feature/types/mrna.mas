@@ -3,7 +3,7 @@
     $featurelocs
     $blast_url => undef
     $seq_download_url => undef
-    $xrefs     => []
+    $xrefs     => {}
 </%args>
 <%once>
     use SGN::View::Feature qw/ type_name /;
@@ -82,8 +82,8 @@
      collapsible => 1,
      is_empty => ! scalar @$xrefs,
  &>
-     <& /sitefeatures/mixed/xref_set/link.mas,
-        xrefs => $xrefs,
+     <& /ambikon/xrefs/consume/response.mas,
+        xrefs   => $xrefs,
       &>
 </&>
 

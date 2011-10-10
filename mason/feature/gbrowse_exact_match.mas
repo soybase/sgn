@@ -2,20 +2,30 @@
     $feature
     $xrefs
 </%args>
-
 % if( $gbrowse_xref ) {
-
-<& /sitefeatures/gbrowse2/xref/rich.mas, xref => $gbrowse_xref &>
-
+\
+<& /ambikon/xrefs/consume/xref.mas, xref => $gbrowse_xref &>
+\
 % }
-
 <%init>
     # in our xrefs, find the gbrowse2 xref that has only our feature
     # in it, and use its gbrowse_img and a link to gbrowse as our exon
     # structure diagram
-    my ( $gbrowse_xref ) =
-         grep {     $_->feature->feature_name eq 'gbrowse2'
-                 && @{$_->seqfeatures} == 1
-                 && $_->seqfeatures->[0]->display_name eq $feature->name 
-              } @$xrefs;
+    my $gbrowse_xref;
+    Data::Visitor::Callback->new(
+        object_no_class => 'visit_ref',
+        ignore_return_values => 1,
+        'Ambikon::Xref' => sub {
+            if( $_->has_tag('genome browser')
+                && $_->{seqfeatures}
+                && @{$_->{seqfeatures}} == 1
+                && $_->{seqfeatures}->[0]->{display_name} eq $feature->name
+              ) {
+                $gbrowse_xref ||= $_;
+            }
+        },
+    )->visit( $xrefs );
 </%init>
+<%once>
+    use Data::Visitor::Callback;
+</%once>
