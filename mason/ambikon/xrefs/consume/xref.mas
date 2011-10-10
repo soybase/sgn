@@ -1,0 +1,7 @@
+<%args>
+  $xref
+</%args>
+<% Ambikon::View::Xrefs::HTML->new->xref_html( $xref ) %>
+<%once>
+  use Ambikon::View::Xrefs::HTML;
+</%once>

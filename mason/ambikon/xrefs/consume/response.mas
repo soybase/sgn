@@ -1,0 +1,16 @@
+<%args>
+  $xrefs
+</%args>
+\
+<%doc>
+
+  Renders a complete xref response into HTML, using provided HTML
+  renderings if present, and using default renderings otherwise.
+
+</%doc>
+\
+<% Ambikon::View::Xrefs::HTML->new->xref_response_html( $xrefs ) %>
+\
+<%once>
+  use Ambikon::View::Xrefs::HTML;
+</%once>
