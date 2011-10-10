@@ -22,5 +22,15 @@ has 'seq_id' => (
 has $_ => ( is => 'ro', isa => 'Int' )
   for 'start', 'end';
 
+around 'TO_JSON' => sub {
+    my ( $orig, $self ) = @_;
+    my $j = $self->$orig();
+    no strict 'refs';
+    $j->{$_} = $self->$_()
+        for 'seq_id', 'start', 'end', 'data_source', 'is_whole_sequence';
+    $j;
+};
+
+
 __PACKAGE__->meta->make_immutable;
 1;

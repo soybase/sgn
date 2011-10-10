@@ -9,6 +9,9 @@ use URI::QueryParam;
 
 use Bio::Graphics::FeatureFile;
 
+with 'Ambikon::Role::Serializable';
+
+
 has 'name' => ( documentation => <<'',
 name of the data source
 
@@ -105,6 +108,23 @@ sub _url {
 }
 
 
+sub TO_JSON {
+    my $self = shift;
+    no strict 'refs';
+    return {
+        map {
+            $_ => ''.$self->$_()
+        } qw (
+            name
+            description
+            extended_description
+            organism
+            path
+            image_url
+            view_url
+        )
+    };
+};
 
 __PACKAGE__->meta->make_immutable;
 1;
