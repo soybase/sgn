@@ -1,6 +1,9 @@
 package SGN::Controller::Ambikon::Xrefs;
 use Moose;
 use namespace::autoclean;
+
+use List::Util 'first';
+
 use SGN::View::Mason::CrossReference 'resolve_xref_component';
 
 BEGIN {extends 'Catalyst::Controller::REST'; }
@@ -45,10 +48,8 @@ sub search_xrefs_GET {
     # process our query parameters to figure out what we're doing,
     # unless this has already been done by something else
     $c->stash->{xref_queries} ||= [ $c->req->param('q') ];
-    $c->stash->{xref_hints}   ||= {
-        render_type => $c->req->params->{'render_type'},
-        exclude     => [ split /,/, $c->req->param('exclude') ],
-    };
+    $c->stash->{xref_hints}   ||= $c->req->params;
+    $c->stash->{xref_hints}{exclude} &&= [ split /,/, $c->stash->{xref_hints}{exclude} ];
 
     my $hints = $c->stash->{xref_hints};
     my $type = $hints->{render_type} || 'link';
@@ -61,8 +62,12 @@ sub search_xrefs_GET {
 
     $_->tags( [ $_->feature->description || $_->feature->name ] ) for @{$xref_set->xrefs};
 
+    my $mason = $c->view('BareMason');
+
     $c->stash(
-        template => "/ambikon/xrefs/mixed/xref_set/$type.mas",
+        # try to use the mixed-xref component given by $type, fall
+        # back to link.mas if does not exist
+        template => ( first { $mason->interp->comp_exists($_) } map "/ambikon/xrefs/produce/mixed/xref_set/$_.mas", $type, 'link' ),
 
         xrefs => $xref_set->xrefs,
         xref_set => $xref_set,
@@ -72,16 +77,15 @@ sub search_xrefs_GET {
     if( my $renderings = $hints->{renderings} ) {
         my %r = map { lc $_ => 1 } ( ref $renderings eq 'ARRAY' ? @$renderings : ( $renderings ) );
         if( $r{'text/html'} ) {
-            my $mason = $c->view('BareMason');
-
             # render the whole resultset
             $xref_set->renderings->{'text/html'} = $mason->render( $c, $c->stash->{template} );
 
             # and also render each individual xref
             for my $x ( @{ $xref_set->xrefs } ) {
+                my $tags = $x->tags;
                 my $comp =
-                      resolve_xref_component( $mason->interp, $x->tags, '/ambikon/xrefs/%f/xref/rich.mas' )
-                   || resolve_xref_component( $mason->interp, $x->tags, '/ambikon/xrefs/%f/xref/link.mas' );
+                      resolve_xref_component( $mason->interp, $tags, "/ambikon/xrefs/produce/%f/xref/$type.mas" )
+                   || resolve_xref_component( $mason->interp, $tags, '/ambikon/xrefs/produce/%f/xref/link.mas'  );
 
                 $x->renderings->{'text/html'} = $mason->render( $c, $comp, { xref => $x } );
             }

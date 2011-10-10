@@ -3,6 +3,8 @@ use Moose;
 
 BEGIN { extends 'Catalyst::Controller' }
 
+use JSON;
+use Ambikon::Serializer;
 use Ambikon::ServerHandle;
 
 =head1 NAME
@@ -67,14 +69,27 @@ sub search_xrefs : Private {
         # if not running under an Ambikon server, call our own
         # xrefs-serving code and use those
         $c->stash->{xref_queries} = $args{queries};
-        $c->stash->{xref_hints}   = $args{hints};
+        $c->stash->{xref_hints}   = my $hints = $args{hints};
+        $c->stash->{xref_hints}{renderings} ||= 'text/html';
         $c->forward( '/ambikon/xrefs/search_xrefs' );
-        my $xref_set = $c->stash->{xref_set};
-        return {
-            renderings => $c->stash->{xref_set}->renderings,
-            'all_queries' => { SGN => { xref_set => $xref_set } },
-        };
+        my $json = JSON->new->convert_blessed;
+        my $xref_set = Ambikon::Serializer->new->inflate( $json->decode( $json->encode( $c->stash->{xref_set} ) ) );
+        if( $hints->{format} eq 'flat_array' ) {
+            return $xref_set->xrefs;
+        } else {
+            return {
+                renderings => $c->stash->{xref_set}->renderings,
+                'all_queries' => { SGN => { xref_set => $xref_set } },
+            }
+        }
     }
+}
+
+sub search_xrefs_flat : Private {
+    my ( $self, $c, @args ) = @_;
+    my %args = $self->_xref_args( \@args );
+    $args{hints}{format} = 'flat_array';
+    return $self->search_xrefs( $c, %args );
 }
 
 sub _xref_args {
