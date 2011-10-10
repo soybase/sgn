@@ -32,6 +32,15 @@ my $build = SGN::Build->new(
         'perl'                                     => '5.10.0',
         'version'                                  => '0.77',
         'autodie'                                  => 0,
+
+        'Ambikon::Role::Serializable'              => 0,
+        'Ambikon::ServerHandle'                    => 0,
+        'Ambikon::Serializer'                      => 0,
+        'Ambikon::View::Xrefs::HTML'               => 0,
+        'Ambikon::Xref'                            => 0,
+        'Ambikon::XrefSet'                         => 0,
+        'Ambikon::XrefSet'                         => 0,
+
         'Bio::Chado::Schema'                       => '0.08100',
         'Bio::Root::Version'                       => '1.006001',
         'Bio::GMOD::Blast::Graph'                  => '0.01',
