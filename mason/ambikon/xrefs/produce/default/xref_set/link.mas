@@ -3,7 +3,7 @@
 </%args>
 % if( @$xrefs ) {
 %   my $tags = $xrefs->[0]->tags;
-%   my $single_comp = resolve_xref_component( $m, $tags, '/ambikon/xrefs/%f/xref/link.mas' )
+%   my $single_comp = resolve_xref_component( $m, $tags, '/ambikon/xrefs/produce/%f/xref/link.mas' )
 %       or Carp::croak "Cannot find 'link' Mason component for tags (@$tags)";
     <ul class="xref xref_link">
 %     for my $x (@$xrefs) {

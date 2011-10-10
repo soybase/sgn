@@ -10,7 +10,7 @@
         <dd>
 %         my $x1 = $by_category{$f}->[0];
 %         my $tags = $x1->tags;
-%         my $multi_comp = resolve_xref_component( $m, $tags, '/ambikon/xrefs/%f/xref_set/link.mas' )
+%         my $multi_comp = resolve_xref_component( $m, $tags, '/ambikon/xrefs/produce/%f/xref_set/link.mas' )
 %              or Carp::croak "Cannot find 'link' Mason component for tags (@$tags)";
           <& $multi_comp, xrefs => $by_category{$f} &>
         </dd>
