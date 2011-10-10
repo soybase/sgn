@@ -32,7 +32,6 @@ my $build = SGN::Build->new(
         'perl'                                     => '5.10.0',
         'version'                                  => '0.77',
         'autodie'                                  => 0,
-        'IPC::System::Simple'                      => 0,         #< required for autodie :all
         'Bio::Chado::Schema'                       => '0.08100',
         'Bio::Root::Version'                       => '1.006001',
         'Bio::GMOD::Blast::Graph'                  => '0.01',
@@ -75,6 +74,7 @@ my $build = SGN::Build->new(
         'HTML::Mason'                              => 0,
         'HTML::TreeBuilder::XPath'                 => 0,
         'IO::String'                               => 0,
+        'IPC::System::Simple'                      => 0, #< for autodie :all
         'Image::Size'                              => 0,
         'JSAN::ServerSide'                         => '==0.06',
         'JSON'                                     => 0,
