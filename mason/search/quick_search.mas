@@ -25,10 +25,12 @@
 % if( $show_times ) {
   <div>Site xref search time: <% sprintf('%0.1f sec', $xrefs_time) %></div>
 % }
-% if( $xrefs && $xrefs->{renderings}{'text/html'} ) {
-  <% $xrefs->{renderings}{'text/html'} %>
+% if( $xrefs ) {
+
+  <& /ambikon/xrefs/consume/response.mas, xrefs => $xrefs &>
 
   <hr style="border: 0; border-bottom: 1px solid #aaa; width: 90%; margin: 1.5em auto 1.2em auto"  />
+
 % }
 
   <div>
