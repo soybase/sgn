@@ -2,14 +2,24 @@
   $xrefs
 </%args>
 
-<& /ambikon/xrefs/gbrowse2/xref_set/rich.mas, xrefs => \@gbrowse_gene_model_xrefs &>
+% for ( @gbrowse_gene_model_xrefs ) {
+  <& /ambikon/xrefs/consume/xref.mas, xref => $_ &>
+% }
 
 <%init>
 
   # look up any gbrowse cross-refs for this locus id, if any
-  my @gbrowse_gene_model_xrefs =
-     grep {
-           $_->subsite->name eq 'gbrowse2'
-        && $_->data_source->description =~ /genomic/i
-     } @$xrefs;
+  my @gbrowse_gene_model_xrefs;
+  Data::Visitor::Callback->new(
+      'object_no_class' => 'visit_ref',
+      'Ambikon::Xref' => sub {
+          push @gbrowse_gene_model_xrefs, $_
+              if $_->has_tag('genome browser')
+                 && $_->{data_source}{description} =~ /genomic/i;
+      },
+  )->visit( $xrefs) ;
+
 </%init>
+<%once>
+  use Data::Visitor::Callback;
+</%once>

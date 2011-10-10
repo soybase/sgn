@@ -55,7 +55,7 @@ $c->forward_to_mason_view(
     locus_id => $locus_id,
     user     => $user,
     dbh      => $dbh,
-    xrefs    => [ get_locus_xrefs( $c, $locus ) ],
+    xrefs    => get_locus_xrefs( $c, $locus ),
 );
 
 #############
@@ -64,22 +64,24 @@ $c->forward_to_mason_view(
 sub get_locus_xrefs {
     my ( $c, $locus ) = @_;
 
-    my @queries = (
-        # 3. plus primary locus name
-        $locus->get_locus_name,
-        # 2. convert to list of locus alias strings
-        map $_->get_locus_alias,
-        # 1. list of locus alias objects
-        $locus->get_locus_aliases( 'f', 'f' )
-     );
+    return $c->forward(
+        '/ambikon/search_xrefs',
 
-    if( my $ais = $c->forward('/ambikon/server') ) {
-        my $data = $ais->search_xrefs(
-            queries => \@queries,
-            hints => { exclude => ['loci','locuspages', 'locus pages'] },
-           );
-        return map @{$_->{xrefs} || []}, map values %{$data->{$_} || {}}, @queries;
-    } else {
-        return map $c->feature_xrefs( $_, { exclude => 'locuspages' } ), @queries;
-    }
+        [
+          queries => [
+            # look for both locus name
+            $locus->get_locus_name,
+            # and locus aliases
+            ( map $_->get_locus_alias,
+              $locus->get_locus_aliases( 'f', 'f' )
+            )
+          ],
+          hints => {
+              renderings  => 'text/html',
+              exclude     => 'locuspages',
+              render_type => 'rich',
+          },
+        ],
+
+      );
 }
