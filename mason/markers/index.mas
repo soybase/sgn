@@ -95,6 +95,16 @@ if (!$marker) {
 
 <& /markers/genome.mas,  xrefs => $ARGS{xrefs} &>
 
+<&| /page/info_section.mas,
+     title => 'Related views',
+     empty_message => 'None found',
+     collapsible => 1,
+ &>
+     <& /ambikon/xrefs/consume/response.mas,
+        xrefs   => $ARGS{xrefs},
+      &>
+</&>
+
 <& /markers/comments.mas, marker=>$marker &>
 
 
