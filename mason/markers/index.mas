@@ -93,7 +93,7 @@ if (!$marker) {
 
 <& /markers/attributions.mas, marker=>$marker &>
 
-<& /markers/genome.mas, marker => $marker &>
+<& /markers/genome.mas,  xrefs => $ARGS{xrefs} &>
 
 <& /markers/comments.mas, marker=>$marker &>
 

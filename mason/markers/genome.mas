@@ -1,24 +1,20 @@
 <%args>
-$marker
+  $xrefs
 </%args>
-<%init>
-
-# look up gbrowse cross-refs for this marker, if any
-my @xrefs = map {
-
-    $_->xrefs({
-        -types   => ['match'],
-        -name    => 'SGN-M'.$marker->marker_id,
-        -aliases => 1,
-    })
-
-} $c->enabled_feature('gbrowse2');
-
-</%init>
-
 <&| /page/info_section.mas, title => "Genomic locations" &>
-% if( @xrefs ) {
-  <& /sitefeatures/gbrowse2/xref_set/rich.mas, xrefs => \@xrefs &>
+% for my $xref ( @browser_xrefs ) {
+    <& /ambikon/xrefs/consume/xref.mas, xref => $_ &>
 % }
 </&>
+<%init>
+  use Data::Visitor::Callback;
 
+  my @browser_xrefs;
+  Data::Visitor::Callback->new(
+      object_no_class => 'visit_ref',
+      'Ambikon::Xref' => sub {
+          push @browser_xrefs, $_ if $_->has_tag('genome browser');
+      },
+  )->visit( $xrefs );
+
+</%init>

@@ -50,10 +50,32 @@ Show the HTML detail page for this marker.
 sub marker_details: Chained('get_marker') PathPart('details') :Args(0) {
   my ( $self, $c ) = @_;
 
+  $c->forward('get_marker_xrefs');
+
   $c->stash(
       template  => '/markers/index.mas',
       dbh       => $c->dbc->dbh,
      );
+}
+
+sub get_marker_xrefs : Private {
+    my ( $self, $c ) = @_;
+
+    $c->stash->{xrefs} = $c->forward(
+        '/ambikon/search_xrefs',
+
+        [
+          queries => [
+              'SGN-M'.$c->stash->{marker_id}
+          ],
+          hints => {
+              renderings  => 'text/html',
+              render_type => 'rich',
+          },
+        ],
+
+      );
+
 }
 
 
