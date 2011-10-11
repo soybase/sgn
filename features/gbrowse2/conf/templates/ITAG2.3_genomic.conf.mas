@@ -428,7 +428,7 @@ bgcolor      = sub { (shift->attributes('scaffold_reliably_oriented'))[0] ? 'gra
 stranded     = sub { (shift->attributes('scaffold_reliably_oriented'))[0] ? 1 : 0 }
 citation     = This track shows the location and orientation of the scaffolds and contigs in the tomato SL2.40 genome assembly.  Dark gray scaffolds with arrow indicated their directionality indicate reliable orientation, whereas white-filled scaffolds without arrows could not be reliably oriented.
 das category = structural
-balloon click = sub { my $name = shift->name; "url:/api/v1/feature_xrefs?q=$name;exclude=gbrowse,gbrowse2" }
+balloon click = sub { my $name = shift->name; "url:/ambikon/xrefs/search_html?q=$name;exclude=gbrowse,gbrowse2" }
 
 [itag1_reference]
 feature      = match:ITAG_itag1_ref
