@@ -96,6 +96,11 @@ sub feature_xrefs {
         my %ex = map { $_ => 1 } @$ex;
         @f = grep !$ex{$_->feature_name}, @f;
     }
+    # if( my $only = $args->{only_feature} ) {
+    #     $only = [ $only ] unless ref $only;
+    #     my %only = map { $_ => 1 } @$only;
+    #     @f = grep $only{$_->feature_name}, @f
+    # }
     return map $_->xrefs( $query, $args ),  @f;
 }
 
