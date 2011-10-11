@@ -16,6 +16,14 @@ __PACKAGE__->config(
     },
    );
 
+has 'serializer' => (
+  is => 'ro',
+  default => sub {
+      require Ambikon::Serializer;
+      Ambikon::Serializer->new
+    },
+);
+
 =head1 NAME
 
 SGN::Controller::Ambikon::Xrefs - controller for emitting Ambikon
@@ -52,6 +60,10 @@ sub search_xrefs_GET {
     $c->stash->{xref_hints}   ||= $c->req->params;
     $c->stash->{xref_hints}{exclude} &&= [ split /,/, $c->stash->{xref_hints}{exclude} ];
 
+    # decode any queries that appear to be JSON
+    $c->stash->{xref_queries} =
+        $self->serializer->decode_queries( $c->stash->{xref_queries} );
+
     my $hints = $c->stash->{xref_hints};
     my $type = $hints->{render_type} || 'link';
 
@@ -80,7 +92,6 @@ sub search_xrefs_GET {
         if( $r{'text/html'} ) {
             # render the whole resultset
             $xref_set->renderings->{'text/html'} = $mason->render( $c, $c->stash->{template} );
-
             # and also render each individual xref
             for my $x ( @{ $xref_set->xrefs } ) {
                 my $tags = $x->tags;
