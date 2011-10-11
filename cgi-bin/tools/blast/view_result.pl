@@ -115,12 +115,12 @@ print <<EOJS;
     // look up xrefs for overall subject sequence
     var subj = popup.find('.subject_sequence_xrefs');
     subj.html( '<img src="/img/throbber.gif" /> searching ...' );
-    subj.load( '/api/v1/feature_xrefs?q='+id );
+    subj.load( '/ambikon/xrefs/search_html?q='+id );
 
     // look up xrefs for the hit region
     var region = popup.find('.hit_region_xrefs');
     region.html( '<img src="/img/throbber.gif" /> searching ...' );
-    region.load( '/api/v1/feature_xrefs?q='+id_region );
+    region.load( '/ambikon/xrefs/search_html?q='+id_region );
 
     popup.dialog( 'open' );
     jQuery( "body .ui-widget-overlay").click( function() { popup.dialog( "close" ); } );
