@@ -37,6 +37,7 @@ sub search_xrefs :
       ActionClass('REST')
       Path('/api/v1/feature_xrefs')
       Path('/ambikon/xrefs/search')
+      Path('/ambikon/xrefs/search_html')
       Args(0) {
 }
 
