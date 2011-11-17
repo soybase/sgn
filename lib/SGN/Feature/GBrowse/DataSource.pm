@@ -47,7 +47,6 @@ has 'gbrowse' => ( documentation => <<'',
 GBrowse Feature object this data source belongs to
 
     is => 'ro',
-    required => 1,
     weak_ref => 1,
   );
 
@@ -57,6 +56,7 @@ absolute path to the data source's config file
     is  => 'ro',
     isa => 'Path::Class::File',
     required => 1,
+    coerce => 1,
    );
 
 has 'config' => ( documentation => <<'',
@@ -101,10 +101,13 @@ sub image_url {
 
 sub _url {
     my ( $self, $script, $query ) = @_;
-    my $url = $self->gbrowse->cgi_url->clone;
-    $url->path( join '', map "$_/", $url->path, $script, $self->name );
-    $url->query_form_hash( $query ) if $query;
-    return $url;
+    if( my $gbrowse = $self->gbrowse ) {
+        my $url = $gbrowse->cgi_url->clone;
+        $url->path( join '', map "$_/", $url->path, $script, $self->name );
+        $url->query_form_hash( $query ) if $query;
+        return $url;
+    }
+    return;
 }
 
 

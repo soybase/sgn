@@ -9,8 +9,6 @@ use Carp;
 use Bio::Range;
 use Bio::Graphics::Gel;
 
-use CXGN::Apache::Error;
-
 use CXGN::TomatoGenome::BACSubmission;
 use CXGN::DB::Connection;
 use CXGN::DB::Physical;
@@ -461,29 +459,13 @@ print info_section_html(
     contents => sequencing_content( $self, $c, $clone, $person, $dbh, $chado ),
 );
 
-# compute content for prelim. annot section
-my $latest_seq = $clone->latest_sequence_name;
-
-my @gb_xrefs = map {
-    my $gb = $_;
-    my @end_names = ($clone->arizona_clone_name.'_F', $clone->arizona_clone_name.'_R' );
-    my @names = ( $latest_seq,
-                  $clone->arizona_clone_name,
-                  ($clone->chromosome_num ? ($clone->clone_name_with_chromosome) :  ()),
-                  ( $clone->latest_sequence_name || () ),
-                  @end_names,
-                  );
-    map $gb->xrefs( $_ ), @names
-} $c->enabled_feature('gbrowse2');
 
 print info_section_html(
     title       => 'Annotations',
     collapsible => 1,
     contents    => info_table_html(
         __border => 0,
-        Browse   => @gb_xrefs
-            ? $c->render_mason( '/sitefeatures/gbrowse2/xref_set/link.mas', xrefs => \@gb_xrefs )
-            : '<span class="ghosted">'. $clone->clone_name.' has no browsable sequence annotations</span>',
+        Browse   => annotation_links_html( $c, $clone ),
         Download => (
             $self->_is_tomato($clone)
             ? render_tomato_bac_annot_download( $c, $clone )
@@ -511,6 +493,37 @@ $page->footer;
 #  Subroutines
 #
 ######################################################################
+
+# fetch and render ambikon xrefs for relevant genome browser links
+sub annotation_links_html {
+    my ( $c, $clone ) = @_;
+
+    # compute content for prelim. annot section
+    my $latest_seq = $clone->latest_sequence_name;
+
+    my @end_names = ($clone->arizona_clone_name.'_F', $clone->arizona_clone_name.'_R' );
+    my @names = ( $latest_seq,
+                  $clone->arizona_clone_name,
+                  ($clone->chromosome_num ? ($clone->clone_name_with_chromosome) :  ()),
+                  ( $clone->latest_sequence_name || () ),
+                  @end_names,
+                );
+
+    my $response = $c->forward(
+        '/ambikon/search_xrefs',
+        [ queries => \@names,
+          hints   => {
+              render_type => 'link',
+              xrefs_with_tag => 'genome browser',
+          },
+        ],
+      );
+
+    my $html = $c->render_mason( '/ambikon/xrefs/consume/response.mas', xrefs => $response );
+    $html = '<span class="ghosted">'. $clone->clone_name.' has no browsable sequence annotations</span>' unless $html =~ /<(a|img) /;
+    return $html;
+}
+
 
 #compare an in-vitro and in-silico restriction fragment set
 #against eachother, rate how well they match up on a scale of 0 to 1

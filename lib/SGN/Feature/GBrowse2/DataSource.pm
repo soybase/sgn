@@ -19,7 +19,7 @@ has 'xref_discriminator' => (
     lazy_build => 1,
    ); sub _build_xref_discriminator {
        my ( $self ) = @_;
-       return $self->gbrowse->config_master->code_setting( $self->name => 'restrict_xrefs' )
+       return eval { $self->gbrowse->config_master->code_setting( $self->name => 'restrict_xrefs' ) }
               || sub { 1 }
    }
 
@@ -153,8 +153,10 @@ sub _make_feature_xrefs {
 }
 
 sub _make_cross_ref {
-    shift;
-    return CrossReference->new( @_ );
+    my $self = shift;
+    my $xref = CrossReference->new( @_ );
+    push @{$xref->tags}, $self->name, $self->organism;
+    return $xref;
 }
 
 sub _make_region_xref {
