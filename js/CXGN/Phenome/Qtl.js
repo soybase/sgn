@@ -31,7 +31,7 @@ var Qtl = {
 	}
         else{
 	    var type = 'browse';
-	    var d = new MochiKit.Async.doSimpleXMLHttpRequest("organism_browser.pl", {organism: str, type: type});
+	    var d = new MochiKit.Async.doSimpleXMLHttpRequest("/phenome/organism_browser.pl", {organism: str, type: type});
 	    d.addCallbacks(this.updateTaxonSelect);
 	}
     },
@@ -65,7 +65,7 @@ var Qtl = {
       	var type = 'associate';
 	var organism_id = MochiKit.DOM.getElement('taxon_select').value;	
 
-	new Ajax.Request('organism_browser.pl', { parameters:
+	new Ajax.Request('/phenome/organism_browser.pl', { parameters:
 		{type: type, organism_id: organism_id}, onSuccess: Tools.reloadPage} );
 
 
@@ -87,33 +87,21 @@ var Qtl = {
             }
     },
    
-    setDefaultStat: function( id ) 
+    setUserStatOption: function( id, useroption ) 
     {
-	var pop_id = id;
-        var stat_params = 'default';
-        new MochiKit.Async.doSimpleXMLHttpRequest ( '../../../phenome/qtl_stat_options.pl', 
-                                                    {
-                                                     pop_id: pop_id, stat_params: stat_params
-                                                    }
-                                                  );
-    }, 
-    
-    setUserStat: function( id ) 
-    {
-	var pop_id = id;
-        var stat_params = 'user_params';
-        new MochiKit.Async.doSimpleXMLHttpRequest ( '../../../phenome/qtl_stat_options.pl', 
-                                                    { 
-                                                     pop_id: pop_id, stat_params: stat_params
-                                                    }
+        new MochiKit.Async.doSimpleXMLHttpRequest ('/qtl/stat/option', 
+                                                   { pop_id: id, 
+                                                     stat_params: useroption
+                                                   }
                                                   );
     },
- 
+
+
     logUser: function( userid ) 
     {
 	if (userid == null) 
             {
-                window.location="../../../solpeople/login.pl";
+                window.location="/solpeople/login.pl";
             } 
         else 
             {
@@ -131,10 +119,18 @@ var Qtl = {
                 jQuery.unblockUI();
             }          
     },
+
+     genericWaitPage: function() 
+    {
+        jQuery.blockUI.defaults.applyPlatformOpacityRules = false;
+        jQuery.blockUI({message: 'Please wait....'});
+                       
+        if(location.reload()) 
+            {
+                jQuery.unblockUI();
+            }          
+    },
             
-
-
-
       
 }//
 

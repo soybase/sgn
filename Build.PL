@@ -17,6 +17,7 @@ my $build = SGN::Build->new(
 
     build_requires => {
         'Class::MethodMaker'             => 0,
+        'Data::UUID'                     => 0,
         'File::Temp'                     => 0,
         'HTML::Lint'                     => 0,
         'Parse::Deb::Control'            => 0,
@@ -41,7 +42,8 @@ my $build = SGN::Build->new(
         'Ambikon::XrefSet'                         => 0,
         'Ambikon::XrefSet'                         => 0,
 
-        'Bio::Chado::Schema'                       => '0.08100',
+        'Bio::Chado::Schema'                       => '0.09020',
+
         'Bio::Root::Version'                       => '1.006001',
         'Bio::GMOD::Blast::Graph'                  => '0.01',
         'Bio::Graphics::FeatureFile'               => 0,
@@ -65,6 +67,8 @@ my $build = SGN::Build->new(
         'Data::Page'                               => 0,
         'Data::Visitor::Callback'                  => 0,
         'DateTime'                                 => 0,
+        # Remove the following dep when XML::Atom is fixed to depend on it and released
+        'DateTime::TimeZone'                       => '1.31',
         'DateTime::Format::Flexible'               => 0,
         'DBIx::Class'                              => 0,
         'DBIx::Connector'                          => 0,
@@ -89,6 +93,7 @@ my $build = SGN::Build->new(
         'JSON'                                     => 0,
         'JSON::XS'                                 => '2.24',
         'JSON::Any'                                => 0,
+        'Lingua::EN::Inflect'                      => 0,
         'List::Util'                               => 0,
         'LWP::UserAgent'                           => 0,
         'Mail::Sendmail'                           => 0,
@@ -122,6 +127,7 @@ my $build = SGN::Build->new(
         'URI::Escape'                              => 0,
         'URI::FromHash'                            => 0,
         'XML::Generator'                           => 0,
+        'XML::Atom'                                => 0,
         'XML::Twig'                                => 0,
         'YAML::Any'                                => 0,
         'WWW::Mechanize::TreeBuilder'              => 0,

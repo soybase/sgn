@@ -16,7 +16,6 @@ library(RColorBrewer)
 library(ltm)
                                         
 allargs<-commandArgs()
-print(allargs)
 
 phenodata<-grep("phenodata",
                allargs,
@@ -39,11 +38,6 @@ heatmap<-grep("heatmap",
                value=TRUE
                )
 
-print(phenodata)
-print(cortable)
-print(heatmap)
-
-
 #reading phenotype data into an R object
 phenodata<-read.csv(phenodata,
                     header=TRUE,
@@ -53,8 +47,6 @@ phenodata<-read.csv(phenodata,
                    )
 
 phenodata$ID=NULL
-
-
 
 #running Pearson correlation analysis
 coefpvalues<-rcor.test(phenodata,
@@ -134,8 +126,8 @@ write.table(coefficients,
       file=cortable,
       col.names=TRUE,
       row.names=TRUE,
+      quote=FALSE,
       dec="."
       )
-
 
 q(save = "no", runLast = FALSE)

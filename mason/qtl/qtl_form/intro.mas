@@ -18,19 +18,20 @@ $guide
 </%args>
 
 <%perl>
+
 my $citation = qq | <a href="http://www.biomedcentral.com/1471-2105/11/525/abstract">Citation</a> |;
 my $links = $guide . '|' . $citation;
 </%perl>
 
 <& /page/page_title.mas, title => "Step 0: Introduction" &>
 <&| /page/info_section.mas, title => "Introduction", subtitle => $links &>
- <form action="../../../phenome/qtl_load.pl" method="POST" enctype="MULTIPART/FORM-DATA">  
+ <form action="/phenome/qtl_load.pl" method="POST" enctype="MULTIPART/FORM-DATA">  
       <table cellspacing=20>
 	<tr>
           <td>	   
             <p>The uploading of QTL data needs to be done in one session. 
               Therefore, prepare your data files in the required format before 
-              starting the process.  Please read the submission $guide. If you 
+              starting the process. Please read the submission <% $guide %> first. If you 
               would like to have the formatting of your dataset checked 
               beforehand, send your data to: 
               <a href=mailto:iyt2\@cornell.edu>iyt2@cornell.edu</a>.
