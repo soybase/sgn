@@ -1,6 +1,8 @@
 
 <%perl>
 
+use CXGN::Phenotypes;
+
 my $q = $ARGS{q};
 
 $q ||= CXGN::Phenotypes->new->new_query;

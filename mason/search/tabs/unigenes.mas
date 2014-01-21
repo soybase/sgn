@@ -1,1 +1,28 @@
+<%args>
+
+</%args>
+
+<%perl>
+my $q = CXGN::Unigene::Search->new->new_query;
+</%perl>
+
+<table class="search_form_title" summary="" border="0">
+  <tr><td colspan="2">
+      <& /page/page_title.mas, title=>"Unigene Search" &>
+   </td></tr>
+   <tr><td colspan="2" align="right">
+      <a class="search_form_random" href="/search/unigene.pl?random=yes">
+	Select a unigene at random
+      </a>
+</td></tr></table>
+<form action="/search/ug-ad2.pl" method="get">
+  <div class="indentedcontent">
+    <% $q->to_html %>
+  </div>
+</form>
+<hr />
+<span style="margin-top: 1em" class="search_form_title">TIGR TC</span>
+<div class="indentedcontent">
+  See <a href="/tools/convert/input.pl">Converting between SGN unigenes and TGI TC sequences</a>.
+</div>
 

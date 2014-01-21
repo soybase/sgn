@@ -31,7 +31,7 @@ Lukas Mueller <lam87@cornell.edu>
   </tr>
   </table>
 
-<form action="/solpeople/people_search.pl" method="get">
+<form action="/ajax/search/people" method="get">
   <div class="indentedcontent">
     <% $q->to_html() %>
   </div>
