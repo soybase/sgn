@@ -35,8 +35,9 @@ my $form = $q->to_html;
 
 <& /util/import_javascript.mas, classes=>"CXGN.Page.FormattingHelpers" &> 
 
+<& /page/page_title.mas, title=>"Gene Search" &>
+
 <table class="search_form_title" summary=""><tr><td>
-  <h4><span class="search_form_title">Gene search</span></h4>
   </td>
   </tr></table>
   

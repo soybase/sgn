@@ -23,9 +23,10 @@ $q ||= CXGN::Genomic::Search::Clone->new->new_query;
 
 </%perl>
 
-  <table class="search_form_title" summary=""><tr><td>
-    <span class="search_form_title">Genomic clone search</span>
-  </td><td align="right">
+  <table class="search_form_title" summary=""><tr><td colspan="2">
+	<& /page/page_title.mas, title=>"BACs & genomic clone search" &>
+  </tr><tr>
+  </td><td align="right" colspan="2">
     <a class="search_form_random" href="/maps/physical/clone_info.pl?random=yes">
     Select a genomic clone at random
     </a>

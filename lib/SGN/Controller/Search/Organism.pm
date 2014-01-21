@@ -14,7 +14,7 @@ has 'default_page_size' => (
    );
 
 
-sub search : Path('/search/organisms') {
+sub search : Path('/search/tabs/organisms') {
     my ($self, $c) = @_;
 
     $c->forward( 'get_taxa_choices' );
@@ -29,7 +29,7 @@ sub search : Path('/search/organisms') {
     }
 
     $c->stash(
-        template =>  '/search/organisms.mas',
+        template =>  '/search/tabs/organisms.mas',
         form     => $form,
         results  => $results,
         pagination_link_maker => sub {

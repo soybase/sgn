@@ -1,1 +1,18 @@
 
+<%args>
+$dbh
+</%args>
+
+<& /page/page_title.mas, title=>'Marker Search' &>
+
+<%perl>
+use CXGN::Search::Markers;
+
+    my $mform = CXGN::Search::Markers->new($dbh);
+    
+
+</%perl>
+
+<form action="/search/markers/markersearch.pl">'
+         <% $mform->to_html() %>
+        </form>

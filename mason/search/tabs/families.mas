@@ -1,1 +1,19 @@
 
+<%perl>
+my $q ||= CXGN::Searches::Family->new()->new_query();
+
+</%perl>
+
+  <table class="search_form_title"><tr><td>
+	<& /page/page_title.mas, title=>"Family search" &>
+  </td>
+  </tr>
+  </table>
+
+	<form action="/search/family_search.pl" method="get">
+		<div class="indentedcontent">
+      <% $q->to_html %>
+		</div>
+	</form>
+
+

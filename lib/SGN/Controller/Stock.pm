@@ -55,7 +55,7 @@ sub search :Path('/stock/search') Args(0) {
     my $form = HTML::FormFu->new(LoadFile($c->path_to(qw{forms stock stock_search.yaml})));
     my $trait_db_name = $c->get_conf('trait_ontology_db_name');
     $c->stash(
-        template                   => '/search/phenotypes/stock.mas',
+        template                   => '/search/tabs/stocks.mas',
         request                    => $c->req,
         form                       => $form,
         form_opts                  => { stock_types => stock_types($self->schema), organisms => stock_organisms($self->schema)} ,

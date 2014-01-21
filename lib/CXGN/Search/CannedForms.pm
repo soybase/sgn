@@ -539,342 +539,344 @@ EOHTML
 
 =cut
 
-package CXGN::Search::CannedForms::MarkerSearch;
-use base qw( CXGN::Page::WebForm );
+# package CXGN::Search::CannedForms::MarkerSearch;
+# use base qw( CXGN::Page::WebForm );
 
-use Modern::Perl;
-use CXGN::Page::FormattingHelpers qw(blue_section_html);
-use Tie::Function;
-use CXGN::DB::Connection;
+# use Modern::Perl;
+# use CXGN::Page::FormattingHelpers qw(blue_section_html);
+# use Tie::Function;
+# use CXGN::DB::Connection;
 
-sub new {
-    my ( $class, $dbh ) = @_;
-    my $self = $class->SUPER::new();
-    $self->{dbh} = $dbh;
-    return $self;
-}
+# sub new {
+#     my ( $class, $dbh ) = @_;
+#     my $self = $class->SUPER::new();
+#     $self->{dbh} = $dbh;
+#     return $self;
+# }
 
-sub to_html {
+# sub to_html {
 
-    my ($self) = @_;
+#     my ($self) = @_;
 
-    tie my %species, 'Tie::Function', sub { $self->species_select(shift) };
+#     tie my %species, 'Tie::Function', sub { $self->species_select(shift) };
 
-    tie my %protocols, 'Tie::Function', sub { $self->protocol_select(shift) };
+#     tie my %protocols, 'Tie::Function', sub { $self->protocol_select(shift) };
 
-    tie my %chromos, 'Tie::Function', sub { $self->chromo_select(shift) };
+#     tie my %chromos, 'Tie::Function', sub { $self->chromo_select(shift) };
 
-    tie my %confs, 'Tie::Function', sub { $self->confidence_select(shift) };
+#     tie my %confs, 'Tie::Function', sub { $self->confidence_select(shift) };
 
-    tie my %maps, 'Tie::Function', sub { $self->map_select(shift) };
+#     tie my %maps, 'Tie::Function', sub { $self->map_select(shift) };
 
-    tie my %colls, 'Tie::Function', sub { $self->collection_select(shift) };
+#     tie my %colls, 'Tie::Function', sub { $self->collection_select(shift) };
 
-    tie my %textbox, 'Tie::Function', sub { $self->textbox(@_) };
+#     tie my %textbox, 'Tie::Function', sub { $self->textbox(@_) };
 
-    tie my %checkbox, 'Tie::Function', sub { $self->checkbox(@_) };
+#     tie my %checkbox, 'Tie::Function', sub { $self->checkbox(@_) };
 
-    tie my %nametype, 'Tie::Function', sub { $self->nametype(shift) };
+#     tie my %nametype, 'Tie::Function', sub { $self->nametype(shift) };
 
-    tie my %uniq, 'Tie::Function', sub { $self->uniqify_name(@_) };
+#     tie my %uniq, 'Tie::Function', sub { $self->uniqify_name(@_) };
 
-    my $retstring = <<EOHTML;
+#     my $retstring = <<EOHTML;
 
-<br /><table summary="">
-<tr><td> Marker name<br />or SGN-M \#: </td>
-<td>
-$nametype{asdf}</td>
-<td>
-$textbox{marker_name}
-<input type="submit" name="$uniq{submit}" value="Search" />
-&nbsp;&nbsp;&nbsp;
-$checkbox{'mapped','checked'}
-<!-- <input type="checkbox" checked="checked" name="mapped" /> -->
-<span class="help" onmouseover="return escape('Unmapped markers include candidate markers that have not yet been mapped, and polymorphism surveys.')">Find only markers that are mapped</span>
-</td></tr>
-</table>
+# <br /><table summary="">
+# <tr><td> Marker name<br />or SGN-M \#: </td>
+# <td>
+# $nametype{asdf}</td>
+# <td>
+# $textbox{marker_name}
+# <input type="submit" name="$uniq{submit}" value="Search" />
+# &nbsp;&nbsp;&nbsp;
+# $checkbox{'mapped','checked'}
+# <!-- <input type="checkbox" checked="checked" name="mapped" /> -->
+# <span class="help" onmouseover="return escape('Unmapped markers include candidate markers that have not yet been mapped, and polymorphism surveys.')">Find only markers that are mapped</span>
+# </td></tr>
+# </table>
 
 
-<h3 style="margin-bottom: 0; padding-bottom: 0;margin-top: 30px;">Advanced search options</h3>
-<div ><small>(Questions? See the <a href="/help/marker_search_help.pl">help page</a>)</small></div>
-<div align="right">   
-<a style="font-size: 75%" href="/search/markers/markersearch.pl?random=yes">  
-[Select a marker at random]</a>  
-</div>
+# <h3 style="margin-bottom: 0; padding-bottom: 0;margin-top: 30px;">Advanced search options</h3>
+# <div ><small>(Questions? See the <a href="/help/marker_search_help.pl">help page</a>)</small></div>
+# <div align="right">   
+# <a style="font-size: 75%" href="/search/markers/markersearch.pl?random=yes">  
+# [Select a marker at random]</a>  
+# </div>
 
-<table summary="" style="overflow:hidden;width:700px">
-<tr><td width="50%">
+# <table summary="" style="overflow:hidden;width:700px">
+# <tr><td width="50%">
 
 
-EOHTML
+# EOHTML
 
-    $retstring .= blue_section_html( 'Marker options', <<EOFOO);
+#     $retstring .= blue_section_html( 'Marker options', <<EOFOO);
 
-$checkbox{bac_assoc}
-Show only markers with BAC associations<br />
-<div style="margin-left: 20px;">
-$checkbox{overgo_assoc}
-<span class="help" onmouseover="return escape('The overgo process associates BACs with certain markers from SGN tomato maps.')">Overgo associations<small> <a href="/maps/physical/overgo_process_explained.pl">[About the overgo process]</a></small></span><br />
+# $checkbox{bac_assoc}
+# Show only markers with BAC associations<br />
+# <div style="margin-left: 20px;">
+# $checkbox{overgo_assoc}
+# <span class="help" onmouseover="return escape('The overgo process associates BACs with certain markers from SGN tomato maps.')">Overgo associations<small> <a href="/maps/physical/overgo_process_explained.pl">[About the overgo process]</a></small></span><br />
 
-$checkbox{manual_assoc}
-<span class="help" onmouseover="return escape('Some markers have been manually associated with BACs.')">Manual associations</span><br />
+# $checkbox{manual_assoc}
+# <span class="help" onmouseover="return escape('Some markers have been manually associated with BACs.')">Manual associations</span><br />
 
-$checkbox{comp_assoc}
-<span class="help" onmouseover="return escape('Some markers have been BLASTed against our collection of BACs.')">Computational associations</span><br />
+# $checkbox{comp_assoc}
+# <span class="help" onmouseover="return escape('Some markers have been BLASTed against our collection of BACs.')">Computational associations</span><br />
 
-</div>
-<br />
+# </div>
+# <br />
 
-<table summary=""><tr><td>Show markers mapped in species </td><td>
-$species{yeah}
-</td></tr></table>
-<br /><br />
+# <table summary=""><tr><td>Show markers mapped in species </td><td>
+# $species{yeah}
+# </td></tr></table>
+# <br /><br />
 
-<table summary=""><tr><td><span class="help" onmouseover="return escape('<b>Protocol definitions:</b><br />AFLP - Amplified Fragment Length Polymorphisms<br />CAPS - Cleaved Amplified Polymorphisms<br />PCR - any unspecified PCR-based method<br />RFLP - Restriction Fragment Length Polymorphism<br />SSR - Short Sequence Repeats (microsatellites)')">Show markers mapped by</span></td><td>
-$protocols{'yeah'}
-</td></tr></table>
+# <table summary=""><tr><td><span class="help" onmouseover="return escape('<b>Protocol definitions:</b><br />AFLP - Amplified Fragment Length Polymorphisms<br />CAPS - Cleaved Amplified Polymorphisms<br />PCR - any unspecified PCR-based method<br />RFLP - Restriction Fragment Length Polymorphism<br />SSR - Short Sequence Repeats (microsatellites)')">Show markers mapped by</span></td><td>
+# $protocols{'yeah'}
+# </td></tr></table>
 
-<table summary=""><tr><td><span class="help" onmouseover="return escape('<b>Collections:</b><br>COS - Conserved Ortholog Sequences (tomato and Arabidopsis)<br>COSII - Conserved Ortholog Sequences II (several Asterid species)<br>KFG - Known Function Genes')">Show markers in group</span></td><td>
-$colls{'yeah'}
-</td></tr></table>
+# <table summary=""><tr><td><span class="help" onmouseover="return escape('<b>Collections:</b><br>COS - Conserved Ortholog Sequences (tomato and Arabidopsis)<br>COSII - Conserved Ortholog Sequences II (several Asterid species)<br>KFG - Known Function Genes')">Show markers in group</span></td><td>
+# $colls{'yeah'}
+# </td></tr></table>
 
-EOFOO
+# EOFOO
 
-    $retstring .= "</td><td>";
+#     $retstring .= "</td><td>";
 
-    $retstring .= blue_section_html( 'Map locations', <<EOHTML);
+#     $retstring .= blue_section_html( 'Map locations', <<EOHTML);
 
-<table summary=""><tr><td>Show only markers on chromosomes</td><td>
-$chromos{yeah}
-</td></tr></table>
+# <table summary=""><tr><td>Show only markers on chromosomes</td><td>
+# $chromos{yeah}
+# </td></tr></table>
 
-<br /><br />
-Position between $textbox{'pos_start',3} cM and $textbox{'pos_end',3} cM
+# <br /><br />
+# Position between $textbox{'pos_start',3} cM and $textbox{'pos_end',3} cM
 
-<br /><br />
+# <br /><br />
 
-<table summary=""><tr><td><span class="help" onmouseover="return escape('Maps that have been made with MapMaker have confidence values associated with their positions. Leave this setting at &quot;uncalculated&quot; to see all markers on all maps.')">Confidence at least</span></td><td>
-$confs{yeah}
-</td></tr></table>
+# <table summary=""><tr><td><span class="help" onmouseover="return escape('Maps that have been made with MapMaker have confidence values associated with their positions. Leave this setting at &quot;uncalculated&quot; to see all markers on all maps.')">Confidence at least</span></td><td>
+# $confs{yeah}
+# </td></tr></table>
 
-<br /><br />
+# <br /><br />
 
-<table summary=""><tr><td>On maps</td><td>
-$maps{yeah}
-</td></tr></table>
+# <table summary=""><tr><td>On maps</td><td>
+# $maps{yeah}
+# </td></tr></table>
 
 
 
-EOHTML
+# EOHTML
 
-    $retstring .= <<EOHTML;
-</td></tr>
-</table>
-<center><input type="submit" name="$uniq{submit}" value="Search" /></center>
-EOHTML
+#     $retstring .= <<EOHTML;
+# </td></tr>
+# </table>
+# <center><input type="submit" name="$uniq{submit}" value="Search" /></center>
+# EOHTML
 
-    return $retstring;
+#     return $retstring;
 
-}
+# }
 
-sub checkbox {
+# sub checkbox {
 
-    my ( $self, $what, $checked_by_default ) = @_;
+#     my ( $self, $what, $checked_by_default ) = @_;
 
-    my $name       = $self->uniqify_name($what);
-    my $val        = $self->data($what);
-    my $checked    = '';
-    my $ifnosubmit = 0;
+#     my $name       = $self->uniqify_name($what);
+#     my $val        = $self->data($what);
+#     my $checked    = '';
+#     my $ifnosubmit = 0;
 
-    $ifnosubmit = 1
-      if ( !$self->data('submit') || $self->data('submit') ne 'Search' );
+#     $ifnosubmit = 1
+#       if ( !$self->data('submit') || $self->data('submit') ne 'Search' );
 
-    $checked = 'checked="checked"'
-      if ( ( $val && $val eq 'on' ) or ( $checked_by_default && $ifnosubmit ) );
-    return qq{<input type="checkbox" $checked name="$name" />}
+#     $checked = 'checked="checked"'
+#       if ( ( $val && $val eq 'on' ) or ( $checked_by_default && $ifnosubmit ) );
+#     return qq{<input type="checkbox" $checked name="$name" />}
 
-}
+# }
 
-sub textbox {
+# sub textbox {
 
-    my ( $self, $what, $size ) = @_;
+#     my ( $self, $what, $size ) = @_;
 
-    my $name = $self->uniqify_name($what) || '';
-    my $val  = $self->data($what)         || '';
+#     my $name = $self->uniqify_name($what) || '';
+#     my $val  = $self->data($what)         || '';
 
-    my $sizeparam = ( defined($size) && $size > 0 ) ? qq{size="$size"} : '';
-    return qq{<input type="text" $sizeparam name="$name" value="$val" />};
+#     my $sizeparam = ( defined($size) && $size > 0 ) ? qq{size="$size"} : '';
+#     return qq{<input type="text" $sizeparam name="$name" value="$val" />};
 
-}
+# }
 
-sub pos_start {
+# sub pos_start {
 
-    my $self = shift;
-    my $name = $self->uniqify_name('pos_start');
-    my $val  = $self->data('pos_start');
-    return qq{<input type="text" size="3" name="$name" value="$val" />};
+#     my $self = shift;
+#     my $name = $self->uniqify_name('pos_start');
+#     my $val  = $self->data('pos_start');
+#     return qq{<input type="text" size="3" name="$name" value="$val" />};
 
-}
+# }
 
-sub pos_end {
+# sub pos_end {
 
-    my $self = shift;
-    my $name = $self->uniqify_name('pos_end');
-    my $val  = $self->data('pos_end');
-    return qq{<input type="text" size="3" name="$name" value="$val" />};
+#     my $self = shift;
+#     my $name = $self->uniqify_name('pos_end');
+#     my $val  = $self->data('pos_end');
+#     return qq{<input type="text" size="3" name="$name" value="$val" />};
 
-}
+# }
 
-sub selectbox {
+# sub selectbox {
 
-    my ( $self, $fieldname, $values, $mult ) = @_;
+#     my ( $self, $fieldname, $values, $mult ) = @_;
 
-    my @valuelist = $self->data_multiple($fieldname);
+#     my @valuelist = $self->data_multiple($fieldname);
 
-    my $anysel = '';
-    my @anymatches = grep { $_ eq 'Any' } @valuelist;
-    $anysel =
-      ( @valuelist == 0 || @anymatches > 0 ) ? 'selected="selected"' : '';
+#     my $anysel = '';
+#     my @anymatches = grep { $_ eq 'Any' } @valuelist;
+#     $anysel =
+#       ( @valuelist == 0 || @anymatches > 0 ) ? 'selected="selected"' : '';
 
-    my $retstring = '';
+#     my $retstring = '';
 
-    if ($mult) {
+#     if ($mult) {
 
-        $retstring = '<select multiple="multiple" size="3" name="'
-          . $self->uniqify_name($fieldname) . '" >';
-        $retstring .= qq{<option $anysel>Any</option>};
+#         $retstring = '<select multiple="multiple" size="3" name="'
+#           . $self->uniqify_name($fieldname) . '" >';
+#         $retstring .= qq{<option $anysel>Any</option>};
 
-    }
-    else {
-        $retstring = '<select name="' . $self->uniqify_name($fieldname) . '" >';
+#     }
+#     else {
+#         $retstring = '<select name="' . $self->uniqify_name($fieldname) . '" >';
 
-    }
+#     }
 
-    my $multiple = $mult ? 'multiple="multiple"' : '';
+#     my $multiple = $mult ? 'multiple="multiple"' : '';
 
-    if ( ref( $values->[0] ) eq 'ARRAY' ) {
+#     if ( ref( $values->[0] ) eq 'ARRAY' ) {
 
-        foreach my $i (@$values) {
-            my $sel = '';
-            $sel = 'selected="selected"' if grep { $_ eq $i->[0] } @valuelist;
-            $retstring .= qq{<option value="$i->[0]" $sel>$i->[1]</option>};
-        }
+#         foreach my $i (@$values) {
+#             my $sel = '';
+#             $sel = 'selected="selected"' if grep { $_ eq $i->[0] } @valuelist;
+#             $retstring .= qq{<option value="$i->[0]" $sel>$i->[1]</option>};
+#         }
 
-    }
-    elsif ( @$values > 0 ) {
+#     }
+#     elsif ( @$values > 0 ) {
 
-        foreach my $i (@$values) {
-            my $sel = '';
-            $sel = 'selected="selected"' if grep { $_ eq $i } @valuelist;
-            $retstring .= qq{<option $sel>$i</option>};
-        }
+#         foreach my $i (@$values) {
+#             my $sel = '';
+#             $sel = 'selected="selected"' if grep { $_ eq $i } @valuelist;
+#             $retstring .= qq{<option $sel>$i</option>};
+#         }
 
-    }
-    else {
+#     }
+#     else {
 
-        warn "no values given to selectbox()\n";
-        return;
-    }
+#         warn "no values given to selectbox()\n";
+#         return;
+#     }
 
-    $retstring .= '</select>';
-    return $retstring;
+#     $retstring .= '</select>';
+#     return $retstring;
 
-}
+# }
 
-sub map_select {
+# sub map_select {
 
-    my ($self) = @_;
+#     my ($self) = @_;
 
-    my $mapx0rz =
-      $self->{dbh}->selectall_arrayref(
-"SELECT map_id, short_name from map WHERE map_type = 'genetic' ORDER BY short_name"
-      );
+#     my $mapx0rz =
+#       $self->{dbh}->selectall_arrayref(
+# "SELECT map_id, short_name from map WHERE map_type = 'genetic' ORDER BY short_name"
+#       );
 
-    return $self->selectbox( 'maps', $mapx0rz, 'multiple' );
+#     return $self->selectbox( 'maps', $mapx0rz, 'multiple' );
 
-}
+# }
 
-sub collection_select {
+# sub collection_select {
 
-    my ($self) = @_;
+#     my ($self) = @_;
 
-    my $collz =
-      $self->{dbh}->selectcol_arrayref(
-        "select mc_name from marker_collection ORDER BY mc_name");
+#     my $collz =
+#       $self->{dbh}->selectcol_arrayref(
+#         "select mc_name from marker_collection ORDER BY mc_name");
 
-    return $self->selectbox( 'colls', $collz, 'multiple' );
+#     return $self->selectbox( 'colls', $collz, 'multiple' );
 
-}
+# }
 
-sub nametype {
+# sub nametype {
 
-    my $self = shift;
-    my @namelist = ( 'starts with', 'exactly', 'contains' );
+#     my $self = shift;
+#     my @namelist = ( 'starts with', 'exactly', 'contains' );
 
-    return $self->selectbox( 'nametype', \@namelist );
+#     return $self->selectbox( 'nametype', \@namelist );
 
-}
+# }
 
-sub protocol_select {
+# sub protocol_select {
 
-    my $self = shift;
-    my $protolist =
-      $self->{dbh}->selectcol_arrayref(
-"SELECT distinct protocol FROM marker_experiment WHERE protocol <> 'unknown'"
-      );
+#     my $self = shift;
+#     my $protolist =
+#       $self->{dbh}->selectcol_arrayref(
+# "SELECT distinct protocol FROM marker_experiment WHERE protocol <> 'unknown'"
+#       );
 
-    #push(@$protolist, 'RFLP');
+#     #push(@$protolist, 'RFLP');
 
-    @$protolist = sort @$protolist;
+#     @$protolist = sort @$protolist;
 
-    return $self->selectbox( 'protos', $protolist, 'multiple' );
+#     return $self->selectbox( 'protos', $protolist, 'multiple' );
 
-}
+# }
 
-sub chromo_select {
+# sub chromo_select {
 
-    my $self = shift;
-    my $chromolist =
-      $self->{dbh}->selectcol_arrayref(
-"SELECT distinct lg_name FROM linkage_group WHERE lg_name !~ '[0-9][a-z]'"
-      );
+#     my $self = shift;
+#     my $chromolist =
+#       $self->{dbh}->selectcol_arrayref(
+# "SELECT distinct lg_name FROM linkage_group WHERE lg_name !~ '[0-9][a-z]'"
+#       );
 
-    {
-      no warnings 'uninitialized';
-      @$chromolist = sort {
-                do { $a =~ /(\d+)/; $1 }
-            <=> do { $b =~ /(\d+)/; $1 }
-      } @$chromolist;
-    }
+#     {
+#       no warnings 'uninitialized';
+#       @$chromolist = sort {
+#                 do { $a =~ /(\d+)/; $1 }
+#             <=> do { $b =~ /(\d+)/; $1 }
+#       } @$chromolist;
+#     }
 
-    return $self->selectbox( 'chromos', $chromolist, 'multiple' );
+#     return $self->selectbox( 'chromos', $chromolist, 'multiple' );
 
-}
+# }
 
-sub confidence_select {
+# sub confidence_select {
 
-    my $self = shift;
-    my $conflist =
-      $self->{dbh}->selectall_arrayref(
-"SELECT confidence_id, confidence_name FROM marker_confidence order by confidence_id "
-      );
+#     my $self = shift;
+#     my $conflist =
+#       $self->{dbh}->selectall_arrayref(
+# "SELECT confidence_id, confidence_name FROM marker_confidence order by confidence_id "
+#       );
 
-    #  my %confs = map { $_->[0] => $_->[1] } @$conflist;
+#     #  my %confs = map { $_->[0] => $_->[1] } @$conflist;
 
-    return $self->selectbox( 'confs', $conflist );
+#     return $self->selectbox( 'confs', $conflist );
 
-}
+# }
 
-sub species_select {
+# sub species_select {
 
-    my ($self) = @_;
+#     my ($self) = @_;
 
-    my $names =
-      $self->{dbh}->selectcol_arrayref(
-'select distinct common_name.common_name from common_name inner join organism using(common_name_id) inner join accession using(organism_id) inner join map on(accession.accession_id=map.parent_1 OR accession.accession_id=map.parent_2) ORDER BY common_name.common_name'
-      );
-    return $self->selectbox( 'species', $names, 'multiple' );
+#     my $names =
+#       $self->{dbh}->selectcol_arrayref(
+# 'select distinct common_name.common_name from common_name inner join organism using(common_name_id) inner join accession using(organism_id) inner join map on(accession.accession_id=map.parent_1 OR accession.accession_id=map.parent_2) ORDER BY common_name.common_name'
+#       );
+#     return $self->selectbox( 'species', $names, 'multiple' );
 
-}
+# }
+
+
 
 1;
