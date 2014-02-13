@@ -10,9 +10,6 @@ $breeding_programs
 
 <div id="add_project_dialog" class="ui-widget">
   <form method="post" enctype="multipart/form-data" encoding="multipart/form-data" id="create_new_trial_form" name="create_new_trial_form">
-    <label for="add_project_name" style="display: none; inline-block; width: 100px;">Trial name:</label>
-    <input id="add_project_name" name="add_project_name" style="display: none" />
-    <br>
     <label for="add_project_year" style="display: inline-block; width: 100px;">Year(s):</label>
     <input id="add_project_year" name="add_project_year" />
     <br>
@@ -22,6 +19,11 @@ $breeding_programs
       <option value=".'"'.@$location[1].'"'.">".@$location[1]."</option>"; }
       </%perl>
     </select>
+   <br />
+   <label for="add_project_name" style="display: inline-block; width: 100px;">Trial name:</label>
+   <input id="add_project_name" name="add_project_name" />
+   <br>
+
     <br>
     <label for="select_breeding_program" style="display: inline-block; width: 100px;">Breeding Program:</label>
     <select id="select_breeding_program" name="select_breeding_program">
@@ -162,6 +164,12 @@ jQuery(document).ready(function () {
 
     jQuery('#add_project_link').click(function () {
         open_project_dialog()
+    });
+
+    jQuery('#add_project_location').mouseup( function () { 
+      if (jQuery('#add_project_name').val() == "") { 
+        jQuery('#add_project_name').val( jQuery('#add_project_location').val()+'_'+jQuery('#add_project_year').val());
+      }
     });
 
     jQuery('#add_project_dialog').dialog({
@@ -385,6 +393,10 @@ jQuery(document).ready(function () {
 	var stock_verified = verify_stock_list(stock_list);
         if (desc == '' || year == '') {
             alert('Year and description are required.');
+            return;
+        }
+        if (name == '') { 
+            alert('The trial name is required. Please enter a trial name.');
             return;
         }
 

@@ -73,7 +73,7 @@ sub generate_experimental_design_POST : Args(0) {
   my %design;
   my %design_info;
   my $error;
-  my $project_name = $c->req->param('project_name');
+  my $trial_name = $c->req->param('project_name');
   my $project_description = $c->req->param('project_description');
   my $year = $c->req->param('year');
   my @stock_names;
@@ -114,10 +114,11 @@ sub generate_experimental_design_POST : Args(0) {
     return;
   }
 
-  my $trial_name;
+#  my $trial_name;
   my $trial_create = CXGN::Trial::TrialCreate->new(schema => $schema);
   $trial_create->set_trial_year($c->req->param('year'));
   $trial_create->set_trial_location($c->req->param('trial_location'));
+  $trial_create->set_trial_name($trial_name);
   if ($trial_create->trial_name_already_exists()) {
     $c->stash->{rest} = {error => "Trial name \"".$trial_create->get_trial_name()."\" already exists" };
     return;
