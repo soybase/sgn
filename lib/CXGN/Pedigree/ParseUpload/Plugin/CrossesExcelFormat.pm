@@ -4,7 +4,11 @@ package CXGN::Pedigree::ParseUpload::Plugin::CrossesExcelFormat;
 use Moose;
 use MooseX::FollowPBP;
 use Moose::Util::TypeConstraints;
+use Try::Tiny;
+use List::MoreUtils qw /any /;
 use Spreadsheet::ParseExcel;
+use Bio::GeneticRelationships::Pedigree;
+use Bio::GeneticRelationships::Individual;
 
 sub name {
     return "crosses excel";
@@ -51,6 +55,7 @@ sub _validate {
     my @errors;
     my $passed_validation;
     my %validate_result;
+    my %valid_cross_types;
 
     my $parser   = Spreadsheet::ParseExcel->new();
     my $spreadsheet = $parser->parse($filename);
@@ -74,27 +79,83 @@ sub _validate {
 
     print STDERR "Validating cross file\n\n";
     #hash for column headers
-    my $cross_name  = $worksheet->get_cell(0,0);
-    my $cross_type  = $worksheet->get_cell(0,1);
-    my $maternal_parent  = $worksheet->get_cell(0,2);
-    my $paternal_parent  = $worksheet->get_cell(0,3);
+    my $cross_name_head  = $worksheet->get_cell(0,0);
+    my $cross_type_head  = $worksheet->get_cell(0,1);
+    my $maternal_parent_head  = $worksheet->get_cell(0,2);
+    my $paternal_parent_head  = $worksheet->get_cell(0,3);
+    my $number_of_progeny  = $worksheet->get_cell(0,4);
+    my $number_of_flowers  = $worksheet->get_cell(0,5);
+    my $number_of_seeds  = $worksheet->get_cell(0,6);
 
 
-    if (!$cross_name) {
+    if (!$cross_name_head || $cross_name_head ne 'cross_name' ) {
       push @errors, "cross_name is missing from the header";
     }
 
-    if (!$cross_type) {
+    if (!$cross_type_head || $cross_type_head ne 'cross_type') {
       push @errors, "cross_type is missing from the header";
     }
 
-    if (!$maternal_parent) {
+    if (!$maternal_parent_head || $maternal_parent_head ne 'maternal_parent') {
       push @errors, "maternal_parent is missing from the header";
     }
 
-    if (!$paternal_parent) {
+    if (!$paternal_parent_head || $paternal_parent_head ne 'paternal_parent') {
       push @errors, "paternal_parent is missing from the header";
     }
+
+    if ($number_of_progeny && $number_of_progeny ne 'number_of_progeny') {
+      push @errors, "wrong header for number_of_progeny column";
+    }
+
+    if ($number_of_progeny && $number_of_flowers ne 'number_of_flowers') {
+      push @errors, "wrong header for number_of_flowers column";
+    }
+
+    if ($number_of_progeny && $number_of_seeds ne 'number_of_seeds') {
+      push @errors, "wrong header for number_of_seeds column";
+    }
+
+    for my $row ( 1 .. $row_max ) {
+      my $cross_name = $worksheet->get_cell($row,0);
+      my $cross_type = $worksheet->get_cell($row,1);
+      my $maternal_parent =  $worksheet->get_cell($row,2);
+      my $paternal_parent =  $worksheet->get_cell($row,3);
+      my $number_of_progeny =  $worksheet->get_cell($row,4);
+      my $number_of_flowers =  $worksheet->get_cell($row,5);
+      my $number_of_seeds =  $worksheet->get_cell($row,6);
+
+      if (!$cross_name || $cross_name eq '') {
+	push @errors, "cross name missing on row $row";
+      }
+
+      if (!$cross_type || $cross_type eq '') {
+	push @errors, "cross type missing on row $row";
+      }
+
+      if (!$maternal_parent || $maternal_parent eq '') {
+	push @errors, "maternal_parent missing on row $row";
+      }
+
+      #some values must be positive integers
+
+      if ($number_of_progeny && !($number_of_progeny =~ /^\d+?$/)) {
+	push @errors, "number_of_progeny is not an integer on row $row";
+      }
+
+      if ($number_of_flowers && !($number_of_flowers =~ /^\d+?$/)) {
+	push @errors, "number_of_flowers is not an integer on row $row";
+      }
+
+      if ($number_of_seeds && !($number_of_seeds =~ /^\d+?$/)) {
+	push @errors, "number_of_seeds is not an integer on row $row";
+      }
+
+      #check that cross name does not exist (and project and experiment)
+      #check that parents exist
+
+    }
+
 
     if (scalar(@errors) >= 1) {
       $validate_result{'valid'} = $passed_validation;
