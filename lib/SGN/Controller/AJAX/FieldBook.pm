@@ -31,8 +31,6 @@ use Spreadsheet::WriteExcel;
 use SGN::View::Trial qw/design_layout_view design_info_view/;
 use CXGN::Phenotypes::ParseUpload;
 use CXGN::Phenotypes::StorePhenotypes;
-use CXGN::Trial::TrialCreate;
-use CXGN::Trial::TrialDesign;
 use CXGN::Trial::TrialLayout;
 use CXGN::Location::LocationLookup;
 use CXGN::Stock::StockLookup;
@@ -317,7 +315,7 @@ sub upload_phenotype_file_for_field_book_POST : Args(0) {
 
   $phenotype_metadata{'archived_file'} = $archived_filename_with_path;
   $phenotype_metadata{'archived_file_type'}="tablet phenotype file";
-  $phenotype_metadata{'operator'}="tester_operator";
+  $phenotype_metadata{'operator'}="tester_operator"; #####Need to get this from uploaded file
   $phenotype_metadata{'date'}="$timestamp";
 
   print STDERR "Validate uploaded file\n";

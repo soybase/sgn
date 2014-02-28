@@ -3,32 +3,31 @@ package CXGN::List::Validate::Plugin::Accessions;
 
 use Moose;
 
+use Data::Dumper;
+use CXGN::BreedersToolbox::AccessionsFuzzySearch;
+
 sub name { 
     return "accessions";
 }
 
 sub validate { 
     my $self = shift;
-    my $c = shift;
+    my $schema = shift;
     my $list = shift;
 
-    my $schema = $c->dbic_schema("Bio::Chado::Schema");
-
-    my $type_id = $schema->resultset("Cv::Cvterm")->search({ name=>"accession" })->first->cvterm_id();
+    #my $type_id = $schema->resultset("Cv::Cvterm")->search({ name=>"accession" })->first->cvterm_id();
 
     my @missing = ();
     
-    foreach my $l (@$list) { 
-	my $rs = $schema->resultset("Stock::Stock")->search(
-	    { 
-		type_id=>$type_id,
-		uniquename => $l, 
-	    });	
-	if ($rs->count() == 0) { 
-	    push @missing, $l;
-	}
-    }
-    return  { missing => \@missing, };
+
+    my $fs = CXGN::BreedersToolbox::AccessionsFuzzySearch->new({schema=>$schema});
+    my $r = $fs->get_matches($list, 0);
+
+    print STDERR Dumper($r);
+
+    my @non_unique;
+
+    return { missing => [ @{$r->{absent}},  map { $_->{name} } @{$r->{fuzzy}} ]  };
     
 }
 

@@ -36,7 +36,7 @@ jQuery(document).ready(function ($) {
 	autoOpen: false,
 	modal: true,
 	autoResize:true,
-        width: 500,
+        width: 600,
         position: ['top', 150],
 	buttons: {
 	    Ok: function() {
@@ -47,6 +47,24 @@ jQuery(document).ready(function ($) {
 	}
     });
 
+
+    $( "#cross_upload_success_dialog_message" ).dialog({
+	autoOpen: false,
+	modal: true,
+	buttons: {
+            Ok: { id: "dismiss_cross_upload_dialog",
+                  click: function() {
+		      $("#upload_crosses").dialog("close");
+		      $( this ).dialog( "close" );
+		      location.reload();
+                  },
+                  text: "OK"
+                }
+        }
+	
+    });
+
+
     $('#upload_crosses_form').iframePostForm({
 	json: true,
 	post: function () {
@@ -56,20 +74,34 @@ jQuery(document).ready(function ($) {
 	    }
 	},
 	complete: function (response) {
+            if (response.error_string) {
+		$("#upload_cross_error_display tbody").html('');
+		$("#upload_cross_error_display tbody").append(response.error_string);
+		$(function () {
+                    $("#upload_cross_error_display").dialog({
+			modal: true,
+			autoResize:true,
+			width: 650,
+			position: ['top', 250],
+			title: "Errors in uploaded cross file",
+			buttons: {
+                            Ok: function () {
+				$(this).dialog("close");
+                            }
+			}
+                    });
+		});
+		return;
+            }
 	    if (response.error) {
 		alert(response.error);
 		return;
 	    }
 	    if (response.success) {
-		alert("File uploaded successfully");
-		$( this ).dialog( "close" );
-		location.reload();
+		$('#cross_upload_success_dialog_message').dialog("open");
 	    }
 	}
     });
-
-
-
 
 
     $("#cross_upload_spreadsheet_format_info").click( function () { 
@@ -80,7 +112,7 @@ jQuery(document).ready(function ($) {
 	autoOpen: false,
 	buttons: { "OK" :  function() { $("#cross_upload_spreadsheet_info_dialog").dialog("close"); },},
 	modal: true,
-	width: 750,
+	width: 900,
 	autoResize:true,
     });
 
@@ -135,6 +167,7 @@ jQuery(document).ready(function ($) {
     $("#create_progeny_checkbox").change(function(){
 	$("#create_progeny_number").toggle(this.checked);  // show if it is checked, otherwise hide
 	$("#use_prefix_suffix").toggle(this.checked);  // show if it is checked, otherwise hide
+	$("#get_prefix_suffix").toggle(this.checked);  // show if it is checked, otherwise hide
     });
     
     $("#use_prefix_suffix_checkbox").change(function(){
@@ -204,7 +237,7 @@ jQuery(document).ready(function ($) {
             url: '/ajax/cross/add_cross',
             dataType: "json",
             type: 'POST',
-            data: 'cross_name='+crossName+'&cross_type='+crossType+'&maternal_parent='+maternalParent+'&paternal_parent='+paternalParent+'&progeny_number='+progenyNumber+'&flower_number='+flowerNumber+'&seed_number='+seedNumber+'&prefix='+prefix+'&suffix='+suffix+'&visible_to_role'+visibleToRole+'&program_id='+program+'&location_id='+location,
+            data: 'cross_name='+crossName+'&cross_type='+crossType+'&maternal_parent='+maternalParent+'&paternal_parent='+paternalParent+'&progeny_number='+progenyNumber+'&flower_number='+flowerNumber+'&seed_number='+seedNumber+'&prefix='+prefix+'&suffix='+suffix+'&visible_to_role'+visibleToRole+'&program='+program+'&location='+location,
             error: function(response) { alert("An error occurred. Please try again later!"+response); },
             parseerror: function(response) { alert("A parse error occurred. Please try again."+response); },
             success: function(response) { 

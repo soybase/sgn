@@ -2,35 +2,37 @@
 =head1 NAME
 
 SGN::Controller::AJAX::Cross - a REST controller class to provide the
-backend for objects linked with new cross
+functions for adding crosses
 
 =head1 DESCRIPTION
 
-Add submit new cross, etc...
+Add a new cross or upload a file containing crosses to add
 
 =head1 AUTHOR
 
 Jeremy Edwards <jde22@cornell.edu>
 Lukas Mueller <lam87@cornell.edu>
 
-
 =cut
 
 package SGN::Controller::AJAX::Cross;
 
 use Moose;
-
-use List::MoreUtils qw /any /;
 use Try::Tiny;
-use CXGN::Phenome::Schema;
-use CXGN::Phenome::Allele;
-use CXGN::Chado::Stock;
-use CXGN::Page::FormattingHelpers qw/ columnar_table_html info_table_html html_alternate_show /;
-use Scalar::Util qw(looks_like_number);
-use Data::Dumper;
+use DateTime;
+use File::Basename qw | basename dirname|;
+use File::Copy;
+use File::Slurp;
+use File::Spec::Functions;
+use Digest::MD5;
+use List::MoreUtils qw /any /;
+use Bio::GeneticRelationships::Pedigree;
+use Bio::GeneticRelationships::Individual;
 use CXGN::UploadFile;
-use Spreadsheet::WriteExcel;
 use CXGN::Pedigree::AddCrosses;
+use CXGN::Pedigree::AddProgeny;
+use CXGN::Pedigree::AddCrossInfo;
+use CXGN::Pedigree::ParseUpload;
 
 BEGIN { extends 'Catalyst::Controller::REST' }
 
@@ -40,31 +42,173 @@ __PACKAGE__->config(
     map       => { 'application/json' => 'JSON', 'text/html' => 'JSON' },
    );
 
-
-
-
-
 sub upload_cross_file : Path('/ajax/cross/upload_crosses_file') : ActionClass('REST') { }
 
 sub upload_cross_file_POST : Args(0) {
   my ($self, $c) = @_;
+  my $chado_schema = $c->dbic_schema('Bio::Chado::Schema', 'sgn_chado');
+  my $metadata_schema = $c->dbic_schema("CXGN::Metadata::Schema");
+  my $phenome_schema = $c->dbic_schema("CXGN::Phenome::Schema");
+  my $dbh = $c->dbc->dbh;
+  my $program = $c->req->param('cross_upload_breeding_program');
+  my $location = $c->req->param('cross_upload_location');
+  my $upload = $c->req->upload('crosses_upload_file');
+  my $prefix = $c->req->param('upload_prefix');
+  my $suffix = $c->req->param('upload_suffix');
   my $uploader = CXGN::UploadFile->new();
+  my $parser;
+  my $parsed_data;
+  my $upload_original_name = $upload->filename();
+  my $upload_tempfile = $upload->tempname;
+  my $subdirectory = "cross_upload";
+  my $archived_filename_with_path;
+  my $md5;
+  my $validate_file;
+  my $parsed_file;
+  my $parse_errors;
+  my %parsed_data;
+  my %upload_metadata;
+  my $time = DateTime->now();
+  my $timestamp = $time->ymd()."_".$time->hms();
+  my $user_id;
+  my $owner_name;
+  my $upload_file_type = "crosses excel";#get from form when more options are added
 
-  my $parser = CXGN::Phenotypes::ParseUpload->new();
+  if (!$c->user()) { 
+    print STDERR "User not logged in... not adding a crosses.\n";
+    $c->stash->{rest} = {error => "You need to be logged in to add a cross." };
+    return;
+  }
+  $user_id = $c->user()->get_object()->get_sp_person_id();
+
+  $owner_name = $c->user()->get_object()->get_username();
+
+  ## Store uploaded temporary file in archive
+  $archived_filename_with_path = $uploader->archive($c, $subdirectory, $upload_tempfile, $upload_original_name, $timestamp);
+  $md5 = $uploader->get_md5($archived_filename_with_path);
+  if (!$archived_filename_with_path) {
+      $c->stash->{rest} = {error => "Could not save file $upload_original_name in archive",};
+      return;
+  }
+  unlink $upload_tempfile;
+
+  $upload_metadata{'archived_file'} = $archived_filename_with_path;
+  $upload_metadata{'archived_file_type'}="cross upload file";
+  $upload_metadata{'user_id'}=$user_id;
+  $upload_metadata{'date'}="$timestamp";
+
+  #parse uploaded file with appropriate plugin
+  $parser = CXGN::Pedigree::ParseUpload->new(chado_schema => $chado_schema, filename => $archived_filename_with_path);
+  $parser->load_plugin('CrossesExcelFormat');
+  $parsed_data = $parser->parse();
+
+  if (!$parsed_data) {
+    my $return_error = '';
+
+    if (! $parser->has_parse_errors() ){
+      $return_error = "Could not get parsing errors";
+      $c->stash->{rest} = {error_string => $return_error,};
+    }
+
+    else {
+      $parse_errors = $parser->get_parse_errors();
+      foreach my $error_string (@{$parse_errors}){
+	$return_error=$return_error.$error_string."<br>";
+      }
+    }
+
+    $c->stash->{rest} = {error_string => $return_error,};
+    return;
+  }
+
+  my $cross_add = CXGN::Pedigree::AddCrosses
+    ->new({
+	   chado_schema => $chado_schema,
+	   phenome_schema => $phenome_schema,
+	   metadata_schema => $metadata_schema,
+	   dbh => $dbh,
+	   location => $location,
+	   program => $program,
+	   crosses =>  $parsed_data->{crosses},
+	   owner_name => $owner_name,
+	  });
+
+  #validate the crosses
+  if (!$cross_add->validate_crosses()){
+    $c->stash->{rest} = {error_string => "Error validating crosses",};
+    return;
+  }
+
+  #add the crosses
+  if (!$cross_add->add_crosses()){
+    $c->stash->{rest} = {error_string => "Error adding crosses",};
+    return;
+  }
+
+  #add the progeny
+  foreach my $cross_name_key (keys %{$parsed_data->{progeny}}){
+    my $progeny_number = $parsed_data->{progeny}->{$cross_name_key};
+    my $progeny_increment = 1;
+    my @progeny_names;
+
+    #create array of progeny names to add for this cross
+    while ($progeny_increment < $progeny_number + 1) {
+      $progeny_increment = sprintf "%03d", $progeny_increment;
+      my $stock_name = $cross_name_key.$prefix.$progeny_increment.$suffix;
+      push @progeny_names, $stock_name;
+      $progeny_increment++;
+    }
+
+    #add array of progeny to the cross
+    my $progeny_add = CXGN::Pedigree::AddProgeny
+      ->new({
+	     chado_schema => $chado_schema,
+	     phenome_schema => $phenome_schema,
+	     dbh => $dbh,
+	     cross_name => $cross_name_key,
+	     progeny_names => \@progeny_names,
+	     owner_name => $owner_name,
+	    });
+    if (!$progeny_add->add_progeny()){
+      $c->stash->{rest} = {error_string => "Error adding progeny",};
+      #should delete crosses and other progeny if add progeny fails?
+      return;
+    }
+  }
+
+  #add the number of flowers to crosses
+  foreach my $cross_name_key (keys %{$parsed_data->{flowers}}) {
+    my $number_of_flowers = $parsed_data->{flowers}->{$cross_name_key};
+    my $cross_add_info = CXGN::Pedigree::AddCrossInfo->new({ chado_schema => $chado_schema, cross_name => $cross_name_key} );
+    $cross_add_info->set_number_of_flowers($number_of_flowers);
+    $cross_add_info->add_info();
+  }
+
+  #add the number of seeds to crosses
+  foreach my $cross_name_key (keys %{$parsed_data->{seeds}}) {
+    my $number_of_seeds = $parsed_data->{seeds}->{$cross_name_key};
+    my $cross_add_info = CXGN::Pedigree::AddCrossInfo->new({ chado_schema => $chado_schema, cross_name => $cross_name_key} );
+    $cross_add_info->set_number_of_seeds($number_of_seeds);
+    $cross_add_info->add_info();
+  }
+
+  $c->stash->{rest} = {success => "1",};
+
 }
 
 
 sub add_cross : Local : ActionClass('REST') { }
 
-sub add_cross_POST :Args(0) { 
+sub add_cross_POST :Args(0) {
     my ($self, $c) = @_;
-    my $schema = $c->dbic_schema('Bio::Chado::Schema', 'sgn_chado');
+    my $chado_schema = $c->dbic_schema('Bio::Chado::Schema', 'sgn_chado');
+    my $metadata_schema = $c->dbic_schema("CXGN::Metadata::Schema");
+    my $phenome_schema = $c->dbic_schema("CXGN::Phenome::Schema");
+    my $dbh = $c->dbc->dbh;
     my $cross_name = $c->req->param('cross_name');
     my $cross_type = $c->req->param('cross_type');
-    $c->stash->{cross_name} = $cross_name;
-    my $program_id = $c->req->param('program_id');
-    $c->stash->{program_id} = $program_id;
-    my $location_id = $c->req->param('location_id');
+    my $program = $c->req->param('program');
+    my $location = $c->req->param('location');
     my $maternal = $c->req->param('maternal_parent');
     my $paternal = $c->req->param('paternal_parent');
     my $prefix = $c->req->param('prefix');
@@ -73,8 +217,16 @@ sub add_cross_POST :Args(0) {
     my $number_of_flowers = $c->req->param('number_of_flowers');
     my $number_of_seeds = $c->req->param('number_of_seeds');
     my $visible_to_role = $c->req->param('visible_to_role');
-
+    my $cross_add;
+    my $progeny_add;
+    my @progeny_names;
+    my @array_of_pedigree_objects;
+    my $progeny_increment = 1;
     my $paternal_parent_not_required;
+    my $number_of_flowers_cvterm;
+    my $number_of_seeds_cvterm;
+    my $owner_name;
+
     if ($cross_type eq "open" || $cross_type eq "bulk_open") {
       $paternal_parent_not_required = 1;
     }
@@ -87,16 +239,16 @@ sub add_cross_POST :Args(0) {
 	return;
     }
 
+    $owner_name = $c->user()->get_object()->get_username();
+
     if (!any { $_ eq "curator" || $_ eq "submitter" } ($c->user()->roles)  ) {
-        print STDERR "User's roles: ".Dumper($c->user()->roles)."\n";
 	print STDERR "User does not have sufficient privileges.\n";
 	$c->stash->{rest} = {error =>  "you have insufficient privileges to add a cross." };
 	return;
     }
 
-
     #check that progeny number is an integer less than maximum allowed
-    my $maximum_progeny_number = 20000;
+    my $maximum_progeny_number = 999; #higher numbers break cross name convention
     if ($progeny_number) {
       if ((! $progeny_number =~ m/^\d+$/) or ($progeny_number > $maximum_progeny_number) or ($progeny_number < 1)) {
 	$c->stash->{rest} = {error =>  "progeny number exceeds the maximum of $maximum_progeny_number or is invalid." };
@@ -117,215 +269,107 @@ sub add_cross_POST :Args(0) {
     }
 
     #check that parents exist in the database
-    if (! $schema->resultset("Stock::Stock")->find({name=>$maternal,})){
+    if (! $chado_schema->resultset("Stock::Stock")->find({name=>$maternal,})){
       $c->stash->{rest} = {error =>  "maternal parent does not exist." };
       return;
     }
 
-    if (! $schema->resultset("Stock::Stock")->find({name=>$paternal,})){
-      $c->stash->{rest} = {error =>  "paternal parent does not exist." };
-      return;
+    if (!$paternal_parent_not_required) {
+      if (! $chado_schema->resultset("Stock::Stock")->find({name=>$paternal,})){
+	$c->stash->{rest} = {error =>  "paternal parent does not exist." };
+	return;
+      }
     }
 
     #check that cross name does not already exist
-    if ($schema->resultset("Stock::Stock")->find({name=>$cross_name})){
+    if ($chado_schema->resultset("Stock::Stock")->find({name=>$cross_name})){
       $c->stash->{rest} = {error =>  "cross name already exists." };
       return;
     }
 
     #check that progeny do not already exist
-    if ($schema->resultset("Stock::Stock")->find({name=>$prefix.$cross_name.$suffix."-1",})){
+    if ($chado_schema->resultset("Stock::Stock")->find({name=>$cross_name.$prefix.'001'.$suffix,})){
       $c->stash->{rest} = {error =>  "progeny already exist." };
       return;
     }
 
-    my $geolocation = $schema->resultset("NaturalDiversity::NdGeolocation")->find_or_create(
-           {
-                nd_geolocation_id => $location_id,
-           } ) ;
+    #objects to store cross information
+    my $cross_to_add = Bio::GeneticRelationships::Pedigree->new(name => $cross_name, cross_type => $cross_type);
+    my $female_individual = Bio::GeneticRelationships::Individual->new(name => $maternal);
+    $cross_to_add->set_female_parent($female_individual);
 
-    my $project;
-
-    if ($program_id && $program_id ne 'null') {
-	$project = $schema->resultset("Project::Project")
-	    ->find_or_create(
-			     {
-			      project_id => $program_id,
-			     } ) ;
+    if (!$paternal_parent_not_required){
+      my $male_individual = Bio::GeneticRelationships::Individual->new(name => $paternal);
+      $cross_to_add->set_male_parent($male_individual);
     }
 
+    $cross_to_add->set_cross_type($cross_type);
+    $cross_to_add->set_name($cross_name);
 
-     my $accession_cvterm = $schema->resultset("Cv::Cvterm")->create_with(
-       { name   => 'accession',
-       cv     => 'stock type',
-       db     => 'null',
-       dbxref => 'accession',
-     });
-
-     #my $population_cvterm = $schema->resultset("Cv::Cvterm")->find(
-     #  { name   => 'population',
-     #});
-
-    my $population_cvterm = $schema->resultset("Cv::Cvterm")->find(
-      { name   => 'cross',
-    });
-
-
-    my $female_parent_stock = $schema->resultset("Stock::Stock")->find(
-            { name       => $maternal,
-            } );
-
-    my $organism_id = $female_parent_stock->organism_id();
-
-    my $male_parent_stock = $schema->resultset("Stock::Stock")->find(
-            { name       => $paternal,
-            } );
-
-    my $population_stock = $schema->resultset("Stock::Stock")->find_or_create(
-            { organism_id => $organism_id,
-	      name       => $cross_name,
-	      uniquename => $cross_name,
-	      type_id => $population_cvterm->cvterm_id,
-            } );
-
-      my $female_parent = $schema->resultset("Cv::Cvterm")->create_with(
-    { name   => 'female_parent',
-      cv     => 'stock relationship',
-      db     => 'null',
-      dbxref => 'female_parent',
-    });
-
-      my $male_parent = $schema->resultset("Cv::Cvterm")->create_with(
-    { name   => 'male_parent',
-      cv     => 'stock relationship',
-      db     => 'null',
-      dbxref => 'male_parent',
-    });
-
-      my $population_members = $schema->resultset("Cv::Cvterm")->create_with(
-    { name   => 'cross_name',
-      cv     => 'stock relationship',
-      db     => 'null',
-      dbxref => 'cross_name',
-    });
-
-      my $visible_to_role_cvterm = $schema->resultset("Cv::Cvterm")->create_with(
-    { name   => 'visible_to_role',
-      cv => 'local',
-      db => 'null',
-    });
-
-   my $number_of_flowers_cvterm = $schema->resultset("Cv::Cvterm")->create_with(
-      { name   => 'number_of_flowers',
-	cv     => 'local',
-	db     => 'null',
-	dbxref => 'number_of_flowers',
-    });
-
-   my $number_of_seeds_cvterm = $schema->resultset("Cv::Cvterm")->create_with(
-      { name   => 'number_of_seeds',
-	cv     => 'local',
-	db     => 'null',
-	dbxref => 'number_of_seeds',
-    });
-
-   my $cross_type_cvterm = $schema->resultset("Cv::Cvterm")->create_with(
-      { name   => 'cross_type',
-	cv     => 'local',
-	db     => 'null',
-	dbxref => 'cross_type',
-    });
+    #create array of pedigree objects to add, in this case just one pedigree
+    @array_of_pedigree_objects = ($cross_to_add);
+    $cross_add = CXGN::Pedigree::AddCrosses
+      ->new({
+	     chado_schema => $chado_schema,
+	     phenome_schema => $phenome_schema,
+	     #metadata_schema => $metadata_schema,
+	     dbh => $dbh,
+	     location => $location,
+	     program => $program,
+	     crosses =>  \@array_of_pedigree_objects,
+	     owner_name => $owner_name,
+	    });
 
 
-    my $experiment = $schema->resultset('NaturalDiversity::NdExperiment')->create(
-            {
-                nd_geolocation_id => $geolocation->nd_geolocation_id(),
-                type_id => $population_cvterm->cvterm_id(),
-            } );
+    #add the crosses
+    $cross_add->add_crosses();
 
-    if ($project) {
-	#link to the project
-	$experiment->find_or_create_related('nd_experiment_projects', {
-								       project_id => $project->project_id()
-								      } );
-    }
-
-    #link the experiment to the stock
-    $experiment->find_or_create_related('nd_experiment_stocks' , {
-	    stock_id => $population_stock->stock_id(),
-	    type_id  =>  $population_cvterm->cvterm_id(),
-                                           });
-
-    if ($cross_type) {
-      $experiment->find_or_create_related('nd_experimentprops' , {
-								  nd_experiment_id => $experiment->nd_experiment_id(),
-								  type_id  =>  $cross_type_cvterm->cvterm_id(),
-								  value  =>  $cross_type,
-								 });
-    }
-
-    if ($number_of_flowers) {
-      #set flower number in experimentprop
-      $experiment->find_or_create_related('nd_experimentprops' , {
-								  nd_experiment_id => $experiment->nd_experiment_id(),
-								  type_id  =>  $number_of_flowers_cvterm->cvterm_id(),
-								  value  =>  $number_of_flowers,
-								 });
-    }
-
-    if ($number_of_seeds) {
-      $experiment->find_or_create_related('nd_experimentprops' , {
-								  nd_experiment_id => $experiment->nd_experiment_id(),
-								  type_id  =>  $number_of_seeds_cvterm->cvterm_id(),
-								  value  =>  $number_of_seeds,
-								 });
-    }
-
-    my $increment = 1;
+    #create progeny if specified
     if ($progeny_number) {
-      while ($increment < $progeny_number + 1) {
-	  $increment = sprintf "%03d", $increment;
-	my $stock_name = $prefix.$cross_name."P".$increment.$suffix;
-	my $accession_stock = $schema->resultset("Stock::Stock")->create(
-									 { organism_id => $organism_id,
-									   name       => $stock_name,
-									   uniquename => $stock_name,
-									   type_id     => $accession_cvterm->cvterm_id,
-									 } );
-	$accession_stock->find_or_create_related('stock_relationship_objects', {
-										type_id => $female_parent->cvterm_id(),
-										object_id => $accession_stock->stock_id(),
-										subject_id => $female_parent_stock->stock_id(),
-									       } );
-	$accession_stock->find_or_create_related('stock_relationship_objects', {
-										type_id => $male_parent->cvterm_id(),
-										object_id => $accession_stock->stock_id(),
-										subject_id => $male_parent_stock->stock_id(),
-									       } );
-	$accession_stock->find_or_create_related('stock_relationship_objects', {
-										type_id => $population_members->cvterm_id(),
-										object_id => $accession_stock->stock_id(),
-										subject_id => $population_stock->stock_id(),
-									       } );
-	if ($visible_to_role) {
-	  my $accession_stock_prop = $schema->resultset("Stock::Stockprop")->find_or_create(
-											    { type_id =>$visible_to_role_cvterm->cvterm_id(),
-											      value => $visible_to_role,
-											      stock_id => $accession_stock->stock_id()
-											    });
-	}
-	$increment++;
 
+      #create array of progeny names to add for this cross
+      while ($progeny_increment < $progeny_number + 1) {
+	$progeny_increment = sprintf "%03d", $progeny_increment;
+	my $stock_name = $cross_name.$prefix.$progeny_increment.$suffix;
+	push @progeny_names, $stock_name;
+	$progeny_increment++;
       }
+
+      #add array of progeny to the cross
+      $progeny_add = CXGN::Pedigree::AddProgeny
+	->new({
+	       chado_schema => $chado_schema,
+	       phenome_schema => $phenome_schema,
+	       dbh => $dbh,
+	       cross_name => $cross_name,
+	       progeny_names => \@progeny_names,
+	       owner_name => $owner_name,
+	      });
+      $progeny_add->add_progeny();
+
     }
 
+    #add number of flowers as an experimentprop if specified
+    if ($number_of_flowers) {
+      my $cross_add_info = CXGN::Pedigree::AddCrossInfo->new({ chado_schema => $chado_schema, cross_name => $cross_name} );
+      $cross_add_info->set_number_of_flowers($number_of_flowers);
+      $cross_add_info->add_info();
+    }
+
+    #add number of seeds as an experimentprop if specified
+    if ($number_of_seeds) {
+      my $cross_add_info = CXGN::Pedigree::AddCrossInfo->new({ chado_schema => $chado_schema, cross_name => $cross_name} );
+      $cross_add_info->set_number_of_seeds($number_of_seeds);
+      $cross_add_info->add_info();
+    }
 
     if ($@) {
 	$c->stash->{rest} = { error => "An error occurred: $@"};
     }
 
     $c->stash->{rest} = { error => '', };
-}
+  }
 
-
-1;
+###
+1;#
+###

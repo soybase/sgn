@@ -33,9 +33,8 @@ jQuery(document).ready( function () {
                     success: function(response) {         
                     runCorrelationAnalysis();
                 },
-                    error: function(response) {
-                    
-                    alert('there is error in creating the phenotype data set for this correlation analysis.');
+                    error: function(response) {                    
+                   // alert('there is error in creating the phenotype data set for this correlation analysis.');
                 }
             });
 
@@ -55,7 +54,7 @@ function runCorrelationAnalysis () {
                 jQuery("#correlation_message").empty();
             },
                 error: function(response) {           
-                alert('There is error running correlation analysis.');
+               // alert('There is error running correlation analysis.');
                 jQuery("#correlation_message")
                     .css({"padding-left": '0px'})
                     .html("There is no correlation output for this population.");
@@ -76,8 +75,8 @@ function plotCorrelation (data) {
     
     data = JSON.parse(data);
     
-    var height = 500;
-    var width  = 500;
+    var height = 350;
+    var width  = 350;
     var pad    = {left:70, top:5, right:5, bottom: 90}; 
     var totalH = height + pad.top + pad.bottom;
     var totalW = width + pad.left + pad.right;

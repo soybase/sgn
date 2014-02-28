@@ -143,7 +143,9 @@ sub search : Path('/solgs/search') Args() {
     $self->gs_traits_index($c);
     my $gs_traits_index = $c->stash->{gs_traits_index};
     
-    my $project_rs = $c->model('solGS::solGS')->all_projects($c);
+    my $page = $c->req->param('page') || 1;
+    my $project_rs = $c->model('solGS::solGS')->all_projects($page);
+    
     $self->projects_links($c, $project_rs);
     my $projects = $c->stash->{projects_pages};
 
@@ -201,7 +203,8 @@ sub show_search_result_pops : Path('/solgs/search/result/populations') Args(1) {
     my ($self, $c, $trait_id) = @_;
     
     my $combine = $c->req->param('combine');
-    
+    my $page = $c->req->param('page') || 1;
+
     if ($combine) 
     {
        
@@ -224,8 +227,8 @@ sub show_search_result_pops : Path('/solgs/search/result/populations') Args(1) {
     }
     else 
     {
-        my $projects_rs = $c->model('solGS::solGS')->search_populations($c, $trait_id);
-        my $trait       = $c->model('solGS::solGS')->trait_name($c, $trait_id);
+        my $projects_rs = $c->model('solGS::solGS')->search_populations($trait_id, $page);
+        my $trait       = $c->model('solGS::solGS')->trait_name($trait_id);
     
         $self->get_projects_details($c, $projects_rs);
         my $projects = $c->stash->{projects_details};
@@ -282,14 +285,14 @@ sub get_projects_details {
         $pr_name = $pr->name;
         $pr_desc = $pr->description;
        
-        my $pr_yr_rs = $c->model('solGS::solGS')->project_year($c, $pr_id);
+        my $pr_yr_rs = $c->model('solGS::solGS')->project_year($pr_id);
         
         while (my $pr = $pr_yr_rs->next) 
         {
             $year = $pr->value;
         }
 
-        my $pr_loc_rs = $c->model('solGS::solGS')->project_location($c, $pr_id);
+        my $pr_loc_rs = $c->model('solGS::solGS')->project_location($pr_id);
     
         while (my $pr = $pr_loc_rs->next) 
         {
@@ -311,10 +314,11 @@ sub get_projects_details {
 
 sub show_search_result_traits : Path('/solgs/search/result/traits') Args(1) {
     my ($self, $c, $query) = @_;
-  
+      
+    my $page = $c->req->param('page') || 1;
+    my $result = $c->model('solGS::solGS')->search_trait($query, $page);
+    
     my @rows;
-    my $result = $c->model('solGS::solGS')->search_trait($c, $query);
-   
     while (my $row = $result->next)
     {
         my $id   = $row->cvterm_id;
@@ -339,7 +343,8 @@ sub show_search_result_traits : Path('/solgs/search/result/traits') Args(1) {
         $self->gs_traits_index($c);
         my $gs_traits_index = $c->stash->{gs_traits_index};
         
-        my $project_rs = $c->model('solGS::solGS')->all_projects($c);
+        my $page = $c->req->param('page') || 1;
+        my $project_rs = $c->model('solGS::solGS')->all_projects($page);
         $self->projects_links($c, $project_rs);
         my $projects = $c->stash->{projects_pages};
        
@@ -363,7 +368,7 @@ sub population : Regex('^solgs/population/([\w|\d]+)(?:/([\w+]+))?'){
     my ($self, $c) = @_;
    
     my ($pop_id, $action) = @{$c->req->captures};
-
+   
     my $uploaded_reference = $c->req->param('uploaded_reference');
     $c->stash->{uploaded_reference} = $uploaded_reference;
 
@@ -384,12 +389,13 @@ sub population : Regex('^solgs/population/([\w|\d]+)(?:/([\w+]+))?'){
             $uploaded_reference = 1;
         }
 
-        $c->stash->{pop_id} = $pop_id;  
-        $self->phenotype_file($c);
-        $self->genotype_file($c);
-        $self->get_all_traits($c);
+        $c->stash->{pop_id} = $pop_id; 
+          
+        $self->phenotype_file($c);  
+        $self->genotype_file($c);  
+        $self->get_all_traits($c);  
         $self->project_description($c, $pop_id);
-
+ 
         $c->stash->{template} = $self->template('/population.mas');
       
         if ($action && $action =~ /selecttraits/ ) {
@@ -461,7 +467,7 @@ sub project_description {
     $c->stash->{uploaded_reference} = 1 if ($pr_id =~ /uploaded/);
 
     if(!$c->stash->{uploaded_reference}) {
-        my $pr_rs = $c->model('solGS::solGS')->project_details($c, $pr_id);
+        my $pr_rs = $c->model('solGS::solGS')->project_details($pr_id);
 
         while (my $row = $pr_rs->next)
         {
@@ -470,10 +476,10 @@ sub project_description {
                       project_desc => $row->description
                 );
         }
-
        
         $self->get_project_owners($c, $pr_id);       
         $c->stash->{owner} = $c->stash->{project_owners};
+
     } 
     else 
     {
@@ -606,7 +612,7 @@ sub selection_trait :Path('/solgs/selection/') Args(5) {
 
     unless ($selection_pop_id =~ /uploaded/) 
     {
-        my $pop_rs = $c->model("solGS::solGS")->project_details($c, $selection_pop_id);    
+        my $pop_rs = $c->model("solGS::solGS")->project_details($selection_pop_id);    
         while (my $pop_row = $pop_rs->next) 
         {      
             $c->stash->{prediction_pop_name} = $pop_row->name;    
@@ -1122,9 +1128,7 @@ sub prediction_population :Path('/solgs/model') Args(3) {
         my $download_prediction = $c->stash->{download_prediction};
       
         $self->list_of_prediction_pops($c, $combo_pops_id, $download_prediction);
-       # $referer = '/' . $referer;
-       # $c->res->redirect($referer);
-       # print STDERR "\nsolgs/model: referer - combined pops page\n";
+      
         $c->res->redirect("/solgs/model/combined/populations/$model_id/trait/$trait_id"); 
         $c->detach();
     }
@@ -1170,10 +1174,7 @@ sub prediction_population :Path('/solgs/model') Args(3) {
          my $download_prediction = $c->stash->{download_prediction};
       
          $self->list_of_prediction_pops($c, $pop_id, $download_prediction);
-         
-         # print STDERR "\nsolgs/model: referer - $referer\n";
-#          $referer = '/' . $referer;
-        
+ 
          $c->res->redirect("/solgs/trait/$trait_id/population/$pop_id");
          $c->detach();
            
@@ -1423,7 +1424,7 @@ sub model_accuracy {
 sub get_trait_name {
     my ($self, $c, $trait_id) = @_;
 
-    my $trait_name = $c->model('solGS::solGS')->trait_name($c, $trait_id);
+    my $trait_name = $c->model('solGS::solGS')->trait_name($trait_id);
   
     if (!$trait_name) 
     { 
@@ -1625,7 +1626,7 @@ sub convert_to_arrayref {
     my @data;   
     while (<$fh>)
     {
-        push @data,  map { [ split(/\t/) ] } $_;
+        push @data,  map { [ split(/\t/) ]  } $_ if $_;
     }
    
     shift(@data);
@@ -1660,7 +1661,7 @@ sub list_of_prediction_pops {
     if(!@pred_pops_ids)
     {
        
-        my $pred_pops_ids2 = $c->model('solGS::solGS')->prediction_pops($c, $training_pop_id);
+        my $pred_pops_ids2 = $c->model('solGS::solGS')->prediction_pops($training_pop_id);
         @pred_pops_ids = @$pred_pops_ids2;
 
         foreach (@pred_pops_ids)
@@ -1676,7 +1677,7 @@ sub list_of_prediction_pops {
     foreach my $prediction_pop_id (@pred_pops_ids)
 
     {
-        my $pred_pop_rs = $c->model('solGS::solGS')->project_details($c, $prediction_pop_id);
+        my $pred_pop_rs = $c->model('solGS::solGS')->project_details($prediction_pop_id);
         my $pred_pop_link;
 
         while (my $row = $pred_pop_rs->next)
@@ -1690,7 +1691,7 @@ sub list_of_prediction_pops {
 
             $pred_pop_link = qq | <a href="/solgs/model/$training_pop_id/prediction/$prediction_pop_id" onclick="solGS.waitPage()"><input type="hidden" value=\'$id_pop_name\'>$name</data> </a> |;
 
-            my $pr_yr_rs = $c->model('solGS::solGS')->project_year($c, $prediction_pop_id);
+            my $pr_yr_rs = $c->model('solGS::solGS')->project_year($prediction_pop_id);
             my $project_yr;
 
             while ( my $yr_r = $pr_yr_rs->next )
@@ -1824,7 +1825,7 @@ sub traits_to_analyze :Regex('^solgs/analyze/traits/population/([\w|\d]+)(?:/([\
                     {
                         my $trait_name =  $r->[1];
                         $trait_name    =~ s/\n//g;                                
-                        my $trait_id   =  $c->model('solGS::solGS')->get_trait_id($c, $trait_name);
+                        my $trait_id   =  $c->model('solGS::solGS')->get_trait_id($trait_name);
                         $self->get_trait_name($c, $trait_id);
                     }
                 }
@@ -1850,7 +1851,7 @@ sub traits_to_analyze :Regex('^solgs/analyze/traits/population/([\w|\d]+)(?:/([\
                         {
                             my $trait_name =  $r->[1];
                             $trait_name    =~ s/\n//g;                                
-                            my $trait_id   =  $c->model('solGS::solGS')->get_trait_id($c, $trait_name);
+                            my $trait_id   =  $c->model('solGS::solGS')->get_trait_id($trait_name);
 
                             $traits    .= $r->[0];
                             $traits    .= "\t" unless ($i == $#selected_traits);
@@ -1861,7 +1862,7 @@ sub traits_to_analyze :Regex('^solgs/analyze/traits/population/([\w|\d]+)(?:/([\
             }
             else 
             {
-                my $tr = $c->model('solGS::solGS')->trait_name($c, $selected_traits[$i]);
+                my $tr = $c->model('solGS::solGS')->trait_name($selected_traits[$i]);
    
                 my $abbr = $self->abbreviate_term($c, $tr);
                 $traits .= $abbr;
@@ -1940,7 +1941,7 @@ sub all_traits_output :Regex('^solgs/traits/all/population/([\w|\d]+)(?:/([\d+]+
          $c->stash->{population_is} = 'prediction population';
          $self->prediction_population_file($c, $pred_pop_id);
         
-         my $pr_rs = $c->model('solGS::solGS')->project_details($c, $pred_pop_id);
+         my $pr_rs = $c->model('solGS::solGS')->project_details($pred_pop_id);
          
          while (my $row = $pr_rs->next) 
          {
@@ -1983,7 +1984,7 @@ sub all_traits_output :Regex('^solgs/traits/all/population/([\w|\d]+)(?:/([\d+]+
              }
 
          }
-         my $trait_id   = $c->model('solGS::solGS')->get_trait_id($c, $trait_name);
+         my $trait_id   = $c->model('solGS::solGS')->get_trait_id($trait_name);
          my $trait_abbr = $c->stash->{trait_abbr}; 
         
          my $dir = $c->stash->{solgs_cache_dir};
@@ -2115,7 +2116,7 @@ sub combine_populations_confrim  :Path('/solgs/combine/populations/trait/confirm
 
     foreach my $pop_id (@pop_ids) {
     
-    my $pop_rs = $c->model('solGS::solGS')->project_details($c, $pop_id);
+    my $pop_rs = $c->model('solGS::solGS')->project_details($pop_id);
     my $pop_details = $self->get_projects_details($c, $pop_rs);
 
   
@@ -2278,7 +2279,7 @@ sub display_combined_pops_result :Path('/solgs/model/combined/populations/') Arg
 sub get_project_owners {
     my ($self, $c, $pr_id) = @_;
 
-    my $owners = $c->model("solGS::solGS")->get_stock_owners($c, $pr_id);
+    my $owners = $c->model("solGS::solGS")->get_stock_owners($pr_id);
     my $owners_names;
 
     if ($owners)
@@ -2310,7 +2311,7 @@ sub combined_pops_summary {
     my $projects_owners;
     foreach (@pops)
     {  
-        my $pr_rs = $c->model('solGS::solGS')->project_details($c, $_);
+        my $pr_rs = $c->model('solGS::solGS')->project_details($_);
 
         while (my $row = $pr_rs->next)
         {
@@ -2406,7 +2407,7 @@ sub compare_genotyping_platforms {
             my @pop_names;
             foreach ($pop_id_1, $pop_id_2)
             {
-                my $pr_rs = $c->model('solGS::solGS')->project_details($c, $_);
+                my $pr_rs = $c->model('solGS::solGS')->project_details($_);
 
                 while (my $row = $pr_rs->next)
                 {
@@ -2752,7 +2753,7 @@ sub add_trait_ids {
         my $trait_name = $_->[1];
         $trait_name =~ s/\n//g;
         
-        my $trait_id = $c->model('solGS::solGS')->get_trait_id($c, $trait_name);
+        my $trait_id = $c->model('solGS::solGS')->get_trait_id($trait_name);
         $table .= $trait_name . "\t" . $trait_id . "\n";
        
     }
@@ -2932,7 +2933,7 @@ sub abbreviate_term {
 sub all_gs_traits_list {
     my ($self, $c) = @_;
 
-    my $rs = $c->model('solGS::solGS')->all_gs_traits($c);
+    my $rs = $c->model('solGS::solGS')->all_gs_traits();
  
     my @all_traits;
     while (my $row = $rs->next)
@@ -3076,8 +3077,8 @@ sub phenotype_file {
         unless ($pheno_file)
         {  
             $pheno_file = catfile($c->stash->{solgs_cache_dir}, "phenotype_data_" . $pop_id . ".txt");
-            $c->model('solGS::solGS')->phenotype_data($c, $pop_id);
-            my $data = $c->stash->{phenotype_data};
+            my $data = $c->model('solGS::solGS')->phenotype_data($pop_id);
+           # my $data = $c->stash->{phenotype_data};
         
             $data = $self->format_phenotype_dataset($c, $data);
             write_file($pheno_file, $data);
@@ -3185,9 +3186,8 @@ sub genotype_file  {
         unless ($geno_file)
         {  
             $geno_file = catfile($c->stash->{solgs_cache_dir}, "genotype_data_" . $pop_id . ".txt");
-            $c->model('solGS::solGS')->genotype_data($c, $pop_id);
-            my $data = $c->stash->{genotype_data};
-
+            my $data = $c->model('solGS::solGS')->genotype_data($pop_id);
+           
             write_file($geno_file, $data);
 
             $file_cache->set($key, $geno_file, '30 days');
@@ -3259,7 +3259,7 @@ sub get_rrblup_output :Private{
            
             $self->run_rrblup_trait($c, $tr);
            
-            my $trait_id = $c->model('solGS::solGS')->get_trait_id($c, $trait_name);
+            my $trait_id = $c->model('solGS::solGS')->get_trait_id($trait_name);
             push @trait_pages, [ qq | <a href="/solgs/trait/$trait_id/population/$pop_id" onclick="solGS.waitPage()">$tr</a>| ];
         }    
     }
@@ -3300,7 +3300,7 @@ sub run_rrblup_trait {
     my $trait_name    = $c->stash->{trait_name};
     my $data_set_type = $c->stash->{data_set_type};
 
-    my $trait_id = $c->model('solGS::solGS')->get_trait_id($c, $trait_name);
+    my $trait_id = $c->model('solGS::solGS')->get_trait_id($trait_name);
     $c->stash->{trait_id} = $trait_id; 
     
     no warnings 'uninitialized';
@@ -3565,7 +3565,7 @@ sub get_solgs_dirs {
     my $solgs_cache     = catdir($solgs_dir, 'cache'); 
     my $solgs_tempfiles = catdir($solgs_dir, 'tempfiles');
     my $solgs_prediction_upload = catdir($solgs_dir, 'tempfiles', 'prediction_upload');
-    my $correlation_dir = catdir($solgs_dir, 'cache', 'correlation');
+    my $correlation_dir = catdir($c->config->{cluster_shared_tempdir}, 'correlation', 'cache');
 
     mkpath ([$solgs_dir, $solgs_cache, $solgs_tempfiles, $solgs_prediction_upload, $correlation_dir], 0, 0755);
    
