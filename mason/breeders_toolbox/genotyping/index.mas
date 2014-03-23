@@ -1,0 +1,11 @@
+
+<%args>
+
+</%args>
+
+<& /page/page_title.mas, title=>"Manage genotypes" &>
+
+<& /page/info_section.mas, title=>"Genotyping trials", subtitle=>"[Add]" &>
+
+<& /page/info_section.mas, title=>"Available genotypes", subtitle=>"[Add]" &>
+
