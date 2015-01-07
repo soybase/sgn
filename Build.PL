@@ -28,6 +28,7 @@ my $build = SGN::Build->new(
         'Test::WWW::Mechanize::Catalyst' => '0.50',
         'Test::WWW::Selenium'            => 0,
         'Test::MockObject'               => 0,
+	'Module::Build::Tiny'            => 0,
     },
     requires => {
         'perl'                                     => '5.10.0',
@@ -57,6 +58,7 @@ my $build = SGN::Build->new(
         'Catalyst::View::Email'                    => 0,
         'Catalyst::View::Download::CSV'            => 0,
         'Catalyst::View::HTML::Mason'              => 0,
+        'Catalyst::Plugin::SmartURI'               => 0,
         'Catalyst::Controller::HTML::FormFu'       => 0,
         'Catalyst::View::JavaScript::Minifier::XS' => '2.100000',
         'CatalystX::GlobalContext'                 => 0,

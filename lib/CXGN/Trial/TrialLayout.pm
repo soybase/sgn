@@ -46,7 +46,7 @@ has 'trial_name' => (isa => 'Str', is => 'ro', predicate => 'has_trial_name', re
 has 'trial_description' => (isa => 'Str', is => 'ro', predicate => 'has_trial_description', reader => 'get_trial_description', writer => '_set_trial_description');
 has 'trial_location' => (isa => 'Str', is => 'ro', predicate => 'has_trial_location', reader => 'get_trial_location', writer => '_set_trial_location');
 has 'design' => (isa => 'HashRef[HashRef[Str]]', is => 'ro', predicate => 'has_design', reader => 'get_design', writer => '_set_design');
-has 'plot_names' => (isa => 'ArrayRef', is => 'ro', predicate => 'has_plot_names', reader => 'get_plot_names', writer => '_set_plot_names');
+has 'plot_names' => (isa => 'ArrayRef', is => 'ro', predicate => 'has_plot_names', reader => 'get_plot_names', writer => '_set_plot_names', default => sub { [] } );
 has 'block_numbers' => (isa => 'ArrayRef', is => 'ro', predicate => 'has_block_numbers', reader => 'get_block_numbers', writer => '_set_block_numbers');
 has 'replicate_numbers' => (isa => 'ArrayRef', is => 'ro', predicate => 'has_replicate_numbers', reader => 'get_replicate_numbers', writer => '_set_replicate_numbers');
 has 'accession_names' => (isa => 'ArrayRef', is => 'ro', predicate => 'has_accession_names', reader => 'get_accession_names', writer => '_set_accession_names');
@@ -75,9 +75,9 @@ sub _lookup_trial_id {
   if (!$self->has_trial_location) {return;}
   $self->_set_design_type($self->_get_design_type_from_project());
   $self->_set_design($self->_get_design_from_trial());
-  $self->_set_plot_names($self->_get_plot_info_fields_from_trial("plot_name"));
-  $self->_set_block_numbers($self->_get_plot_info_fields_from_trial("block_number"));
-  $self->_set_replicate_numbers($self->_get_plot_info_fields_from_trial("rep_number"));
+  $self->_set_plot_names($self->_get_plot_info_fields_from_trial("plot_name") || []);
+  $self->_set_block_numbers($self->_get_plot_info_fields_from_trial("block_number") || []);
+  $self->_set_replicate_numbers($self->_get_plot_info_fields_from_trial("rep_number") || []);
   #$self->_set_is_a_control($self->_get_plot_info_fields_from_trial("is_a_control"));
   ($accession_names_ref, $control_names_ref) = $self->_get_trial_accession_names_and_control_names();
   if ($accession_names_ref) {
@@ -148,25 +148,30 @@ sub _get_design_from_trial {
     my $plot_number_prop = $plot->stockprops->find( { 'type.name' => 'plot number' }, { join => 'type'} );
     my $block_number_prop = $plot->stockprops->find( { 'type.name' => 'block' }, { join => 'type'} );
     my $replicate_number_prop = $plot->stockprops->find( { 'type.name' => 'replicate' }, { join => 'type'} );
+    my $range_number_prop = $plot->stockprops->find( { 'type.name' => 'range' }, { join => 'type'} );
     my $is_a_control_prop = $plot->stockprops->find( { 'type.name' => 'is a control' }, { join => 'type'} );
     my $accession = $plot->search_related('stock_relationship_subjects')->find({ 'type_id' => $plot_of_cv->cvterm_id()})->object;
     my $accession_name = $accession->uniquename;
     $design_info{"plot_name"}=$plot->uniquename;
     $design_info{"plot_id"}=$plot->stock_id;
-    print STDERR "stock id of plot: ". $plot->stock_id."\n";
-    print STDERR "plotprop: $plot_number_prop\n";
+    #print STDERR "stock id of plot: ". $plot->stock_id."\n";
+    #print STDERR "plotprop: $plot_number_prop\n";
     if ($plot_number_prop) {
       $design_info{"plot_number"}=$plot_number_prop->value();
-      print STDERR "plot# value: ".$plot_number_prop->value()."\n"
+      #print STDERR "plot# value: ".$plot_number_prop->value()."\n"
     }
     else {die "no plot number stockprop found for plot $plot_name";}
     if ($block_number_prop) {
       $design_info{"block_number"}=$block_number_prop->value();
-      print STDERR "block# value: ".$block_number_prop->value()."\n"
+      #print STDERR "block# value: ".$block_number_prop->value()."\n"
     }
     if ($replicate_number_prop) {
       $design_info{"rep_number"}=$replicate_number_prop->value();
-      print STDERR "rep# value: ".$replicate_number_prop->value()."\n"
+      #print STDERR "rep# value: ".$replicate_number_prop->value()."\n"
+    }
+    if ($range_number_prop) {
+      $design_info{"range_number"}=$replicate_number_prop->value();
+      #print STDERR "range# value: ".$range_number_prop->value()."\n"
     }
     if ($is_a_control_prop) {
       $design_info{"is_a_control"}=$is_a_control_prop->value();
@@ -174,7 +179,7 @@ sub _get_design_from_trial {
     if ($accession_name) {
       $design_info{"accession_name"}=$accession_name;
     }
-    print STDERR "accession name in plot: $accession_name\n";
+    #print STDERR "accession name in plot: $accession_name\n";
     $design{$plot_number_prop->value}=\%design_info;
   }
   return \%design;
@@ -207,7 +212,7 @@ sub _get_location_from_field_layout_experiment {
     return;
   }
   $location_name = $field_layout_experiment -> nd_geolocation -> description();
-  print STDERR "Location: $location_name\n";
+  #print STDERR "Location: $location_name\n";
   return $location_name;
 }
 
@@ -374,14 +379,14 @@ sub _get_trial_accession_names_and_control_names {
   }
   foreach my $accession_name (sort { lc($a) cmp lc($b)} keys %unique_accessions) {
     push(@accession_names, $accession_name);
-    print STDERR "Accession: $accession_name \n";
+    #print STDERR "Accession: $accession_name \n";
   }
   if (!scalar(@accession_names) >= 1) {
     return;
   }
   foreach my $control_name (sort { lc($a) cmp lc($b)} keys %unique_controls) {
     push(@control_names, $control_name);
-    print STDERR "Control: $control_name \n";
+    #print STDERR "Control: $control_name \n";
   }
   return (\@accession_names, \@control_names);
 }

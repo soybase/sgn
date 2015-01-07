@@ -66,12 +66,13 @@ sub manage_trials : Path("/breeders/trials") Args(0) {
 
     $trials_by_breeding_project{'Other'} = $projects->get_trials_by_breeding_program();
 
-    $c->stash->{locations} = $self->get_locations($c);
+    # locations are not needed for this page... (slow!!)
+    $c->stash->{locations} = $projects->get_all_locations();
+   
 
     $c->stash->{trials_by_breeding_project} = \%trials_by_breeding_project; #$self->get_projects($c);
 
     $c->stash->{breeding_programs} = $breeding_programs;
-
 
     $c->stash->{template} = '/breeders_toolbox/manage_projects.mas';
 }
@@ -90,7 +91,7 @@ sub manage_accessions : Path("/breeders/accessions") Args(0) {
 
     my $ac = CXGN::BreedersToolbox::Accessions->new( { schema=>$schema });
 
-    my $accessions = $ac->get_all_accessions();
+    my $accessions = $ac->get_all_accessions($c);
 
     $c->stash->{accessions} = $accessions;
 
@@ -144,7 +145,7 @@ sub manage_crosses : Path("/breeders/crosses") Args(0) {
 
     $c->stash->{user_id} = $c->user()->get_object()->get_sp_person_id();
     
-    $c->stash->{locations} = $self->get_locations($c);
+    $c->stash->{locations} = $bp->get_locations($c);
 
     #$c->stash->{projects} = $self->get_projects($c);
 
@@ -407,7 +408,7 @@ sub breeder_home :Path("/breeders/home") Args(0) {
 
     $c->stash->{stockrelationships} = $self->get_stock_relationships($c);
 
-    my $locations = $self->get_locations($c);
+    my $locations = $bp->get_locations($c);
     
     $c->stash->{locations} = $locations;
     # get uploaded phenotype files
@@ -430,42 +431,56 @@ sub breeder_search : Path('/breeders/search/') :Args(0) {
 
 }
 
+# next two functions moved to CXGN::BreedersToolbox::Project
+#
+# sub get_locations : Private { 
+#     my $self = shift;
+#     my $c= shift;
 
-sub get_locations : Private { 
-    my $self = shift;
-    my $c= shift;
+#     my $schema = $c->dbic_schema("Bio::Chado::Schema");
 
-    my $schema = $c->dbic_schema("Bio::Chado::Schema");
-
-    my @rows = $schema->resultset('NaturalDiversity::NdGeolocation')->all();
+#     my @rows = $schema->resultset('NaturalDiversity::NdGeolocation')->all();
     
-    my $type_id = $schema->resultset('Cv::Cvterm')->search( { 'name'=>'plot' })->first->cvterm_id;
+#     my $type_id = $schema->resultset('Cv::Cvterm')->search( { 'name'=>'plot' })->first->cvterm_id;
 
     
-    my @locations = ();
-    foreach my $row (@rows) { 	    
-	my $plot_count = "SELECT count(*) from stock join cvterm on(type_id=cvterm_id) join nd_experiment_stock using(stock_id) join nd_experiment using(nd_experiment_id)   where cvterm.name='plot' and nd_geolocation_id=?"; # and sp_person_id=?";
-	my $sh = $c->dbc->dbh->prepare($plot_count);
-	$sh->execute($row->nd_geolocation_id); #, $c->user->get_object->get_sp_person_id);
+#     my @locations = ();
+#     foreach my $row (@rows) { 	    
+# 	my $plot_count = "SELECT count(*) from stock join cvterm on(type_id=cvterm_id) join nd_experiment_stock using(stock_id) join nd_experiment using(nd_experiment_id)   where cvterm.name='plot' and nd_geolocation_id=?"; # and sp_person_id=?";
+# 	my $sh = $c->dbc->dbh->prepare($plot_count);
+# 	$sh->execute($row->nd_geolocation_id); #, $c->user->get_object->get_sp_person_id);
 	
-	my ($count) = $sh->fetchrow_array();
+# 	my ($count) = $sh->fetchrow_array();
 	
-	print STDERR "PLOTS: $count\n";
+# 	#if ($count > 0) { 
 	
-	#if ($count > 0) { 
-	
-		push @locations,  [ $row->nd_geolocation_id, 
-				    $row->description,
-				    $row->latitude,
-				    $row->longitude,
-				    $row->altitude,
-				    $count, # number of experiments TBD
+# 		push @locations,  [ $row->nd_geolocation_id, 
+# 				    $row->description,
+# 				    $row->latitude,
+# 				    $row->longitude,
+# 				    $row->altitude,
+# 				    $count, # number of experiments TBD
 				    
-		];
-    }
-    return \@locations;
+# 		];
+#     }
+#     return \@locations;
 
-}
+# }
+
+# sub get_all_locations { 
+#     my $self = shift;
+#     my $c = shift;
+
+#     my $schema = $c->dbic_schema("Bio::Chado::Schema");
+#     my $rs = $schema -> resultset("NaturalDiversity::NdGeolocation")->search( {} );
+    
+#     my @locations = ();
+#     foreach my $loc ($rs->all()) { 
+# 	push @locations, [ $loc->nd_geolocation_id(), $loc->description() ];
+#     }
+#     return \@locations;
+
+# }
 
 # sub get_projects : Private { 
 #     my $self = shift;
@@ -501,8 +516,10 @@ sub get_crosses : Private {
 
     # get crosses
     #
+    my $stock_type_cv = $schema->resultset("Cv::Cv")->find( {name=>'stock type'});
     my $cross_cvterm = $schema->resultset("Cv::Cvterm")->find(
 	{ name   => 'cross',
+	  cv_id => $stock_type_cv->cv_id(),
 	});
     my @cross_populations = ();
 
@@ -598,6 +615,39 @@ sub get_phenotyping_data : Private {
 
 }
 
+sub manage_genotyping : Path("/breeders/genotyping") Args(0) {
+    my $self = shift;
+    my $c = shift;
+
+    if (!$c->user()) {
+	# redirect to login page
+	$c->res->redirect( uri( path => '/solpeople/login.pl', query => { goto_url => $c->req->uri->path_query } ) );
+	return;
+    }
+
+    my $schema = $c->dbic_schema('Bio::Chado::Schema', 'sgn_chado');
+
+    my $projects = CXGN::BreedersToolbox::Projects->new( { schema=> $schema } );
+
+    my $breeding_programs = $projects->get_breeding_programs();
+
+    my %genotyping_trials_by_breeding_project = ();
+
+    foreach my $bp (@$breeding_programs) {
+	$genotyping_trials_by_breeding_project{$bp->[1]}= $projects->get_genotyping_trials_by_breeding_program($bp->[0]);
+    }
+
+    $genotyping_trials_by_breeding_project{'Other'} = $projects->get_genotyping_trials_by_breeding_program();
+
+    $c->stash->{locations} = $projects->get_locations($c);
+
+    $c->stash->{genotyping_trials_by_breeding_project} = \%genotyping_trials_by_breeding_project; #$self->get_projects($c);
+
+    $c->stash->{breeding_programs} = $breeding_programs;
+
+
+    $c->stash->{template} = '/breeders_toolbox/manage_genotyping.mas';
+}
 
 
 1;

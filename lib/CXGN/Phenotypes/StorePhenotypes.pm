@@ -46,6 +46,8 @@ sub _verify {
     my @traits_missing = @{$trait_validator->validate($c->dbic_schema("Bio::Chado::Schema"),'traits',\@trait_list)->{'missing'}};
     if (scalar(@plots_missing) > 0 || scalar(@traits_missing) > 0) {
 	print STDERR "Plots or traits not valid\n";
+	print STDERR "Invalid plots: ".join(", ", map { "'$_'" } @plots_missing)."\n" if (@plots_missing);
+	print STDERR "Invalid traits: ".join(", ", map { "'$_'" } @traits_missing)."\n" if (@traits_missing);
 	return;
     }
     foreach my $plot_name (@plot_list) {
@@ -138,7 +140,6 @@ sub store {
 
 	    foreach my $trait_name (@trait_list) {
 		print STDERR "trait: $trait_name\n";
-		my $trait_description;
 		my ($db_name, $trait_description) = split (/:/, $trait_name);
 
 		my $db_rs = $schema->resultset("General::Db")->search( { 'me.name' => $db_name });

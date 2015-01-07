@@ -246,7 +246,7 @@ sub default_toolbar_data {
         },
         {
             name => 'genomes',
-            link => '/about/tomato_sequencing/',
+            link => '/genomes/',
             desc => 'Read about sequencing projects.',
             menu => [
                 {  name => 'Reference genomes' },
@@ -262,6 +262,11 @@ sub default_toolbar_data {
                     link => '/organism/Solanum_tuberosum/genome',
                     desc => '',
                 },
+               {
+                    name => 'Pepper',
+                    link => '/organism/Capsicum_annuum/genome',
+                    desc => '',
+                },
 		{ name => 'Draft genomes' },
                 {
                     name => '<i>Solanum pimpinellifolium</i>',
@@ -272,9 +277,15 @@ sub default_toolbar_data {
 
                 {
                     name => '<i>Nicotiana benthamiana</i>',
-                    link => '/organism/Nicotiana_benthamiana/genome',
+                    link => 'http://bti.cornell.edu/research/projects/nicotiana-benthamiana',
                     desc => 'Draft sequence for Nicotiana benthamiana, sequenced by labs at the Boyce Thompson Institute',
                 },
+                {
+                    name => '<i>Nicotiana tabacum</i> &amp; related',
+                    link => '/organism/Nicotiana_tabacum/genome',
+                    desc => 'Draft sequence for Nicotiana tabacum accessions K326, BX, and TN90. Parental genomes <i>Nicotiana sylvestris</i> and <i>Nicotiana tomentosiformis</i>.',
+                },
+
 		{ name => 'Inbred genomes' },
                 {
                     name => '<i>Solanum lycopersicum</i> inbreds',
@@ -327,9 +338,11 @@ sub default_toolbar_data {
                 },
                 {
                     name => 'VIGS Tool',
-                    link => '/tools/vigs',
+                    link => 'http://vigs.solgenomics.net/',
                     desc =>
-'Determine which genes a probe will silence using VIGS.'
+'Determine which genes a probe will silence using VIGS.',
+		    target => '_blank',
+   
                 },
 
                 {
@@ -353,17 +366,22 @@ sub default_toolbar_data {
 
                 #Mapping
                 { name => 'Mapping' },
+                {
+                    name => 'NEW Genome Browser (Jbrowse)',
+                    link => '/jbrowse/',
+                    desc => 'browse genomic annotations using the fast Jbrowse browser',
+                },
 
                 {
-                    name => 'Genome Browser',
+                    name => 'Genome Browser (Gbrowse)',
                     link => '/gbrowse/bin/gbrowse/',
-                    desc => 'browse genomic annotations',
+                    desc => 'browse genomic annotations using GBrowse',
                 },
-		{
-		    name => 'Comparative Genome Browser',
-		    link => 'http://solgenomics.net/gbrowse2/bin/gbrowse_syn/sol2/?search_src=pot;name=ST3.10ch01:1..90000000',
-		    desc => 'Compare genomes using GBrowse_syn',
-		},
+		# {
+		#     name => 'Comparative Genome Browser',
+		#     link => 'http://solgenomics.net/gbrowse2/bin/gbrowse_syn/sol2/?search_src=pot;name=ST3.10ch01:1..90000000',
+		#     desc => 'Compare genomes using GBrowse_syn',
+		# },
                 {
                     name => 'Comparative Map Viewer',
                     link =>
@@ -377,12 +395,12 @@ sub default_toolbar_data {
                     desc =>
 'Designs CAPS (Cleaved Amplified Polymorphic Sequence) assays for up to twelve sequences. Two types of nucleotide inputs are accepted: fasta sequences and clustal aligment. It generates a list of polymorphic enzymes that cut the sequences into different length products.'
                 },
-                {
-                    name => 'Seed BAC Finder',
-                    link => '/tools/seedbac/',
-                    desc =>
-'Lists all anchored BACs for a given chromosome to help identify seed BACs, or suggests a seed BAC given a marker name. '
-                },
+#                 {
+#                     name => 'Seed BAC Finder',
+#                     link => '/tools/seedbac/',
+#                     desc =>
+# 'Lists all anchored BACs for a given chromosome to help identify seed BACs, or suggests a seed BAC given a marker name. '
+#                 },
 		{
                     name => 'solQTL: QTL Mapping',
                     link => '/search/phenotypes/qtl',
@@ -398,12 +416,12 @@ sub default_toolbar_data {
                 #Molecular Biology
                 { name => "Molecular Biology" },
 
-                {
-                    name => 'Signal Peptide Finder',
-                    link => '/tools/sigpep_finder/input.pl',
-                    desc =>
-'This method of searching for signal sequences is designed to complement SignalP, and has similar success rates.'
-                },
+#                {
+#                    name => 'Signal Peptide Finder',
+#                    link => '/tools/sigpep_finder/input.pl',
+#                    desc =>
+#'This method of searching for signal sequences is designed to complement SignalP, and has similar success rates.'
+ #               },
                 {
                     name => 'In Silico PCR',
                     link => '/tools/insilicopcr',
@@ -429,7 +447,12 @@ sub default_toolbar_data {
                     desc => 'Coffee Interactome Data with Cytoscape Web Start viewer.'
                 },
 
-
+		{ name => "Breeder Tools" },
+		{ 
+		    name => 'Breeder Home',
+		    link => '/breeders/home',
+		    desc => 'Manage a breeding program',
+		},
                 #Bulk Query
                 { name => 'Bulk Query' },
 
@@ -441,7 +464,7 @@ sub default_toolbar_data {
                 },
                 {
                     name => 'FTP Site',
-                    link => '/bulk/input.pl?mode=ftp',
+                    link => '/tools/bulk?mode=ftp',
                     desc =>
 'FTP (File Transfer Protocol) is more efficient than HTTP (HyperText Transfer Protocol) for transferring large files. Many of our larger archive files are accessible here.'
                 },
@@ -584,6 +607,24 @@ sub option_link {
     #die"Option link not found for heading '$heading' option '$option'";
 }
 
+sub option_target { 
+    my $self = shift;
+    my ( $heading, $option ) = @_;
+
+    #print STDERR "option_link received: heading '$heading' option '$option'\n";
+    for my $heading_hash ( @{ $self->toolbar_data } ) {
+        if ( $heading_hash->{name} eq $heading ) {
+            for my $menu_option_hash ( @{ $heading_hash->{menu} } ) {
+                if ( $menu_option_hash->{name} eq $option ) {
+                    my $option_target = $menu_option_hash->{target};
+                    if ($option_target) { return ' target=$option_target ' }
+                }
+            }
+        }
+    }
+
+}
+
 =head2 option_style
 
     for my $heading(@headings)
@@ -722,8 +763,9 @@ EOH
 
                   #menu options for each heading, these will be invisible unless hovered over
                   my $option_link = $self->option_link( $heading, $menu_option );
+		  my $option_target = $self->option_target( $heading, $menu_option ); 
                   $option_link &&=
-                      qq|<a class="toolbar_item" href="$option_link">$menu_option</a>|;
+                      qq|<a class="toolbar_item" $option_target href="$option_link">$menu_option</a>|;
                   $option_link ||= qq|<span class="toolbar_item">$menu_option</span>|;
                   my $style = $self->option_style( $heading, $menu_option );
                   <<EOH

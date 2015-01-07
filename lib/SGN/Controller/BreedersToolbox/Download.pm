@@ -1,32 +1,25 @@
-#!/usr/bin/perl
 
 package SGN::Controller::BreedersToolbox::Download;
+
+use Moose;
+
+BEGIN { extends 'Catalyst::Controller'; }
 
 use strict;
 use warnings;
 use JSON qw( decode_json );
 use Data::Dumper;
 use CGI;
+use CXGN::Trial;
+use CXGN::Trial::TrialLayout;
 use File::Slurp qw | read_file |;
-
-
-
-print "content-type: text/html \n\n";
-
-use Moose;
-
-BEGIN { extends 'Catalyst::Controller'; }
-
+use File::Temp 'tempfile';
+use File::Basename; 
+use File::Copy;
 use URI::FromHash 'uri';
 use CXGN::List::Transform;
+use Spreadsheet::WriteExcel;
 
-__PACKAGE__->config(
-    default => 'application/json',
-    stash_key => 'rest',
-    map => { 'application/json' => 'JSON', 'text/html' => 'JSON' },
-   );
-
- 
 sub breeder_download : Path('/breeders/download/') Args(0) { 
     my $self = shift;
     my $c = shift;
@@ -40,6 +33,262 @@ sub breeder_download : Path('/breeders/download/') Args(0) {
     $c->stash->{template} = '/breeders_toolbox/download.mas';
 }
 
+sub download_trial_layout_action : Path('/breeders/trial/layout/download') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+    my $format = $c->req->param("format");
+
+    my $trial = CXGN::Trial::TrialLayout -> new({ schema => $c->dbic_schema("Bio::Chado::Schema"), trial_id => $trial_id });
+
+    my $design = $trial->get_design();
+
+    $self->trial_download_log($c, $trial_id, "trial layout");
+
+    if ($format eq "csv") { 
+	$self->download_layout_csv($c, $trial_id, $design);
+    }
+    else { 
+	$self->download_layout_excel($c, $trial_id, $design);
+    }
+
+}
+
+
+sub download_layout_csv { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+    my $design = shift;
+
+    $c->tempfiles_subdir("data_export"); # make sure the dir exists
+    my ($fh, $tempfile) = $c->tempfile(TEMPLATE=>"data_export/trial_layout_".$trial_id."_XXXXX");
+
+    close($fh);
+
+    my $file_path = $c->config->{basepath}."/".$tempfile.".csv"; # need xls extension to avoid trouble
+    
+    move($tempfile, $file_path);
+
+    open(my $F, ">", $file_path) || die "Can't open file $file_path\n";
+
+    my $header = join (",", "plot_name", "accession_name", "plot_number","block_number", "is_a_control", "rep_number");
+    
+    print $F $header."\n";
+
+    my $line = 1;
+    foreach my $n (keys(%$design)) { 
+     	print $F join ",", 
+	$design->{$n}->{plot_name},
+	$design->{$n}->{accession_name},
+	$design->{$n}->{plot_number},
+	$design->{$n}->{block_number},
+	$design->{$n}->{is_a_control},
+	$design->{$n}->{rep_number};
+	print $F "\n";
+    }
+    close($F);
+
+    my $file_name = basename($file_path);    
+    $c->res->content_type('Application/csv');    
+    $c->res->header('Content-Disposition', qq[attachment; filename="$file_name"]);   
+
+    my $output = read_file($file_path);
+
+    $c->res->body($output);
+
+}
+
+sub download_layout_excel { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+    my $design = shift;
+
+    $c->tempfiles_subdir("data_export"); # make sure the dir exists
+    my ($fh, $tempfile) = $c->tempfile(TEMPLATE=>"data_export/trial_layout_".$trial_id."_XXXXX");
+    
+    my $file_path = $tempfile.".xls"; # need xls extension to avoid trouble
+    
+    move($tempfile, $file_path);
+    
+    my $ss = Spreadsheet::WriteExcel->new($c->config->{basepath}."/".$file_path);
+    
+    my $ws = $ss->add_worksheet();
+    
+    $ws->write(0,0,"plot_name");
+    $ws->write(0,1,"accession_name");
+    $ws->write(0,2,"plot_number");
+    $ws->write(0,3,"block_number");
+    $ws->write(0,4,"is_a_control");
+    $ws->write(0,5,"rep_number");
+    
+    my $line = 1;
+    foreach my $n (keys(%$design)) { 
+     	print STDERR "plot name ".$ws->write($line, 0, $design->{$n}->{plot_name});
+	print STDERR " accession name ".$ws->write($line, 1, $design->{$n}->{accession_name});
+     	print STDERR " plot number ".$ws->write($line, 2, $design->{$n}->{plot_number});
+     	print STDERR " block number ".$ws->write($line, 3, $design->{$n}->{block_number});
+     	print STDERR " is a control ".$ws->write($line, 4, $design->{$n}->{is_a_control});
+     	print STDERR " rep number ".$ws->write($line, 5, $design->{$n}->{rep_number});
+     	$line++;
+    }    
+    $ss->close();
+    
+    my $file_name = basename($file_path);    
+    $c->res->content_type('Application/xls');    
+    $c->res->header('Content-Disposition', qq[attachment; filename="$file_name"]);   
+
+    my $path = $c->config->{basepath}."/".$file_path;
+    my $output = read_file($path, binmode=>':raw');
+
+    $c->res->body($output);
+}
+
+sub download_multiple_trials_action : Path('/breeders/trials/phenotype/download') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_ids = shift;
+    my $format = $c->req->param("format");
+
+    $self->trial_download_log($c, $trial_ids, "trial phenotypes");
+
+    my @trial_ids = split ",", $trial_ids;
+    my $trial_sql = join ",", map { "\'$_\'" } @trial_ids;
+
+    my $bs = CXGN::BreederSearch->new( { dbh=>$c->dbc->dbh() });
+    my @data = $bs->get_extended_phenotype_info_matrix(undef,$trial_sql, undef);
+    my $schema = $c->dbic_schema("Bio::Chado::Schema");
+
+    $c->tempfiles_subdir("data_export"); # make sure the dir exists
+    
+    if ($format eq "csv") { 
+	###$self->phenotype_download_csv($c, $trial_id, $program_name, $location, $year, \@data);
+	$self->phenotype_download_csv($c, '', '', '', '', \@data);
+    }
+    else { 
+	###$self->phenotype_download_excel($c, $trial_id, $program_name, $location, $year, \@data);
+	$self->phenotype_download_excel($c, '', '', '', '', \@data);
+    }
+}
+
+
+sub download_trial_phenotype_action : Path('/breeders/trial/phenotype/download') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+    my $format = $c->req->param("format");
+    
+    my $trial = CXGN::Trial->new( { bcs_schema => $c->dbic_schema("Bio::Chado::Schema"), trial_id => $trial_id });
+
+    $self->trial_download_log($c, $trial_id, "trial phenotypes");
+
+    my $trial_sql = "\'$trial_id\'";
+    my $bs = CXGN::BreederSearch->new( { dbh=>$c->dbc->dbh() });
+    my @data = $bs->get_phenotype_info_matrix(undef,$trial_sql, undef);
+    my $schema = $c->dbic_schema("Bio::Chado::Schema");
+    my $rs = $schema->resultset("Project::Project")->search( { 'me.project_id' => $trial_id })->search_related('nd_experiment_projects')->search_related('nd_experiment')->search_related('nd_geolocation');
+
+    my $location = $rs->first()->get_column('description');
+    
+    my $bprs = $schema->resultset("Project::Project")->search( { 'me.project_id' => $trial_id})->search_related_rs('project_relationship_subject_projects');
+
+    print STDERR "COUNT: ".$bprs->count()."  ". $bprs->get_column('project_relationship.object_project_id')."\n";
+
+    my $pbr = $schema->resultset("Project::Project")->search( { 'me.project_id'=> $bprs->get_column('project_relationship_subject_projects.object_project_id')->first() } );
+    
+    my $program_name = $pbr->first()->name();
+    my $year = $trial->get_year();
+
+    print STDERR "YEAR: $year\n";
+
+    #print STDERR "PHENOTYPE DATA MATRIX: ".Dumper(\@data);
+    $c->tempfiles_subdir("data_export"); # make sure the dir exists
+    
+    if ($format eq "csv") { 
+	$self->phenotype_download_csv($c, $trial_id, $program_name, $location, $year, \@data);
+    }
+    else { 
+	$self->phenotype_download_excel($c, $trial_id, $program_name, $location, $year, \@data);
+    }
+}
+	
+
+sub phenotype_download_csv { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+    my $program_name = shift;
+    my $location = shift;
+    my $year = shift;
+    my $dataref = shift;
+    my @data = @$dataref;
+
+    my ($fh, $tempfile) = $c->tempfile(TEMPLATE=>"data_export/trial_".$program_name."_phenotypes_".$location."_".$trial_id."_XXXXX");
+
+    close($fh);
+    my $file_path = $c->config->{basepath}."/".$tempfile.".csv";
+    move($tempfile, $file_path);
+
+    open(my $F, ">", $file_path) || die "Can't open file $file_path\n";
+    for (my $line =0; $line< @data; $line++) { 
+	my @columns = split /\t/, $data[$line];
+	
+	print $F join(",", @columns);
+	print $F "\n";
+    }
+
+    my $path = $file_path;
+    my $output = read_file($path);
+
+    my $file_name = basename($file_path);    
+    $c->res->content_type('Application/csv');    
+    $c->res->header('Content-Disposition', qq[attachment; filename="$file_name"]);   
+
+
+
+    close($F);
+    $c->res->body($output);
+}
+
+sub phenotype_download_excel { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+    my $program_name = shift;
+    my $location = shift;
+    my $year = shift;
+    my $dataref = shift;
+    my @data = @$dataref;
+
+    my ($fh, $tempfile) = $c->tempfile(TEMPLATE=>"data_export/trial_".$program_name."_phenotypes_".$location."_".$trial_id."_XXXXX");
+
+    my $file_path = $tempfile.".xls";
+    move($tempfile, $file_path);
+    my $ss = Spreadsheet::WriteExcel->new($c->config->{basepath}."/".$file_path);
+    my $ws = $ss->add_worksheet();
+
+    for (my $line =0; $line< @data; $line++) { 
+	my @columns = split /\t/, $data[$line];
+	for(my $col = 0; $col<@columns; $col++) { 
+	    $ws->write($line, $col, $columns[$col]);
+	}
+    }
+    $ws->write(0, 0, "$program_name, $location ($year)");
+    $ss ->close();
+
+    my $file_name = basename($file_path);    
+    $c->res->content_type('Application/xls');    
+    $c->res->header('Content-Disposition', qq[attachment; filename="$file_name"]);   
+
+    my $path = $c->config->{basepath}."/".$file_path;
+
+    my $output = read_file($path, binmode=>':raw');
+
+    close($fh);
+    $c->res->body($output);
+}
+
 sub download_action : Path('/breeders/download_action') Args(0) { 
     my $self = shift;
     my $c = shift;
@@ -49,29 +298,29 @@ sub download_action : Path('/breeders/download_action') Args(0) {
     my $trait_list_id     = $c->req->param("trait_list_list_select");
     my $data_type         = $c->req->param("data_type")|| "phenotype";
 
-   # my $data_type         = $c->req->param("data_type") || "genotype";
-
-    #my $data_type         = "phenotype" || "genotype";
-
-    #my $data_type         = "phenotype" || "genotype";
-
-
     my $format            = $c->req->param("format");
 
+    my $accession_data;
+    if ($accession_list_id) { 
+	$accession_data = SGN::Controller::AJAX::List->retrieve_list($c, $accession_list_id);
+    }
 
-    print STDERR "IDS: $accession_list_id, $trial_list_id, $trait_list_id\n";
+    my $trial_data;
+    if ($trial_list_id) { 
+	$trial_data = SGN::Controller::AJAX::List->retrieve_list($c, $trial_list_id);
+    }
 
-    my $accession_data = SGN::Controller::AJAX::List->retrieve_list($c, $accession_list_id);
-    my $trial_data = SGN::Controller::AJAX::List->retrieve_list($c, $trial_list_id);
-    my $trait_data = SGN::Controller::AJAX::List->retrieve_list($c, $trait_list_id);
-
-    
+    my $trait_data;
+    if ($trait_list_id) { 
+	$trait_data = SGN::Controller::AJAX::List->retrieve_list($c, $trait_list_id);
+    }
 
     my @accession_list = map { $_->[1] } @$accession_data;
     my @trial_list = map { $_->[1] } @$trial_data;
     my @trait_list = map { $_->[1] } @$trait_data;
 
-        my $tf = CXGN::List::Transform->new();
+    my $tf = CXGN::List::Transform->new();
+    
     my $unique_transform = $tf->can_transform("accession_synonyms", "accession_names");
     
     my $unique_list = $tf->transform($c->dbic_schema("Bio::Chado::Schema"), $unique_transform, \@accession_list);
@@ -81,10 +330,6 @@ sub download_action : Path('/breeders/download_action') Args(0) {
     my $schema = $c->dbic_schema("Bio::Chado::Schema", "sgn_chado");
     my $t = CXGN::List::Transform->new();
     
-#    print STDERR Data::Dumper::Dumper(\@accession_list);
-#    print STDERR Data::Dumper::Dumper(\@trial_list);
-#    print STDERR Data::Dumper::Dumper(\@trait_list);
-
     my $acc_t = $t->can_transform("accessions", "accession_ids");
     my $accession_id_data = $t->transform($schema, $acc_t, $unique_list);
 
@@ -98,20 +343,9 @@ sub download_action : Path('/breeders/download_action') Args(0) {
     my $trial_sql = join ",", map { "\'$_\'" } @{$trial_id_data->{transform}};
     my $trait_sql = join ",", map { "\'$_\'" } @{$trait_id_data->{transform}};
 
-    print STDERR "SQL-READY: $accession_sql | $trial_sql | $trait_sql \n";
-
     my $data; 
     my $output = "";
     
-    #if($data_type eq ""){
-
-    # print STDERR "Please define data type \n";
-
-    # print "Please define data type \n";
-    #
-    #}
-
-
     if ($data_type eq "phenotype") { 
 	$data = $bs->get_phenotype_info($accession_sql, $trial_sql, $trait_sql);
 	
@@ -123,10 +357,6 @@ sub download_action : Path('/breeders/download_action') Args(0) {
     }
 
     if ($data_type eq "genotype") { 
-		
-
-        print STDERR "Download genotype data\n";
-
 	$data = $bs->get_genotype_info($accession_sql, $trial_sql);
 	
 	$output = "";
@@ -134,12 +364,9 @@ sub download_action : Path('/breeders/download_action') Args(0) {
 	    $output .= join "\t", @$d;
 	    $output .= "\n";
 	}
-
-
     }
     $c->res->content_type("text/plain");
-   $c->res->body($output);
-
+    $c->res->body($output);
 }
 
 #=pod
@@ -152,7 +379,6 @@ sub download_gbs_action : Path('/breeders/download_gbs_action') Args(0) {
   #  my $trait_list_id     = $c->req->param("trait_list_list_select");
     my $data_type         = $c->req->param("data_type") || "genotype";
     my $format            = $c->req->param("format");
-
 
     print STDERR "IDS: $accession_list_id, $trial_list_id \n";
 
@@ -169,8 +395,8 @@ sub download_gbs_action : Path('/breeders/download_gbs_action') Args(0) {
     my $schema = $c->dbic_schema("Bio::Chado::Schema", "sgn_chado");
     my $t = CXGN::List::Transform->new();
     
-#    print STDERR Data::Dumper::Dumper(\@accession_list);
-#    print STDERR Data::Dumper::Dumper(\@trial_list);
+     print STDERR Data::Dumper::Dumper(\@accession_list);
+     print STDERR Data::Dumper::Dumper(\@trial_list);
 #    print STDERR Data::Dumper::Dumper(\@trait_list);
 
     my $acc_t = $t->can_transform("accessions", "accession_ids");
@@ -191,87 +417,68 @@ sub download_gbs_action : Path('/breeders/download_gbs_action') Args(0) {
     my $data; 
     my $output = "";
 
-    if ($data_type eq "genotype") { 
-		
+    my ($tempfile, $uri) = $c->tempfile(TEMPLATE => "download_XXXXX", UNLINK=> 0);
+    open my $TEMP, '>', $tempfile or die "Cannot open output_test00.txt: $!";
+
+    print $TEMP "Marker\t";
+    for my $i (0 .. $#accession_list){
+
+	print $TEMP "$accession_list[$i]\t";
+
+    }
+
+    print $TEMP "\n";
+
+    if ($data_type eq "genotype") { 		
         print "Download genotype data\n";
 
 	$data = $bs->get_genotype_info($accession_sql, $trial_sql);        
 	$output = "";
 
-#	say "Your list has ", scalar(@$x), " elements" 
-
-       print STDERR "your list has ", scalar(@$data)," element \n";
-      
-       #my @myGBS = ();
-       
-     
+       print STDERR "your list has ", scalar(@$data)," element \n"; 
        my @AoH = ();
 
      for (my $i=0; $i < scalar(@$data) ; $i++) 
-#      for my $i ( 0 .. $#data )
      {
       my $decoded = decode_json($data->[$i][1]);
       push(@AoH, $decoded); 
-      #print "$i\n";
-     }
-      # push(@myGBS, 'Moe'); 
-
+     } 
 	print STDERR "your array has ", scalar(@AoH)," element \n";
 	
-
-
         my @k=();
 	for my $i ( 0 .. $#AoH ){
 	   @k = keys   %{ $AoH[$i] }
 	}
 
-	my $fh000="out_test000.txt";
-
-	$fh000 = File::Spec->catfile($c->config->{gbs_temp_data}, $fh000);
-
-
-        print STDERR "Output file is ", $fh000,"\n";
-	
-   #     open my $fh00, '>', "output_test00.txt" or die "Cannot open output_test00.txt: $!";
-
-        open my $fh00, '>', $fh000 or die "Cannot open output_test00.txt: $!";
 
         for my $j (0 .. $#k){
+	    print $TEMP "$k[$j]\t";
 
-	    print $fh00 "$k[$j]\t";
 	    for my $i ( 0 .. $#AoH ) {
              
             if($i == $#AoH ){  
-            print $fh00 "$AoH[$i]{$k[$j]}";
+		print $TEMP "$AoH[$i]{$k[$j]}";
+
             }else{
-	    print $fh00 "$AoH[$i]{$k[$j]}\t";
+		print $TEMP "$AoH[$i]{$k[$j]}\t";
 	    }
              
             }
 
-            print $fh00 "\n";
+ print $TEMP "\n";
 
 	}
 
     }
 
-
-    
-   # my $contents = read_file("output_test00.txt");
-
-    # print STDERR "Output file is ", $fh00,"\n";
-    # print STDERR "Output file is ", $fh000,"\n";
+     print STDERR "download file is", $tempfile,"\n";
 
 
-     my $contents = read_file("/data/prod/public/out_test000.txt");
+      my $contents = $tempfile;
 
+      $c->res->content_type("application/text");
+      $c->res->body($contents);
 
-    $c->res->content_type("text/plain");
-
-    $c->res->body($contents);
-
-   system("rm output_test*.txt");
-#  system("rm qc_output.txt");
 
 }
 #=pod
@@ -325,6 +532,16 @@ sub gbs_qc_action : Path('/breeders/gbs_qc_action') Args(0) {
     my $data; 
     my $output = "";
 
+    my ($tempfile, $uri) = $c->tempfile(TEMPLATE => "download_XXXXX", UNLINK=> 0);
+
+        #$fh000 = File::Spec->catfile($c->config->{gbs_temp_data}, $fh000);
+    open my $TEMP, '>', $tempfile or die "Cannot open output_test00.txt: $!";
+
+    #$fh000 = File::Spec->catfile($c->config->{gbs_temp_data}, $fh000);
+  #  $tempfile = File::Spec->catfile($c->config->{gbs_temp_data}, $tempfile);
+    $tempfile = File::Spec->catfile($tempfile);
+
+
     if ($data_type eq "genotype") { 
 		
         print "Download genotype data\n";
@@ -352,16 +569,16 @@ sub gbs_qc_action : Path('/breeders/gbs_qc_action') Args(0) {
 
 	print STDERR "your array has ", scalar(@AoH)," element \n";
 	
-	my $fh000="out_test000.txt";
+#	my $fh000="out_test000.txt";
 
-	$fh000 = File::Spec->catfile($c->config->{gbs_temp_data}, $fh000);
+#	$fh000 = File::Spec->catfile($c->config->{gbs_temp_data}, $fh000);
 
 
-        print STDERR "Output file is ", $fh000,"\n";
+#        print STDERR "Output file is ", $fh000,"\n";
 	
    #     open my $fh00, '>', "output_test00.txt" or die "Cannot open output_test00.txt: $!";
 
-        open my $fh00, '>', $fh000 or die "Cannot open output_test00.txt: $!";
+#        open my $fh00, '>', $fh000 or die "Cannot open output_test00.txt: $!";
 
 
         my @k=();
@@ -373,37 +590,62 @@ sub gbs_qc_action : Path('/breeders/gbs_qc_action') Args(0) {
 
         for my $j (0 .. $#k){
 
-	    print $fh00 "$k[$j]\t";
+	    print $TEMP "$k[$j]\t";
 	    for my $i ( 0 .. $#AoH ) {
              
             if($i == $#AoH ){  
-            print $fh00 "$AoH[$i]{$k[$j]}";
+            print $TEMP "$AoH[$i]{$k[$j]}";
             }else{
-	    print $fh00 "$AoH[$i]{$k[$j]}\t";
+	    print $TEMP "$AoH[$i]{$k[$j]}\t";
 	    }
              
             }
 
-            print $fh00 "\n";
+            print $TEMP "\n";
 
 	}
     }
 
+
+    my ($tempfile_out, $uri_out) = $c->tempfile(TEMPLATE => "output_XXXXX", UNLINK=> 0);
+
+
     #system("R --slave --args output_test00.txt qc_output.txt < /home/aiminy/code/code_R/GBS_QC.R"); ok
     #system("R --slave --args output_test00.txt qc_output.txt < ./R/GBS_QC.R"); ok
-     system("R --slave --args /data/prod/public/out_test000.txt /data/prod/public/qc_output.txt < R/GBS_QC.R");
+     system("R --slave --args $tempfile $tempfile_out < R/GBS_QC.R");
     #system("R --slave --args output_test00.txt qc_output.txt < /R/GBS_QC.R"); path is not ok
 
 
-    my $contents = read_file("/data/prod/public/qc_output.txt");
+    my $contents = $tempfile_out;
 
     $c->res->content_type("text/plain");
 
     $c->res->body($contents);
 
-   system("rm output_test*.txt");
-   system("rm qc_output.txt");
+#   system("rm output_test*.txt");
+#   system("rm qc_output.txt");
 
 }
+
+sub trial_download_log { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+    my $message = shift;
+
+    if (! $c->user) { 
+	return;
+    }
+
+    if ($c->config->{trial_download_logfile}) { 
+	open (my $F, ">>", $c->config->{trial_download_logfile}) || die "Can't open ".$c->config->{trial_download_logfile};
+	print $F $c->user->get_object->get_username()."\t".$trial_id."\t$message\n";
+	close($F);
+    }
+    else { 
+	print STDERR "Note: set config variable trial_download_logfile to obtain a log of downloaded trials.\n";
+    }
+}
+
 #=pod
 1;

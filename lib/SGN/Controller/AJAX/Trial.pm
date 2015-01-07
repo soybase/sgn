@@ -6,11 +6,13 @@ backend for adding trials and viewing trials
 
 =head1 DESCRIPTION
 
-Creating and viewing trials
+Creating, viewing and deleting trials
 
 =head1 AUTHOR
 
 Jeremy Edwards <jde22@cornell.edu>
+
+Deletion by Lukas
 
 =cut
 
@@ -27,6 +29,7 @@ use File::Spec::Functions;
 use Digest::MD5;
 use List::MoreUtils qw /any /;
 use Data::Dumper;
+use CXGN::Trial;
 use CXGN::Trial::TrialDesign;
 use CXGN::Trial::TrialCreate;
 use JSON -support_by_pp;
@@ -34,6 +37,7 @@ use SGN::View::Trial qw/design_layout_view design_info_view/;
 use CXGN::Location::LocationLookup;
 use CXGN::Stock::StockLookup;
 use CXGN::Trial::TrialLayout;
+use CXGN::BreedersToolbox::Projects;
 use CXGN::BreedersToolbox::Delete;
 use CXGN::UploadFile;
 use CXGN::Trial::ParseUpload;
@@ -101,9 +105,16 @@ sub generate_experimental_design_POST : Args(0) {
   if ($c->req->param('control_list')) {
     @control_names = @{_parse_list_from_json($c->req->param('control_list'))};
   }
+
   my $design_type =  $c->req->param('design_type');
   my $rep_count =  $c->req->param('rep_count');
   my $block_number =  $c->req->param('block_number');
+
+  my $row_number = $c->req->param('row_number');
+  my $block_row_number=$c->req->param('row_number_per_block');
+  my $block_col_number=$c->req->param('col_number_per_block');
+  my $col_number =$c->req->param('col_number'); 
+
   my $block_size =  $c->req->param('block_size');
   my $max_block_size =  $c->req->param('max_block_size');
   my $plot_prefix =  $c->req->param('plot_prefix');
@@ -112,6 +123,19 @@ sub generate_experimental_design_POST : Args(0) {
   my $trial_location = $c->req->param('trial_location');
   my $trial_name = $c->req->param('project_name');
   #my $trial_name = "Trial $trial_location $year"; #need to add something to make unique in case of multiple trials in location per year?
+
+
+
+   print STDERR join "\n",$design_type;
+   print STDERR "\n";
+   
+   print STDERR join "\n",$block_number;
+   print STDERR "\n";
+
+   print STDERR join "\n",$row_number;
+   print STDERR "\n";
+
+
 
   if (!$c->user()) {
     $c->stash->{rest} = {error => "You need to be logged in to add a trial" };
@@ -126,7 +150,7 @@ sub generate_experimental_design_POST : Args(0) {
   my $geolocation_lookup = CXGN::Location::LocationLookup->new(schema => $schema);
   $geolocation_lookup->set_location_name($c->req->param('trial_location'));
   if (!$geolocation_lookup->get_geolocation()){
-    $c->stash->{rest} = {error => "Trial location not found"};
+    $c->stash->{rest} = { error => "Trial location not found" };
     return;
   }
 
@@ -169,6 +193,23 @@ sub generate_experimental_design_POST : Args(0) {
   }
   if ($block_number) {
     $trial_design->set_number_of_blocks($block_number);
+    #$trial_design->set_number_of_blocks(8);
+  }
+  if($row_number){
+      $trial_design->set_number_of_rows($row_number);
+      #$trial_design->set_number_of_rows(9);
+  }
+ if($block_row_number){
+      $trial_design->set_block_row_numbers($block_row_number);
+      #$trial_design->set_number_of_rows(9);
+  }
+ if($block_col_number){
+      $trial_design->set_block_col_numbers($block_col_number);
+      #$trial_design->set_number_of_rows(9);
+  }
+ if($col_number){
+      $trial_design->set_number_of_cols($col_number);
+      #$trial_design->set_number_of_rows(9);
   }
   if ($block_size) {
     $trial_design->set_block_size($block_size);
@@ -187,6 +228,8 @@ sub generate_experimental_design_POST : Args(0) {
     $c->stash->{rest} = {error => "Design type not supported." };
     return;
   }
+
+
   try {
     $trial_design->calculate_design();
   } catch {
@@ -220,6 +263,9 @@ sub save_experimental_design_POST : Args(0) {
   my $metadata_schema = $c->dbic_schema("CXGN::Metadata::Schema");
   my $phenome_schema = $c->dbic_schema("CXGN::Phenome::Schema");
   my $dbh = $c->dbc->dbh;
+
+  print STDERR "Saving trial... :-)\n";
+
   #my $trial_create = new CXGN::Trial::TrialCreate(chado_schema => $schema);
   if (!$c->user()) {
     $c->stash->{rest} = {error => "You need to be logged in to add a trial" };
@@ -273,9 +319,11 @@ sub save_experimental_design_POST : Args(0) {
     $trial_create->save_trial();
   } catch {
     $c->stash->{rest} = {error => "Error saving trial in the database $_"};
+    print STDERR "ERROR SAVING TRIAL!\n";
     $error = 1;
   };
   if ($error) {return;}
+  print STDERR "Trial saved successfully\n";
   $c->stash->{rest} = {success => "1",};
   return;
 }
@@ -811,6 +859,18 @@ sub _formatted_string_from_error_hash_by_type {
   return $error_string;
 }
 
+
+=head2 delete_trial_by_file
+
+ Usage:
+ Desc:
+ Ret:
+ Args:
+ Side Effects:
+ Example:
+
+=cut
+
 sub delete_trial_by_file : Path('/breeders/trial/delete/file') Args(1) { 
     my $self = shift;
     my $c = shift;
@@ -840,22 +900,237 @@ sub delete_trial_by_file : Path('/breeders/trial/delete/file') Args(1) {
     }    
 }
 
-# transform stock list to list containing uniquenames only 
-# (convert synonyms to unique names)
-#
-# sub transform_stock_list { 
+
+=head2 delete_trial_by_trial_id
+
+ Usage:
+ Desc:         Deletes plots associated with a phenotyping experiment
+ Ret:
+ Args:
+ Side Effects:
+ Example:
+
+=cut
+
+sub delete_trial_by_trial_id : Path('/breeders/trial/delete/id') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+
+    my $trial_id = shift;
+
+    print STDERR "DELETING trial $trial_id\n";
+
+    if (!$c->user()) { 
+	$c->stash->{rest} = { error => 'You must be logged in to delete a trial' };
+	return;
+    }
+    
+    my $user_id = $c->user->get_object()->get_sp_person_id();
+
+    my $schema = $c->dbic_schema("Bio::Chado::Schema");
+
+    my $breeding_program_rs = $schema->resultset("Cv::Cvterm")->search( { name => "breeding_program" });
+
+    my $breeding_program_id = $breeding_program_rs->first()->cvterm_id();
+
+    my $breeding_program_name = $breeding_program_rs->first()->name();
+
+    my $trial_organization_id = $schema->resultset("Project::Projectprop")->search( 
+	{ 
+	    project_id => $trial_id, 
+	    type_id=>$breeding_program_id 
+	});
+
+    if (! ($c->user->check_roles('curator') || ( $c->user->check_roles('submitter') && $c->roles($breeding_program_name) ))) { 
+	$c->stash->{rest} = { error => 'You do not have sufficient privileges to delete a trial.' };
+    }
+    
+#    my $del = CXGN::BreedersToolbox::Delete->new( 
+#	bcs_schema => $c->dbic_schema("Bio::Chado::Schema"),
+#	metadata_schema => $c->dbic_schema("CXGN::Metadata::Schema"),
+#	phenome_schema => $c->dbic_schema("CXGN::Phenome::Schema"),
+#	);
+
+    my $t = CXGN::Trial->new( { trial_id=> $trial_id, bcs_schema => $c->dbic_schema("Bio::Chado::Schema") });
+
+    my $hash = $t->delete_experiments($user_id, $trial_id);
+
+    $c->stash->{rest} = $hash;
+}
+
+
+=head2 delete_phenotype_data_by_trial_id
+
+ Usage:
+ Desc:
+ Ret:
+ Args:
+ Side Effects:
+ Example:
+
+=cut
+
+sub delete_phenotype_data_by_trial_id : Path('/breeders/trial/phenotype/delete/id') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+
+    my $trial_id = shift;
+
+    print STDERR "DELETING phenotypes of trial $trial_id\n";
+
+    if (!$c->user()) { 
+	$c->stash->{rest} = { error => 'You must be logged in to delete a trial' };
+	return;
+    }
+    
+    my $user_id = $c->user->get_object()->get_sp_person_id();
+
+    my $schema = $c->dbic_schema("Bio::Chado::Schema");
+
+    my $breeding_program_rs = $schema->resultset("Cv::Cvterm")->search( { name => "breeding_program" });
+
+    my $breeding_program_id = $breeding_program_rs->first()->cvterm_id();
+
+    my $breeding_program_name = $breeding_program_rs->first()->name();
+
+    my $trial_organization_id = $schema->resultset("Project::Projectprop")->search( 
+	{ 
+	    project_id => $trial_id, 
+	    type_id=>$breeding_program_id 
+	});
+
+    if (! ($c->user->check_roles('curator') || ( $c->user->check_roles('submitter') && $c->roles($breeding_program_name) ))) { 
+	$c->stash->{rest} = { error => 'You do not have sufficient privileges to delete a trial.' };
+    }
+    
+    
+#    my $del = CXGN::BreedersToolbox::Delete->new( 
+#	bcs_schema => $c->dbic_schema("Bio::Chado::Schema"),
+#	metadata_schema => $c->dbic_schema("CXGN::Metadata::Schema"),
+#	phenome_schema => $c->dbic_schema("CXGN::Phenome::Schema"),
+#	);
+
+    my $t = CXGN::Trial->new( { trial_id => $trial_id, bcs_schema => $c->dbic_schema("Bio::Chado::Schema") });
+
+    my $error = $t->delete_phenotype_data($trial_id);
+
+    if ($error) { 
+	$c->stash->{rest} = { error => $error };
+    }
+    else { 
+	$c->stash->{rest} = { success => "1" };
+    }
+}
+
+=head2 delete_trial_layout_by_trial_id
+
+ Usage:
+ Desc:
+ Ret:
+ Args:
+ Side Effects:
+ Example:
+
+=cut
+
+sub delete_trial_layout_by_trial_id : Path('/breeders/trial/layout/delete/id') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+
+    my $trial_id = shift;
+
+    print STDERR "DELETING trial layout $trial_id\n";
+
+    if (!$c->user()) { 
+	$c->stash->{rest} = { error => 'You must be logged in to delete a trial layout' };
+	return;
+    }
+    
+    my $user_id = $c->user->get_object()->get_sp_person_id();
+
+    my $schema = $c->dbic_schema("Bio::Chado::Schema");
+
+    my $breeding_program_rs = $schema->resultset("Cv::Cvterm")->search( { name => "breeding_program" });
+
+    my $breeding_program_id = $breeding_program_rs->first()->cvterm_id();
+
+    my $breeding_program_name = $breeding_program_rs->first()->name();
+
+    my $trial_organization_id = $schema->resultset("Project::Projectprop")->search( 
+	{ 
+	    project_id => $trial_id, 
+	    type_id=>$breeding_program_id 
+	});
+
+    if (! ($c->user->check_roles('curator') || ( $c->user->check_roles('submitter') && $c->roles($breeding_program_name) ))) { 
+	$c->stash->{rest} = { error => 'You do not have sufficient privileges to delete a trial.' };
+    }
+    
+    #my $del = CXGN::BreedersToolbox::Delete->new( 
+#	bcs_schema => $c->dbic_schema("Bio::Chado::Schema"),
+#	metadata_schema => $c->dbic_schema("CXGN::Metadata::Schema"),
+#	phenome_schema => $c->dbic_schema("CXGN::Phenome::Schema"),
+#	);
+
+    my $t = CXGN::Trial->new( { bcs_schema => $c->dbic_schema("Bio::Chado::Schema"), trial_id => $trial_id });
+    #my $error =  $del->delete_field_layout_by_trial($trial_id);
+
+    my $error = $t->delete_field_layout();
+    if ($error) { 
+	$c->stash->{rest} = { error => $error };
+    }
+    $c->stash->{rest} = { success => 1 };
+
+}
+
+sub get_trial_description : Path('/ajax/breeders/trial/description/get') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+    
+    my $trial = CXGN::Trial->new( { bcs_schema => $c->dbic_schema("Bio::Chado::Schema"), trial_id => $trial_id });
+    
+    print STDERR "TRIAL: ".$trial->get_description()."\n";
+
+    $c->stash->{rest} = { description => $trial->get_description() };
+   
+}
+
+sub save_trial_description : Path('/ajax/breeders/trial/description/save') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+    my $description = $c->req->param("description");
+    
+    my $trial = CXGN::Trial->new( { bcs_schema => $c->dbic_schema("Bio::Chado::Schema"), trial_id => $trial_id });
+
+    my $p = CXGN::BreedersToolbox::Projects->new( { schema => $c->dbic_schema("Bio::Chado::Schema") });
+
+    my $breeding_program = $p->get_breeding_programs_by_trial($trial_id);
+
+    if (! ($c->user() &&  ($c->user->check_roles("curator") || $c->user->check_roles($breeding_program)))) { 
+	$c->stash->{rest} = { error => "You need to be logged in with sufficient privileges to change the description of a trial." };
+	return;
+    }
+    
+    $trial->set_description($description);
+
+    $c->stash->{rest} = { success => 1 };
+}
+
+# sub get_trial_type :Path('/ajax/breeders/trial/type') Args(1) { 
 #     my $self = shift;
 #     my $c = shift;
-#     my $stock_ref = shift; 
+#     my $trial_id = shift;
 
-#     my $lt = CXGN::List::Transform->new( );
-#     my $transform = $lt ->can_transform('accession_synonyms', 'accession_names');
+#     my $t = CXGN::Trial->new( { bcs_schema => $c->dbic_schema("Bio::Chado::Schema"), trial_id => $trial_id } );
 
-#     my $data = $lt->transform($c->dbic_schema("Bio::Chado::Schema"), $transform, $stock_ref);
+#     $c->stash->{rest} = { type => $t->get_project_type() };
 
-#     return $data;
-
-		   
 # }
+    
+
+
+
 
 1;

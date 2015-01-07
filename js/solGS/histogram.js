@@ -27,8 +27,11 @@ function getTraitDetails () {
 }
 
 
-jQuery(document).ready( function () { 
-    
+jQuery(document).ready( function () {     
+    getHistogramData();
+});
+
+function getHistogramData () {
     var trait = getTraitDetails();
        
     jQuery.ajax({
@@ -36,16 +39,22 @@ jQuery(document).ready( function () {
         dataType: 'json',
         data: {'population_id': trait.population_id, 'trait_id' : trait.trait_id  },
         url: '/histogram/phenotype/data/',
-        success: function(response) {           
-            plotHistogram(response.data);
-            jQuery("#histogram_message").empty();
+        success: function(response) {
+            if(response.status == 'success') {
+                plotHistogram(response.data);
+                jQuery("#histogram_message").empty();
+            } else {                
+                var errorMessage = "<p>This trait has no phenotype data to plot.</p>";
+                jQuery("#histogram_message").html(errorMessage);  
+            }
+            
         },
         error: function(response) {
-            var errorMessage = 'There is error in creating the phenotype data set for the histogram.';
+            var errorMessage = "<p>Error occured plotting histogram for this trait dataset.</p>";
             jQuery("#histogram_message").html(errorMessage);                  
         }
     });
-});
+}
 
 
 function plotHistogram (data) {
@@ -104,7 +113,7 @@ function plotHistogram (data) {
           
     var histogramPlot = svg.append("g")
         .attr("id", "trait_histogram_plot")
-        .attr("transform", "translate(" + pad.left + "," + pad.top + ")");
+        .attr("transform", "translate(" +  pad.left + "," + pad.top + ")");
 
     var bar = histogramPlot.selectAll(".bar")
         .data(histogram)
@@ -112,12 +121,12 @@ function plotHistogram (data) {
         .append("g")
         .attr("class", "bar")
         .attr("transform", function(d) {
-                return "translate(" + xAxisScale(d.x)  
+            return "translate(" + xAxisScale(d.x)  
                 + "," + height - yAxisScale(d.y) + ")"; 
             });     
   
     bar.append("rect")
-        .attr("x", function(d) { return xAxisScale(d.x); } )
+        .attr("x", function(d) { return (pad.left + 5) + xAxisScale(d.x); } )
         .attr("y", function(d) {return height - yAxisScale(d.y); }) 
         .attr("width", function(d) {return xAxisScale(d.dx) - 2  ; })
         .attr("height", function(d) { return yAxisScale(d.y); })
@@ -132,7 +141,7 @@ function plotHistogram (data) {
     bar.append("text")
         .text(function(d) { return d.y; })
         .attr("y", function(d) {return height - (yAxisScale(d.y) + 10); } )
-        .attr("x",  function(d) { return (pad.left + xAxisScale(d.x)) + 2; } )      
+        .attr("x",  function(d) { return ((2*pad.left) + xAxisScale(d.x)); } )      
         .attr("dy", ".6em")
         .attr("text-anchor", "end")  
         .attr("font-family", "sans-serif")
@@ -142,7 +151,7 @@ function plotHistogram (data) {
                   
     histogramPlot.append("g")
         .attr("class", "x axis")
-        .attr("transform", "translate(" + pad.left + "," + height +")")
+        .attr("transform", "translate(" + (2*pad.left) + "," + height +")")
         .call(xAxis)
         .selectAll("text")
         .attr("y", 0)
@@ -155,13 +164,28 @@ function plotHistogram (data) {
           
     histogramPlot.append("g")
         .attr("class", "y axis")
-        .attr("transform", "translate(" + pad.left +  "," + 0 + ")")
+        .attr("transform", "translate(" +(2* pad.left) +  "," + 0 + ")")
         .call(yAxis)
         .selectAll("text")
         .attr("y", 0)
         .attr("x", -10)
         .attr("fill", "green")
         .style("fill", "green");
+
+    histogramPlot.append("g")
+        .attr("transform", "translate(" + (totalW * 0.5) + "," + (height + pad.bottom) + ")")        
+        .append("text")
+        .text("Trait values")            
+        .attr("fill", "teal")
+        .style("fill", "teal");
+
+    histogramPlot.append("g")
+        .attr("transform", "translate(" + 0 + "," + ( totalH*0.5) + ")")        
+        .append("text")
+        .text("Frequency")            
+        .attr("fill", "teal")
+        .style("fill", "teal")
+        .attr("transform", "rotate(-90)");
        
     
 }   

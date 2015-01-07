@@ -26,19 +26,21 @@ function getPopIds () {
                     .prop('checked', true); 
             });
         });
-  
-    jQuery("#selected_trials").show();
    
+    jQuery("#selected_trials").show();  
     jQuery("#combine").show();
     jQuery("#search_again").show();
    
 }
 
+
 function doneSelecting() {
     jQuery("#homepage_trials_list").hide();
     jQuery("#done_selecting").hide();
+    jQuery("#homepage_message").hide();
     
 }
+
 
 function removeSelectedTrial() {
     
@@ -46,21 +48,85 @@ function removeSelectedTrial() {
         
         jQuery(this).remove();
         
-        if( jQuery("#selected_trials_table td").doesExist() == false) {
+        if( jQuery("#selected_trials_table td").length == 0) {
             jQuery("#selected_trials").hide();
             jQuery("#combine").hide();
             jQuery("#search_again").hide();
-            jQuery("#done_selecting input").val('Combine');
+            jQuery("#done_selecting input").val('Select');            
             
-            searchAgain();
+            searchAgain();           
         }
     });
 
 }
 
+
 function searchAgain () {
-    searchTrials();
+
+    var url = window.location.pathname;
+
+    if (url.match(/solgs\/search\/trials\/trait\//) != null) {
+	var traitId = jQuery("input[name='trait_id']").val();
+	url = '/solgs/search/result/populations/' + traitId;
+    } else {
+	url = '/solgs/search/trials/';
+    }
+  
+    jQuery('#homepage_trials_list').empty();
+    searchTrials(url);  
+    jQuery("#homepage_message").show();
     jQuery("#done_selecting").show();
+    jQuery("#done_selecting input").val('Select');
+    
+}
+
+
+function combineTraitTrials () {
+    var trId = getTraitId();
+  
+    var trialIds = getSelectedTrials();  
+
+    var action = "/solgs/combine/populations/trait/" + trId;
+    var selectedPops = trId + "=" + trialIds + '&' + 'combine=combine';
+    
+    jQuery.blockUI.defaults.applyPlatformOpacityRules = false;
+    jQuery.blockUI({message: 'Please wait..'});
+    
+    jQuery.ajax({  
+        type: 'POST',
+        dataType: "json",
+        url: action,
+        data: selectedPops,
+        success: function(res) {                       
+             
+            if (res.status) {
+                  
+                var comboPopsId = res.combo_pops_id;
+                var newUrl = '/solgs/model/combined/populations/' + comboPopsId + '/trait/' + trId;
+                    
+		if (comboPopsId) {
+		    window.location.href = newUrl;
+		    jQuery.unblockUI();
+                } else if (res.redirect_url) {
+		    goToSingleTrialPage(res.redirect_url);
+		    jQuery.unblockUI();
+                } 
+                    
+            } else {
+                    
+                if(res.not_matching_pops ){                        
+                    alert('populations ' + res.not_matching_pops + 
+                          ' were genotyped using different marker sets. ' + 
+                          'Please make new selections to combine.' );
+                    window.location.href =  '/solgs/search/result/populations/' + trId;
+                }
+
+                if (res.redirect_url) {
+                    window.location.href = res.redirect_url;
+                }
+            } 
+	}
+    });
 }
 
 
@@ -83,26 +149,26 @@ function downloadData() {
             if (res.not_matching_pops == null) {
                
                 var combinedPopsId = res.combined_pops_id;
-                jQuery.unblockUI();
-               // alert('all clones in all trials genotyped using the same RE'); 
-                
-                goToCombinedTrialsPage(combinedPopsId);              
-                    
-            } else {
-                    
-                if(res.not_matching_pops ) { 
+               
+                if(combinedPopsId) {
+                    goToCombinedTrialsPage(combinedPopsId);
                     jQuery.unblockUI();
-                    alert('populations ' + res.not_matching_pops + 
-                          ' were genotyped using different marker sets. ' + 
-                              'Please make new selections to combine.' );
-                }
-
-                if (res.redirect_url) {
-                    window.location.href = res.redirect_url;
-                }
+                }else if (res.redirect_url) {
+                    goToSingleTrialPage(res.redirect_url);
+                    jQuery.unblockUI();
+                } 
+                                     
+            } else if(res.not_matching_pops )  {
+                            
+                jQuery.unblockUI();
+                alert('populations ' + res.not_matching_pops + 
+                      ' were genotyped using different marker sets. ' + 
+                      'Please make new selections to combine.' );
+        
             } 
         },
-        error: function(res) {           
+        error: function(res) { 
+            jQuery.unblockUI();
             alert('An error occured retrieving phenotype' +
                   'and genotype data for trials..');
         }       
@@ -111,14 +177,13 @@ function downloadData() {
 
 
 function getSelectedTrials () {
-    
+   
     var trialIds = [];
-    var selectedTrialsExist = jQuery("#selected_trials_table").doesExist();
   
-    if (selectedTrialsExist == true) {      
+    if (jQuery("#selected_trials_table").length) {      
         jQuery("#selected_trials_table tr").each(function () {       
             var trialId = jQuery(this).find("input[type=checkbox]").val();
-              
+           
             if (trialId) {
                 trialIds.push(trialId);
             }            
@@ -138,9 +203,23 @@ function goToCombinedTrialsPage(combinedPopsId) {
     
     if(combinedPopsId) {      
         window.location.href = action;
-    }
-   
+    } 
 }
+
+
+function goToSingleTrialPage(url) {
+    
+    if (url) {      
+        window.location.href = url;
+    }    
+}
+
+
+var getTraitId = function () {
+   
+    var id = jQuery("input[name='trait_id']").val();   
+    return id;
+};
 
 
 Array.prototype.unique =

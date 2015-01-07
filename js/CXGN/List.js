@@ -433,9 +433,11 @@ CXGN.List.prototype = {
        Parameters: 
          div_name: The div_name where the select should appear
          types: a list of list types that should be listed in the menu
+         add_empty_element: text. if present, add an empty element with the
+           provided text as description
     */
     
-    listSelect: function(div_name, types) { 	
+    listSelect: function(div_name, types, empty_element) { 	
 	var lists = new Array();
 
 	if (types) {
@@ -453,8 +455,11 @@ CXGN.List.prototype = {
 	}
 
 	var html = '<select id="'+div_name+'_list_select" name="'+div_name+'_list_select" >';
+	if (empty_element) { 
+	    html += '<option value="">'+empty_element+'</option>\n';
+        } 
 	for (var n=0; n<lists.length; n++) {
-	    html = html + '<option value='+lists[n][0]+'>'+lists[n][1]+'</option>';
+	    html += '<option value='+lists[n][0]+'>'+lists[n][1]+'</option>';
 	}
 	html = html + '</select>';
 	return html;
@@ -648,18 +653,19 @@ function addToListMenu(listMenuDiv, dataDiv, options) {
 	    selectText = options.selectText;
 	}
 	if (options.typeSourceDiv) { 
-	    type = getData(options.typeSourceDiv, selectText);
-	    if (type) { 
-		type = type.replace(/(\n|\r)+$/, '');
+	    var sourcetype = getData(options.typeSourceDiv, selectText);
+	    if (sourcetype) { 
+		type = sourcetype.replace(/(\n|\r)+$/, '');
 	    }
 	}
-	if (options.types) { 
+	if (options.listType) { 
 	    type = options.listType;
 	}
     }
     html = '<input type="text" id="'+dataDiv+'_new_list_name" size="8" />';
     html += '<input type="hidden" id="'+dataDiv+'_list_type" value="'+type+'" />';
     html += '<input id="'+dataDiv+'_add_to_new_list" type="button" value="add to new list" /><br />';
+
     html += lo.listSelect(dataDiv, [ type ]);
 
     html += '<input id="'+dataDiv+'_button" type="button" value="add to list" />';
@@ -722,7 +728,7 @@ function getData(id, selectText) {
 		}
 	    }
 	    data = datalist.join("\n");
-	    alert("data:"+data);
+	    //alert("data:"+data);
 	    
 	}
 	else { 

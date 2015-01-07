@@ -35,7 +35,7 @@ $trait_name = ucfirst($trait_name);
    title => "Trait phenotype data frequency distribution from $trial_name"
 &>
  
-  <div id="histogram_message"  style="font-weight:bold;text-align:center;text-transform:uppercase;color:#A7C942">
+  <div id="histogram_message"  style="font-weight:bold;text-align:center;color:#A7C942">
     <p>Loading frequency distribution graph...</p>
   </div>
 
@@ -44,5 +44,7 @@ $trait_name = ucfirst($trait_name);
      trial_id => $trial_id,
      trait_id => $trait_id
     &>
+
+
 
 </&>

@@ -1,4 +1,17 @@
 
+=head1 NAME
+
+CXGN::BreederSearch - class for retrieving breeder information for the breeder search wizard
+
+=head1 AUTHORS
+
+Lukas Mueller <lam87@cornell.edu>
+Aimin Yan <ay247@cornell.edu>
+
+=head1 METHODS
+
+=cut
+
 package CXGN::BreederSearch;
 
 use Moose;
@@ -184,11 +197,19 @@ sub get_intersect {
 	return { results => \@results };
     }
     else { 
-	
 	return { message => 'Too many items to display ('.(scalar(@results)).')' };
-
     }
 }
+
+
+=head2 get_phenotype_info
+
+parameters: comma-separated lists of accession, trial, and trait IDs. May be empty.
+
+returns: an array with phenotype information
+
+=cut
+
 
 sub get_phenotype_info {  
     my $self = shift;
@@ -196,19 +217,184 @@ sub get_phenotype_info {
     my $trial_sql = shift;
     my $trait_sql = shift;
 
-    my $q = "SELECT project.name, stock.uniquename, nd_geolocation.description, cvterm.name, phenotype.value FROM stock as plot JOIN stock_relationship ON (plot.stock_id=subject_id) JOIN stock ON (object_id=stock.stock_id) JOIN nd_experiment_stock ON(nd_experiment_stock.stock_id=plot.stock_id) JOIN nd_experiment ON (nd_experiment_stock.nd_experiment_id=nd_experiment.nd_experiment_id) JOIN nd_geolocation USING(nd_geolocation_id) JOIN nd_experiment_phenotype ON (nd_experiment_phenotype.nd_experiment_id=nd_experiment.nd_experiment_id) JOIN phenotype USING(phenotype_id) JOIN cvterm ON (phenotype.cvalue_id=cvterm.cvterm_id) JOIN nd_experiment_project ON (nd_experiment_project.nd_experiment_id=nd_experiment.nd_experiment_id) JOIN project USING(project_id)  WHERE cvterm.cvterm_id in ($trait_sql) and project.project_id in ($trial_sql) and stock.stock_id in ($accession_sql)";
+    print STDERR "$accession_sql - $trial_sql - $trait_sql \n\n";
 
+    my $rep_type_id = $self->get_stockprop_type_id("replicate");
+
+    my @where_clause = ();
+    if ($accession_sql) { push @where_clause,  "stock.stock_id in ($accession_sql)"; }
+    if ($trial_sql) { push @where_clause, "project.project_id in ($trial_sql)"; }
+    if ($trait_sql) { push @where_clause, "cvterm.cvterm_id in ($trait_sql)"; }
+
+    my $where_clause = "";
+   
+    if (@where_clause>0) { 
+	$where_clause = "where (stockprop.type_id=$rep_type_id or stockprop.type_id IS NULL) AND  ".(join (" and ", @where_clause));
+    }
+
+    my $order_clause = " order by project.name, plot.uniquename";
+
+    my $q = "SELECT project.name, stock.uniquename, nd_geolocation.description, cvterm.name, phenotype.value, plot.uniquename, db.name, cvterm.name, stockprop.value AS rep
+             FROM stock as plot JOIN stock_relationship ON (plot.stock_id=subject_id) 
+             JOIN stock ON (object_id=stock.stock_id) 
+             LEFT JOIN stockprop ON (plot.stock_id=stockprop.stock_id)
+             JOIN nd_experiment_stock ON(nd_experiment_stock.stock_id=plot.stock_id) 
+             JOIN nd_experiment ON (nd_experiment_stock.nd_experiment_id=nd_experiment.nd_experiment_id) 
+             JOIN nd_geolocation USING(nd_geolocation_id) 
+             JOIN nd_experiment_phenotype ON (nd_experiment_phenotype.nd_experiment_id=nd_experiment.nd_experiment_id)  
+             JOIN phenotype USING(phenotype_id) JOIN cvterm ON (phenotype.cvalue_id=cvterm.cvterm_id) 
+             JOIN cv USING(cv_id)
+             JOIN dbxref ON (cvterm.dbxref_id = dbxref.dbxref_id)
+             JOIN db USING(db_id)
+             JOIN nd_experiment_project ON (nd_experiment_project.nd_experiment_id=nd_experiment.nd_experiment_id) 
+             JOIN project USING(project_id)  
+             $where_clause
+             $order_clause";
+    
     print STDERR "QUERY: $q\n\n";
     my $h = $self->dbh()->prepare($q);
     $h->execute();
 
     my $result = [];
-    while (my ($project_name, $stock_name, $location, $trait, $value) = $h->fetchrow_array()) { 
-	push @$result, [ $project_name, $stock_name, $location, $trait, $value ];
+    while (my ($project_name, $stock_name, $location, $trait, $value, $plot_name, $cv_name, $cvterm_accession, $rep) = $h->fetchrow_array()) { 
+	push @$result, [ $project_name, $stock_name, $location, $trait, $value, $plot_name, $cv_name, $cvterm_accession, $rep ];
 	
     }
+    print STDERR "QUERY returned ".scalar(@$result)." rows.\n";
     return $result;
 }
+
+sub get_phenotype_info_matrix { 
+    my $self = shift;
+    my $accession_sql = shift;
+    my $trial_sql = shift;
+    my $trait_sql = shift;
+    
+    my $data = $self->get_phenotype_info($accession_sql, $trial_sql, $trait_sql);
+    
+    my %plot_data;
+    my %traits;
+
+    foreach my $d (@$data) { 
+	my $cvterm = $d->[6].":".$d->[7];
+	my $trait_data = $d->[4];
+	my $plot = $d->[5];
+	$plot_data{$plot}->{$cvterm} = $trait_data;
+	$traits{$cvterm}++;
+    }
+    
+    my @info = ();
+    my $line = "";
+
+    # generate header line
+    #
+    my @sorted_traits = sort keys(%traits);
+    foreach my $trait (@sorted_traits) { 
+	$line .= "\t".$trait;  # first header has to be empty (plot name column)
+    }
+    push @info, $line;
+    
+    # dump phenotypic values
+    #
+    my $count2 = 0;
+    foreach my $plot (sort keys (%plot_data)) { 
+	$line = $plot;
+
+	foreach my $trait (@sorted_traits) { 
+	    my $tab = $plot_data{$plot}->{$trait}; # ? "\t".$plot_data{$plot}->{$trait} : "\t";
+	    $line .= $tab ? "\t".$tab : "\t";
+
+	}
+	push @info, $line;
+    }
+
+    return @info;
+}
+
+sub get_extended_phenotype_info_matrix { 
+    my $self = shift;
+    my $accession_sql = shift;
+    my $trial_sql = shift;
+    my $trait_sql = shift;
+    
+    my $data = $self->get_phenotype_info($accession_sql, $trial_sql, $trait_sql);
+    
+    my %plot_data;
+    my %traits;
+
+    print STDERR "No of lines retrieved: ".scalar(@$data)."\n";
+    foreach my $d (@$data) { 
+
+	my ($project_name, $stock_name, $location, $trait, $trait_data, $plot, $cv_name, $cvterm_accession, $rep) = @$d;
+	
+	my $cvterm = $d->[6].":".$d->[7];
+	my $trait_data = $d->[4];
+	my $plot = $d->[5];
+	if (!defined($rep)) { $rep = ""; }
+	$plot_data{$plot}->{$cvterm} = $trait_data;
+	$plot_data{$plot}->{metadata} = {
+	    rep => $rep,
+	    trial_name => $project_name,
+	    accession => $stock_name,
+	    location => $location,
+	    plot => $plot, 
+	    rep => $rep, 
+	    cvterm => $cvterm, 
+	    trait_data => $trait_data 
+	};
+	$traits{$cvterm}++;
+    }
+    
+    my @info = ();
+    my $line = join "\t", qw | trial_name location accession plot rep |;
+
+    # generate header line
+    #
+    my @sorted_traits = sort keys(%traits);
+    foreach my $trait (@sorted_traits) { 
+	$line .= "\t".$trait; 
+    }
+    push @info, $line;
+    
+    # dump phenotypic values
+    #
+    my $count2 = 0;
+
+    my @unique_plot_list = ();
+    my $previous_plot = "";
+    foreach my $d (@$data) { 
+	my $plot = $d->[5];
+	if ($plot ne $previous_plot) { 
+	    push @unique_plot_list, $plot;
+	}
+	$previous_plot = $plot;
+    }
+
+
+    foreach my $p (@unique_plot_list) { 
+	$line = join "\t", map { $plot_data{$p}->{metadata}->{$_} } ( "trial_name", "location", "accession", "plot", "rep" );
+	print STDERR "Adding line for plot $p\n";
+	foreach my $trait (@sorted_traits) { 
+	    my $tab = $plot_data{$p}->{$trait}; 
+	    
+	    $line .= $tab ? "\t".$tab : "\t";
+
+	}
+	push @info, $line;
+    }
+
+    return @info;
+}
+
+
+
+=head2 get_genotype_info
+
+parameters: comma-separated lists of accession, trial, and trait IDs. May be empty.
+
+returns: an array with phenotype information
+
+=cut
 
 sub get_genotype_info {
   
@@ -290,6 +476,16 @@ sub get_stock_type_id {
     my $q = "SELECT stock.type_id FROM stock JOIN cvterm on (stock.type_id=cvterm.cvterm_id) WHERE cvterm.name='$term'";
     my $h = $self->dbh->prepare($q);
     $h->execute();
+    my ($type_id) = $h->fetchrow_array();
+    return $type_id;
+}
+
+sub get_stockprop_type_id { 
+    my $self = shift;
+    my $term = shift;
+    my $q = "SELECT stockprop.type_id FROM stockprop JOIN cvterm on (stockprop.type_id=cvterm.cvterm_id) WHERE cvterm.name=?";
+    my $h = $self->dbh->prepare($q);
+    $h->execute($term);
     my ($type_id) = $h->fetchrow_array();
     return $type_id;
 }
