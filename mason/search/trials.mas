@@ -1,0 +1,43 @@
+
+<%args>
+
+</%args>
+
+<& /util/import_javascript.mas, classes => [ 'jquery', 'jquery.dataTables' ] &>
+
+<& /page/page_title.mas, title => "Trial Search" &>
+
+
+<table id="search_results" class="display">
+<thead>
+  <tr>
+    <th>Trial name</th>
+    <th>Description</th>
+    <th>Breeding program</th>
+    <th>Year</th>
+    <th>Location</th>
+    <th>Trial type</th>
+</tr>
+</thead>
+
+</table>
+
+<link rel="stylesheet" type="text/css" href="/documents/inc/datatables/jquery.dataTables.css">
+
+
+
+<script>
+
+jQuery(document).ready(function () {
+
+   jQuery('#search_results').DataTable( { 
+       'ajax': '/ajax/search/trials' 
+   });
+
+
+
+});
+
+
+  
+</script>

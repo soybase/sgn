@@ -3,6 +3,7 @@
 $pop_id
 $show_data => 1;
 $accuracy_report
+$model_parameters
 $top_blups
 $blups_download_url
 $marker_effects_download_url
@@ -32,11 +33,10 @@ $combo_pops_id => ''
 
 </%perl>
 
-  <& /util/import_javascript.mas, classes => ["solGS.histogram", "solGS.phenotypeDataFlot", "solGS.traitGebvFlot", 
+  <& /util/import_javascript.mas, classes => ["d3.d3Min", "solGS.histogram", "solGS.phenotypeDataFlot", "solGS.traitGebvFlot", 
                                               "flot.flot", "flot.categories", 
                                               "flot.tooltip", "flot.selection", "flot.navigate", 
-                                              "flot.axisLabels",
-                                             ] 
+                                              "flot.axisLabels", "statistics/simple_statistics"                                             ] 
   &>
 
 
@@ -82,11 +82,16 @@ $combo_pops_id => ''
 % if ($show_data) 
 %{
 
+<& /solgs/model/model_parameters.mas, 
+   model_parameters => $model_parameters,
+&>
+
 <& /solgs/model/accuracy.mas, 
    accuracy_report        => $accuracy_report,
   validation_download_url => $validation_download_url
 &>
 
+<& /solgs/model/pca.mas &>
 
 <& /solgs/model/top_blups.mas, 
    top_blups          => $top_blups,

@@ -6,10 +6,39 @@ $trials_by_breeding_project => ()
 $breeding_programs
 </%args>
 
-<& /util/import_javascript.mas, classes => [ 'jquery', 'jqueryui', 'jquery.iframe-post-form','CXGN.List',] &>
+<& /util/import_javascript.mas, classes => [ 'jquery', 'jqueryui', 'jquery.iframe-post-form','CXGN.List','CXGN.BreedersToolbox.AddTrial','CXGN.BreedersToolbox.UploadTrial','CXGN.BreedersToolbox.Trial'] &>
+
+ <style>
+  /* IE has layout issues when sorting (see #5413) */
+  .group { zoom: 1 }
+  .trial_list_table  {border-spacing:7px;}
+  </style>
+
+<div id="trials_accordion">
+  <%perl>
+  foreach my $p (sort keys %$trials_by_breeding_project){
+    print '<div class="group">';
+    print '<h3 class="ui-accordion-header">'.$p.'</h3>'."\n";
+    print '<div>';
+    print '<p>';
+    print '<table class="trial_list_table">';
+    #print "<tr><td colspan=\"3\"><h4>$p</h4></td></tr>\n";
+    foreach my $t (@{$trials_by_breeding_project->{$p}}) {
+      print "<tr><td colspan=\"3\"><a href=\"/breeders_toolbox/trial/$t->[0]\">$t->[1]</td><td>$t->[2]</td></tr>\n";
+    }
+    print '</table>';
+    print '</p>';
+    print '</div>';
+    print '</div>';
+  }
+  </%perl>
+</div>
 
 <div id="add_project_dialog" class="ui-widget">
   <form method="post" enctype="multipart/form-data" encoding="multipart/form-data" id="create_new_trial_form" name="create_new_trial_form">
+    <label for="new_trial_name" style="display: inline-block; width: 100px;">Trial name:</label>
+    <input id="new_trial_name" name="new_trial_name" />
+    <br>
     <label for="add_project_year" style="display: inline-block; width: 100px;">Year(s):</label>
     <input id="add_project_year" name="add_project_year" />
     <br>
@@ -29,24 +58,23 @@ $breeding_programs
     <select id="select_breeding_program" name="select_breeding_program">
       <%perl>
       foreach my $program (@$breeding_programs) {
-         print "<option value=".@$program[0].">".@$program[1]."</option>";
+         print "<option value=".@$program[1].">".@$program[1]."</option>";
       }
       </%perl>
     </select>
     <br>
-    <br>
+
     <label for="add_project_description" style="display: inline-block; vertical-align:top; width: 100px;">Description:</label>
     <textarea id="add_project_description" name="add_project_description" form="create_new_trial_form" cols="40"></textarea>
-    <br><br>
-    <div id="format_type_radio">
+    <div id="format_type_radio" style="display: none">
       <input type="radio" id="format_radio3" name="radio" class="format_type" value="create_with_design_tool" checked="checked" />
       <label for="radio3">Create using trial design tool</label>
       <br>
-      <input type="radio" id="format_radio2" name="radio" class="format_type" value="create_with_upload" />
-      <label for="radio2">Create from uploaded file</label>
+      <input type="radio" id="format_radio2" name="radio" class="format_type" value="create_with_upload" style="display: none"/>
+      <label for="radio2" style="display: none">Create from uploaded file</label>
       <br>
-      <input type="radio" id="format_radio1" name="radio" class="format_type" value="empty" />
-      <label for="radio1">Create empty trial</label>
+      <input type="radio" id="format_radio1" name="radio" class="format_type" value="empty" style="display: none"/>
+      <label for="radio1" style="display: none">Create empty trial</label>
       <br>
     </div>
     <div id="get_file_upload_data" style="display: none">
@@ -54,65 +82,127 @@ $breeding_programs
       <label for="trial_upload_file" style="display: inline-block; width: 100px;">Upload file:</label>
       <input type="file" name="trial_upload_file" id="trial_upload_file" encoding="multipart/form-data" />
     </div>
+
+
     <div id="trial_design_info" style="display: none">
       <hr>
-      <label for="select_design_method" style="display: inline-block; width: 200px;">Design type:</label>
+      <label for="select_design_method" style="display: inline-block; width: 300px;">Design type:</label>
       <select id="select_design_method" name="select_design_method">
 	<option value=CRD>Completely Randomized</option>
         <option value=RCBD>Complete Block</option>
         <option value=Alpha>Alpha Lattice</option>
         <option value=Augmented>Augmented</option>
-      </select>
-      <br><br>
-      <div id="trial_design_more_info" style="display: none">
+	<option value=MAD>Modified Augmented Design </option>
 
+	<!-- <option value=MADIII>MADIII</option> -->
+	<!-- <option value=MADIV>MADIV</option>   -->
+       <!--	<option value=MADV>MADV</option> -->
+      </select>
+      <br>
+      <br>
+      <br>
+
+
+       <%doc>
+       </%doc>
+
+      <div id="trial_design_more_info" style="display: none">
       <div id="select_list" name="select_list">
-	<label id="select_list_label" for="select_list_list_select" style="display: inline-block; width: 200px;">List of stocks to include:
+	<label id="select_list_label" for="select_list_list_select" style="display: inline-block; width: 300px;">List of stocks to include:<br>
+	(required parameter)
 	</label>
       </div>
 
       <div id="list_of_checks_section" style="display: none">
-	<label id="select_list_of_checks_label" for="select_list_of_checks_list_select" style="display: inline-block; width: 200px;">List of checks:</label>
+	<label id="select_list_of_checks_label" for="select_list_of_checks_list_select" style="display: inline-block; width: 300px;">List of checks:<br>
+	(required parameter) 
+	</label>
       </div>
+
       <br>
       <div id="design_info" name="design_info">
 	<div id="rep_count_section" style="display: none">
-	  <label for="rep_count" style="display: inline-block; width: 200px;">Number of replicates:</label>
+	  <label for="rep_count" style="display: inline-block; width: 300px;">Number of replicates:<br>
+	    (required parameter)
+	  </label>
 	  <input id="rep_count" name="rep_count" />
 	  <br>
 	</div>
+
         <div id="block_number_section" style="display: none">
-	  <label for="block_number" style="display: inline-block; width: 200px;">Number of blocks:</label>
+	  <label for="block_number" style="display: inline-block; width: 300px;">Number of blocks:<br>
+	    (required parameter)
+	  </label>
 	  <input id="block_number" name="block_number" />
 	  <br>
+        </div>
+       
+	<div id="row_number_section" style="display: none">
+	  <label for="row_number" style="display: inline-block; width: 300px;">Number of field rows:<br>
+	    (required parameter)
+	  </label>
+	  <input id="row_number" name="row_number" />   
        	</div>
+        <br>
+
+	<div id="row_number_per_block_section" style="display: none">
+	  <label for="row_number_per_block" style="display: inline-block; width: 300px;">Row Number Per Block:<br>
+	    (Optional parameter)
+	  </label>
+	  <input id="row_number_per_block" name="row_number_per_block" />
+	  <br>
+        </div>
+
+        <div id="other_parameter_section" style="display:none">  
+     	<label for="show_other_parameter_options">Other optional parameters</label>
+        <input type="checkbox" id="show_other_parameter_options">
+ 	<div id="other_parameter_options" style="display:none"> 
+          <hr> 
+     	  <label for="col_number_per_block" style="display: inline-block; width: 300px;">Col Number Per Block:</label>
+	  <input id="col_number_per_block" name="col_number_per_block" />
+	  <br>
+	  <label for="col_number" style="display: inline-block; width: 300px;">Number of field columns:</label>
+	  <input id="col_number" name="col_number" />
+	  <br>
+       	</div>
+	</div>
+
         <div id="block_size_section" style="display: none">
-	  <label for="block_size" style="display: inline-block; width: 200px;">Block size:</label>
+	  <label for="block_size" style="display: inline-block; width: 300px;">Block size:<br>
+	    (required parameter)
+	  </label>
           <input id="block_size" name="block_size" />
 	  <br>
         </div>
+
         <div id="max_block_size_section" style="display: none">
-	  <label for="max_block_size" style="display: inline-block; width: 200px;">Maximum block size:</label>
+	  <label for="max_block_size" style="display: inline-block; width: 300px;">Maximum block size:<br>
+	    (required parameter)
+	  </label>
           <input id="max_block_size" name="block_size" />
 	  <br>
 	</div>
+
+
 	<br>
 	<label for="show_plot_naming_options">Custom plot naming/numbering</label>
         <input type="checkbox" id="show_plot_naming_options">
+
 	<div id="plot_naming_options" style="display: none">
 	  <hr>
-	  <label for="plot_prefix" style="display: inline-block; width: 200px;">Plot name prefix:</label>
+	  <label for="plot_prefix" style="display: inline-block; width: 300px;">Plot name prefix:</label>
 	  <input id="plot_prefix" name="plot_prefix" />
 	  <br>
-	  <label for="start_number" style="display: inline-block; width: 200px;">Plot start number:</label>
+	  <label for="start_number" style="display: inline-block; width: 300px;">Plot start number:</label>
           <input id="start_number" name="start_number" />
 	  <br>
-	  <label for="increment" style="display: inline-block; width: 200px;">Plot number increment:</label>
+	  <label for="increment" style="display: inline-block; width: 300px;">Plot number increment:</label>
           <input id="increment" name="increment" />
 	  <br>
-      </div>
-      </div>
-      </div>
+       </div>
+
+     </div>
+    </div>
     </div>
   </form>
 </div>
@@ -128,7 +218,6 @@ $breeding_programs
   <button id="view_trial_layout_button" class="ui-widget">View trial layout</button> 
   <hr>
   <div id="trial_design_information" class="ui-widget"></div>
-
 </div>
 
 <div id="trial_design_view_layout" title="Trial design layout">
@@ -156,6 +245,7 @@ background-color: #ccc;
   </p>
 </div>
 
+<div id="upload_trial_dialog" title="Upload trial">
 
 <script defer="defer">
 
@@ -436,247 +526,79 @@ jQuery(document).ready(function () {
        });
     }
 
- function save_experimental_design(design_json) {
-     jQuery('#trial_saving_dialog').dialog("open");
-        var name = jQuery('#add_project_name').val();
-        var year = jQuery('#add_project_year').val();
-        var desc = jQuery('#add_project_description').val();
-        var trial_location = jQuery('#add_project_location').val();
-        var block_number = jQuery('#block_number').val();
-        var stock_list_id = jQuery('#select_list_list_select').val();
-        var control_list_id = jQuery('#list_of_checks_section_list_select').val();
-        var list = new CXGN.List();
-	var stock_list;
-	if (! stock_list_id == "") {
-            stock_list = JSON.stringify(list.getList(stock_list_id));
-	}
-	var control_list;
-	if (! control_list_id == "") {
-            control_list = JSON.stringify(list.getList(control_list_id));
-	}
-        var design_type = jQuery('#select_design_method').val();
-	var rep_count = jQuery('#rep_count').val();
-	var block_size = jQuery('#block_size').val();
-	var max_block_size = jQuery('#max_block_size').val();
-	var plot_prefix = jQuery('#plot_prefix').val();
-	var start_number = jQuery('#start_number').val();
-	var increment = jQuery('#increment').val();
-	var breeding_program_id = jQuery('#select_breeding_program').val();
-	var stock_verified = verify_stock_list(stock_list);
-        if (desc == '' || year == '') {
-            alert('Year and description are required.');
-            return;
-        }
-        new jQuery.ajax({
-            type: 'POST',
-            url: '/ajax/trial/save_experimental_design',
-	    dataType: "json",
-            data: {
-                'project_name': name,
-                'project_description': desc,
-                'year': year,
-                'trial_location': trial_location,
-                'stock_list': stock_list,
-		'control_list': control_list,
-		'design_type': design_type,
-		'rep_count': rep_count,
-		'block_number': block_number,
-		'block_size': block_size,
-		'max_block_size': max_block_size,
-		'plot_prefix': plot_prefix,
-		'start_number': start_number,
-		'increment': increment,
-		'design_json': design_json,
-                'breeding_program_id': breeding_program_id,
-            },
-            success: function (response) {
-                if (response.error) {
-		    jQuery('#trial_saving_dialog').dialog("close");
-                    alert(response.error);
-                    jQuery('#trial_design_confirm').dialog("close");
-                } else {
-		    //alert('Trial design saved');
-		    jQuery('#trial_saving_dialog').dialog("close");
-		    jQuery('#trial_saved_dialog_message').dialog("open");
-                }
-            },
-            error: function () {
-                jQuery('#trial_saving_dialog').dialog("close");
-                alert('An error occurred saving the trial.');
-                jQuery('#trial_design_confirm').dialog("close");
-            }
-       });
-    }
+  <&| /page/explanation.mas, title=>'Template information' &>
+    <p>
+      <b>File format information</b>
+      <br>
+      <a id="trial_upload_spreadsheet_format_info">Spreadsheet format</a>
+    </p>
+  </&>
 
-    jQuery( "#trial_saving_dialog" ).dialog({
-	autoOpen: false,
-	modal: true,
-    });
+  <form method="post" enctype="multipart/form-data" encoding="multipart/form-data" id="upload_trial_form" name="upload_trial_form">
 
-    jQuery( "#trial_saved_dialog_message" ).dialog({
-	autoOpen: false,
-	modal: true,
-	buttons: {
-            Ok: function() {
-		jQuery( this ).dialog( "close" );
-		location.reload();
-            }
-	}
-    });
 
-    function verify_stock_list(stock_list) {
-	var return_val;
-	new jQuery.ajax({
-            type: 'POST',
-            url: '/ajax/trial/verify_stock_list',
-	    dataType: "json",
-            data: {
-                //'stock_list': stock_list.join(","),
-                'stock_list': stock_list,
-            },
-            success: function (response) {
-                if (response.error) {
-                    alert(response.error);
-		    verify_stock_list.return_val = 0;
-                } else {
-		    verify_stock_list.return_val = 1;
-                }
-            },
-            error: function () {
-                alert('An error occurred. sorry');
-	    verify_stock_list.return_val = 0;
-            }
-	});
-	return return_val;
-    }
-
-    jQuery('#trial_design_confirm').dialog({
-	autoOpen: false,
-        height: 400,
-	width: 450,
-        modal: true,
-        buttons: {
-	    Confirm: function() {
-		save_experimental_design(design_json);
-		//jQuery( this ).dialog( "close" );
-		//jQuery('#add_project_dialog').dialog("close");
-	    },
-	    Cancel: function() {
-		//jQuery('#add_project_dialog').dialog("close");
-		jQuery( this ).dialog( "close" );
-		return;
-	    }
-        },
-    });
-
-    jQuery('#view_trial_layout_button').click(function () {
-	jQuery('#trial_design_view_layout').dialog("open");
-    });
-
-    jQuery('#trial_design_view_layout').dialog({
-	autoOpen: false,
-	height: 500,
-	width: 400,
-        modal: true,
-        buttons: {
-        Close: function() {
-	    jQuery( this ).dialog( "close" );
-	}
+    <label for="trial_upload_breeding_program" style="display: inline-block; width: 100px;">Breeding Program:</label>
+    <select id="trial_upload_breeding_program" name="trial_upload_breeding_program">
+      <%perl>
+      foreach my $program (@$breeding_programs) {
+         print "<option value=".@$program[1].">".@$program[1]."</option>";
       }
-    }); 
+      </%perl>
+    </select>
+    <br>
 
-    function save_project_info(name, year, desc) {
-        alert('data = ' + name + ' ' + year + ' ' + desc);
-        new jQuery.ajax({
-            type: 'GET',
-            async: false,
-            url: '/ajax/breeders/project/insert',
-            data: {
-                'project_name': name,
-                'project_description': desc,
-                'year': year
-            },
-            success: function (response) {
-                if (response.error) {
-                    alert(response.error);
-                } else {
-                    alert('The trial information was saved.');
-                }
-            },
-            error: function () {
-                alert('An error occurred. sorry');
-            }
-        });
-    }
+    <label for="trial_upload_location" style="display: inline-block; width: 100px;">Location:</label>
+    <select id="trial_upload_location" name="trial_upload_location">
+      <%perl>foreach my $location (@locations) { print "
+        <option value=".'"'.@$location[1].'"'.">".@$location[1]."</option>"; }
+      </%perl>
+    </select>
+    <br>
 
-    function create_design() {
-        var name = jQuery('#project_name').val();
-        var year = jQuery('#project_year').val();
-        var desc = jQuery('#project_description').val();
+    <label for="trial_upload_name" style="display: inline-block; width: 100px;">Trial name:</label>
+    <input id="trial_upload_name" name="trial_upload_name" />
+    <br>
 
-        if (name == '' || year == '') {
-            alert('Name and year are required.');
-            return;
-        }
-        new jQuery.ajax({
-            type: 'GET',
-            url: '/breeders/project/insert',
-            data: {
-                'project_name': name,
-                'project_description': desc,
-                'year': year
-            },
-        }).done(alert("Done saving project info"));
-        jQuery('#add_project_dialog').dialog("close");
-    }
+    <label for="trial_upload_year" style="display: inline-block; width: 100px;">Year(s):</label>
+    <input id="trial_upload_year" name="trial_upload_year" />
+    <br>
 
-    jQuery('#create_new_trial_form').iframePostForm({
-	json: true,
-	post: function () {
-            var uploadTrialLayoutFile = jQuery("#trial_upload_file").val();
-            if (uploadTrialLayoutFile === '') {
-		alert("No file selected");
-            }
-	},
-	complete: function (response) {
-            if (response.error_string) {
-		jQuery("#upload_trial_error_display tbody").html('');
-		jQuery("#upload_trial_error_display tbody").append(response.error_string);
-		jQuery(function () {
-                    jQuery("#upload_trial_error_display").dialog({
-			modal: true,
-			title: "Errors in uploaded file",
-			buttons: {
-                            Ok: function () {
-				jQuery(this).dialog("close");
-                            }
-			}
-                    });
-		});
-		return;
-            }
-            if (response.error) {
-		alert(response.error);
-		return;
-            }
-            if (response.success) {
-		alert("File uploaded successfully");
-            }
-	}
-    });
-});
+    <label for="trial_upload_description" style="display: inline-block; vertical-align:top; width: 100px;">Description:</label>
+    <textarea id="trial_upload_description" name="trial_upload_description" form="upload_trial_form" cols="40"></textarea>
+    <br>
 
-</script>
+    <label for="trial_upload_design_method" style="display: inline-block; width: 100px;">Design type:</label>
+    <select id="trial_upload_design_method" name="trial_upload_design_method">
+      <option value=CRD>Completely Randomized</option>
+      <option value=RCBD>Complete Block</option>
+      <option value=Alpha>Alpha Lattice</option>
+      <option value=Augmented>Augmented</option>
+      <option value=MAD>Modified Augmented Design</option>
 
-<table>
-  <%perl>
 
-  use Data::Dumper;
-  foreach my $p (sort keys %$trials_by_breeding_project){
-    print "<tr><td colspan=\"3\"><h4>$p</h4></td></tr>\n";
-    foreach my $t (@{$trials_by_breeding_project->{$p}}) { 
-      print "<tr><td><a href=\"/breeders_toolbox/trial/$t->[0]\">$t->[1]</td><td>$t->[2]</td></tr>\n";
-    }
-  }
-  </%perl>
-</table>
+    <!--  <option value=MADIII>MADIII</option>   -->
+    <!--  <option value=MADIV>MADIV</option> -->
+    <!--  <option value=MADV>MADV</option> -->
+    </select>
+    <br>
+    <br>
+
+    <label for="trial_uploaded_file" style="display: inline-block; width: 100px;">Upload file:</label>
+    <input type="file" name="trial_uploaded_file" id="trial_uploaded_file" encoding="multipart/form-data" />
+
+    </form>
+
+</div>
+
+
+<div id="trial_upload_spreadsheet_info_dialog" title="Format for uploading trials in a spreadsheet">
+  <&| /breeders_toolbox/trial/trial_spreadsheet_upload_format_info.mas &>
+  </&>
+</div>
+
+<div id="trial_upload_success_dialog_message" title="Trial file uploaded">
+  <p>
+    <span class="ui-icon ui-icon-circle-check" style="float: left; margin: 0 7px 50px 0;"></span>
+    The trial file was uploaded successfully
+  </p>
+</div>

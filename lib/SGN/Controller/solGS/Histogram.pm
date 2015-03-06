@@ -30,29 +30,28 @@ sub histogram_phenotype_data :Path('/histogram/phenotype/data/') Args(0) {
 
     $trait_pheno_file = $c->controller('solGS::solGS')->grep_file($dir, $trait_pheno_file);
     $c->stash->{histogram_trait_file} = $trait_pheno_file;
- 
-    if(!$trait_pheno_file || -z $trait_pheno_file )
-    {
-        my $pop_pheno_file = 'formatted_phenotype_data_' . $pop_id;     
-        $pop_pheno_file    = $c->controller('solGS::solGS')->grep_file($dir, $pop_pheno_file);
-        
-        if (!$pop_pheno_file) 
-        {
-            $self->create_population_phenotype_data($c);
-            $pop_pheno_file = $c->stash->{phenotype_file};
-        }
 
-        $self->create_trait_phenodata($c);
-     
+    if (!$trait_pheno_file || -z $trait_pheno_file)
+    {
+        $self->create_population_phenotype_data($c);                 
     }
 
+    unless (!$c->stash->{phenotype_file} || -s $trait_pheno_file)
+    {
+        $self->create_trait_phenodata($c);
+    }    
+    
     my $data = $self->format_plot_data($c);
+    
+    $c->controller('solGS::solGS')->trait_phenotype_stat($c);
+     my $stat = $c->stash->{descriptive_stat};
 
     my $ret->{status} = 'failed';
 
-    if ($data)
+    if (@$data)
     {
         $ret->{data} = $data;
+	$ret->{stat} = $stat;
         $ret->{status} = 'success';             
     }
 
@@ -60,7 +59,7 @@ sub histogram_phenotype_data :Path('/histogram/phenotype/data/') Args(0) {
        
     $c->res->content_type('application/json');
     $c->res->body($ret);    
-
+      
 }
 
 
@@ -68,8 +67,8 @@ sub format_plot_data {
    my ($self, $c) = @_;
 
    my $file = $c->stash->{histogram_trait_file};
-   my $data = $c->controller('solGS::solGS')->convert_to_arrayref($c, $file);
-   
+   my $data = $c->controller('solGS::solGS')->convert_to_arrayref_of_arrays($c, $file);
+  
    return $data;
    
 }
@@ -86,10 +85,10 @@ sub create_population_phenotype_data {
 sub create_histogram_dir {
     my ($self, $c) = @_;
     
-    my $temp_dir        = $c->config->{cluster_shared_tempdir};
+    my $temp_dir      =  $c->config->{cluster_shared_tempdir};
     my $histogram_dir = catdir($temp_dir, 'histogram', 'cache'); 
   
-    mkpath ([$temp_dir, $histogram_dir], 0, 0755);
+    mkpath ($histogram_dir, 0, 0755);
    
     $c->stash->{histogram_dir} = $histogram_dir;
 
@@ -161,18 +160,16 @@ sub create_trait_phenodata {
                 $err .= "\n=== R output ===\n".file($histogram_output_temp)->slurp."\n=== end R output ===\n" 
             };
                      
-
-            $c->throw(is_client_error   => 1,
-                      title             => "Histogram analysis script error",
-                      public_message    => "There is a problem running the histogram r script on this dataset!",	     
-                      notify            => 1, 
-                      developer_message => $err,
-            );
+            $c->stash->{script_error} =  "There is a problem running the histogram r script on this dataset.";	     
+    
       };
-        
-    } 
-
-    $c->stash->{histogram_trait_file} = $trait_file;
+     
+        $c->stash->{histogram_trait_file} = $trait_file;
+    }
+    else 
+    {
+        $c->stash->{script_error} =  "There is no phenotype for this trait.";     
+    }
 
 }
 

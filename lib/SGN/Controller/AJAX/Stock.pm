@@ -810,7 +810,7 @@ sub stock_autocomplete_GET :Args(0) {
     $term =~ s/\s+/ /g;
 
     my @response_list;
-    my $q = "select distinct(name) from stock where name ilike ? ORDER BY stock.name";
+    my $q = "select distinct(uniquename) from stock where uniquename ilike ? ORDER BY stock.uniquename LIMIT 100";
     my $sth = $c->dbc->dbh->prepare($q);
     $sth->execute('%'.$term.'%');
     while (my ($stock_name) = $sth->fetchrow_array) { 
@@ -818,6 +818,40 @@ sub stock_autocomplete_GET :Args(0) {
     }
 
     print STDERR "stock_autocomplete RESPONSELIST = ".join ", ", @response_list;
+    
+    $c->{stash}->{rest} = \@response_list;
+}
+
+=head2 accession_autocomplete
+
+ Usage:
+ Desc:
+ Ret:
+ Args:
+ Side Effects:
+ Example:
+
+=cut
+
+sub accession_autocomplete : Local : ActionClass('REST') { } 
+
+sub accession_autocomplete_GET :Args(0) { 
+    my ($self, $c) = @_;
+
+    my $term = $c->req->param('term');
+
+    $term =~ s/(^\s+|\s+)$//g;
+    $term =~ s/\s+/ /g;
+
+    my @response_list;
+    my $q = "select distinct(stock.uniquename) from stock join cvterm on(type_id=cvterm_id) where stock.uniquename ilike ? and cvterm.name='accession' ORDER BY stock.uniquename";
+    my $sth = $c->dbc->dbh->prepare($q);
+    $sth->execute('%'.$term.'%');
+    while (my ($stock_name) = $sth->fetchrow_array) { 
+	push @response_list, $stock_name;
+    }
+
+    #print STDERR "stock_autocomplete RESPONSELIST = ".join ", ", @response_list;
     
     $c->{stash}->{rest} = \@response_list;
 }

@@ -16,16 +16,16 @@ my $out = $d->find_element_ok("lists_link", "id", "find lists_link")->click();
 
 # delete the list should it already exist
 #
-if ($d->driver->get_page_source() =~ /new_test_list/) { 
-    print "DELETE LIST new_test_list... ";
-    $d->find_element_ok("delete_list_new_test_list", "id", "find delete_list_new_test_list test")->click();
-    $d->driver->accept_alert();
-    sleep(1);
+# if ($d->driver->get_page_source() =~ /new_test_list/) { 
+#     print "DELETE LIST new_test_list... ";
+#     $d->find_element_ok("delete_list_new_test_list", "id", "find delete_list_new_test_list test")->click();
+#     $d->driver->accept_alert();
+#     sleep(1);
 
-    print "Done.\n";
-}
+#     print "Done.\n";
+# }
  
-sleep(1);
+#sleep(1);
 
 print "Adding new list...\n";
 
@@ -39,6 +39,8 @@ $d->find_element_ok("add_list_button", "id", "find add list button test")->click
 
 $d->find_element_ok("view_list_new_test_list", "id", "view list test")->click();
 
+sleep(2);
+
 $d->find_element_ok("dialog_add_list_item", "id", "add test list")->send_keys("element1\nelement2\nelement3\n");
 
 sleep(1);
@@ -47,11 +49,11 @@ $d->find_element_ok("dialog_add_list_item_button", "id", "find dialog_add_list_i
 
 print "Close list content dialog...\n";
 
-$d->accept_alert_ok();
-sleep(1);
+#$d->accept_alert_ok();
+#sleep(1);
 
-$d->accept_alert_ok();
-sleep(1);
+#$d->accept_alert_ok();
+#sleep(1);
 
 my $button = $d->find_element_ok("close_list_item_dialog", "id", "find close_list_item_dialog button test");
 

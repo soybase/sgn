@@ -281,13 +281,15 @@ sub download_genotypes : Chained('get_stock') PathPart('genotypes') Args(0) {
     my $stock_id = $stock->stock_id;
     my $stock_name = $stock->uniquename;
     if ($stock_id) {
+
+	print STDERR "Exporting genotype file...\n";
         my $tmp_dir = $c->get_conf('basepath') . "/" . $c->get_conf('stock_tempfiles');
         my $file_cache = Cache::File->new( cache_root => $tmp_dir  );
         $file_cache->purge();
         my $key = "stock_" . $stock_id . "_genotype_data";
         my $gen_file = $file_cache->get($key);
         my $filename = $tmp_dir . "/stock_" . $stock_id . "_genotypes.csv";
-        unless ( -e $gen_file) {
+        unless ( $gen_file && -e $gen_file) {
             my $gen_hashref; #hashref of hashes for the phenotype data
             my %cvterms ; #hash for unique cvterms
             ##############
@@ -303,10 +305,16 @@ sub download_genotypes : Chained('get_stock') PathPart('genotypes') Args(0) {
 		    while (my $prop = $genotypeprop_rs->next) {
 			my $json_text = $prop->value ;
 			my $genotype_values = JSON::Any->decode($json_text);
+			my $count = 0;
+			my @lines = ();
 			foreach my $marker_name (keys %$genotype_values) {
+			    $count++;
+			    #if ($count % 1000 == 0) { print STDERR "Processing $count     \r"; }
 			    my $read = $genotype_values->{$marker_name};
-			    write_file( $filename, { append => 1 } , ($project, "\t" , $marker_name, "\t", $read, "\n") );
+			    push @lines, (join "\t", ($project, $marker_name, $read))."\n";
 			}
+			my @sorted_lines = sort chr_sort @lines;
+			write_file($filename, { append=> 1 }, @sorted_lines);
 		    }
 		}
 	    }
@@ -314,14 +322,43 @@ sub download_genotypes : Chained('get_stock') PathPart('genotypes') Args(0) {
             $gen_file = $file_cache->get($key);
         }
         my @data;
+
         foreach ( read_file($filename) ) {
+	    chomp;
             push @data, [ split(/\t/) ];
         }
-        $c->stash->{'csv'}={ data => \@data};
+        #$c->stash->{'csv'}={ data => \@data};
+	$c->stash->{'csv'} = \@data;
         $c->forward("View::Download::CSV");
     }
 }
 
+sub chr_sort { 
+    my @a = split "\t", $a;
+    my @b = split "\t", $b;
+    
+    my $a_chr;
+    my $a_coord;
+    my $b_chr;
+    my $b_coord;
+    
+    if ($a[1] =~ /^[A-Za-z]+(\d+)[_-](\d+)$/) {
+	$a_chr = $1;
+	$a_coord = $2;
+    }
+    
+    if ($b[1] =~ /[A-Za-z]+(\d+)[_-](\d+)/) { 
+	$b_chr = $1;
+	$b_coord = $2;
+    }
+    
+    if ($a_chr eq $b_chr) { 
+	return $a_coord <=> $b_coord;
+    }
+    else { 
+	return $a_chr <=> $b_chr;
+    }
+}
 
 =head2 get_stock
 
@@ -434,7 +471,7 @@ sub _make_stock_search_rs {
         $name =~ s/(^\s+|\s+)$//g;
         $name =~ s/\s+/ /g;
 
-        $rs = $rs->search({
+        $rs = $rs->search({ 'me.is_obsolete' => 'false', 
             -or => [
                  'lower(me.name)' => { like => '%'.lc( $name ).'%' } ,
                  'lower(me.uniquename)' => { like => '%'.lc( $name ).'%' },

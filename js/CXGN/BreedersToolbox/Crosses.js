@@ -47,6 +47,24 @@ jQuery(document).ready(function ($) {
 	}
     });
 
+
+    $( "#cross_upload_success_dialog_message" ).dialog({
+	autoOpen: false,
+	modal: true,
+	buttons: {
+            Ok: { id: "dismiss_cross_upload_dialog",
+                  click: function() {
+		      $("#upload_crosses").dialog("close");
+		      $( this ).dialog( "close" );
+		      location.reload();
+                  },
+                  text: "OK"
+                }
+        }
+	
+    });
+
+
     $('#upload_crosses_form').iframePostForm({
 	json: true,
 	post: function () {
@@ -80,20 +98,10 @@ jQuery(document).ready(function ($) {
 		return;
 	    }
 	    if (response.success) {
-		alert("File uploaded successfully");
-		$( this ).dialog( "close" );
-		location.reload();
-
-
-
-
-
+		$('#cross_upload_success_dialog_message').dialog("open");
 	    }
 	}
     });
-
-
-
 
 
     $("#cross_upload_spreadsheet_format_info").click( function () { 
@@ -104,7 +112,7 @@ jQuery(document).ready(function ($) {
 	autoOpen: false,
 	buttons: { "OK" :  function() { $("#cross_upload_spreadsheet_info_dialog").dialog("close"); },},
 	modal: true,
-	width: 750,
+	width: 900,
 	autoResize:true,
     });
 
@@ -224,17 +232,20 @@ jQuery(document).ready(function ($) {
 
 	if (!crossName) { alert("A cross name is required"); return; }
 	//alert("Sending AJAX request.. /ajax/cross/add_cross");
-	
+
 	$.ajax({
             url: '/ajax/cross/add_cross',
+            timeout: 3000000,
             dataType: "json",
             type: 'POST',
             data: 'cross_name='+crossName+'&cross_type='+crossType+'&maternal_parent='+maternalParent+'&paternal_parent='+paternalParent+'&progeny_number='+progenyNumber+'&flower_number='+flowerNumber+'&seed_number='+seedNumber+'&prefix='+prefix+'&suffix='+suffix+'&visible_to_role'+visibleToRole+'&program='+program+'&location='+location,
             error: function(response) { alert("An error occurred. Please try again later!"+response); },
             parseerror: function(response) { alert("A parse error occurred. Please try again."+response); },
-            success: function(response) { 
+            success: function(response) {
+
 		if (response.error) { alert(response.error); }
 		else {
+                    
 		    $("#create_cross").dialog("close");
 		    //alert("The cross has been added.");
 		    $('#cross_saved_dialog_message').dialog("open");
@@ -279,23 +290,23 @@ jQuery(document).ready(function ($) {
     }
 
     $("#maternal_parent").autocomplete( { 
-	source: '/ajax/stock/stock_autocomplete'
+	source: '/ajax/stock/accession_autocomplete'
     });
 
     $("#paternal_parent").autocomplete( { 
-	source: '/ajax/stock/stock_autocomplete'
+	source: '/ajax/stock/accession_autocomplete'
     });
 
     $("#selfed_parent").autocomplete( { 
-	source: '/ajax/stock/stock_autocomplete'
+	source: '/ajax/stock/accession_autocomplete'
     });
 
     $("#doubled_haploid_parent").autocomplete( { 
-	source: '/ajax/stock/stock_autocomplete'
+	source: '/ajax/stock/accession_autocomplete'
     });
 
     $("#open_pollinated_maternal_parent").autocomplete( { 
-	source: '/ajax/stock/stock_autocomplete'
+	source: '/ajax/stock/accession_autocomplete'
     });
 
     $("#paternal_population").autocomplete( { 

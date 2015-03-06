@@ -18,6 +18,7 @@ $pop_id => ''
 $combo_pops_id => ''
 $trait_id
 $trial_id => ''
+
 </%args>
 
 <%perl>
@@ -27,12 +28,6 @@ $pop_id = $trial_id if $trial_id;
 </%perl>
 
 
-</%perl>
-
-<style>
-
-<!DOCTYPE html>
-<meta charset="utf-8">
 <style>
 
 
@@ -49,11 +44,13 @@ $pop_id = $trial_id if $trial_id;
 }
 
 </style>
+
  <& /util/import_javascript.mas, classes => ["d3.d3Min", "solGS.histogram"] &>
 
 <div id="trait_histogram_canvas"></div>
 <div id="trait_histogram_plot"></div>
 <br/>
+
 
 <input type="hidden" id="population_id" value="<% $pop_id %>" /> 
 <input type="hidden" id="combo_pops_id" value="<% $combo_pops_id %>" /> 

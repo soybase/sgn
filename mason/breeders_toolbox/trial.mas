@@ -15,7 +15,7 @@ Jeremy D. Edwards
 
 <%args>
 $trial_id
-$breeding_program => ()
+$breeding_program
 $trial_name
 @location_data
 @phenotype_data
@@ -32,9 +32,11 @@ $design_layout_view
 $user_can_modify => undef
 </%args>
 
-<& /util/import_javascript.mas, classes => [ 'jquery', 'jqueryui',] &>
+<& /util/import_javascript.mas, classes => [ 'jquery', 'jqueryui', 'CXGN.Trial' , 'jstree/dist/jstree' ] &>
 
 <%perl>
+
+my $start_time = time();
 my $description_empty = 1;
 if ($trial_description) {
   if ($trial_description ne "") {
@@ -68,38 +70,66 @@ if (!$design_type eq "") {
 }
 my $design_subtitle = '[<a href="\\fieldbook\\trial_download\\'.$trial_id.'">Download Field Book</a>]';
 
-my $subtitle = qq{<a id="show_change_breeding_program_link">change</a> } if $user_can_modify;
+my $subtitle = qq{[<a id="show_change_breeding_program_link">change</a>] } if $user_can_modify;
 
+print STDERR "Check 7 (mason) : ".(time() - $start_time)."\n";
 </%perl>
 
 <& /page/page_title.mas, title=>"Trial detail for ".$trial_name &>
 
+<table><tr><td width="365" valign="top">
 <&| /page/info_section.mas, title=>"Breeding program", subtitle=>$subtitle &>
-% foreach my $bp (@$breeding_program) { 
-%   print $bp->[1] . "&nbsp;(".$bp->[2].")"; 
-%   if ($user_can_modify) { print " <a title=\"remove program\" id=\"delete_breeding_program_trial_association_link\"><font color=\"red\"><b>X</b></font></a>"; }
-% }
+% ## foreach my $bp (@$breeding_program) { 
+% ##  print $bp->[1] . "&nbsp;(".$bp->[2].")"; 
+% ##  if ($user_can_modify) { print " <a title=\"remove program\" id=\"delete_breeding_program_trial_association_link\"><font color=\"red\"><b>X</b></font></a>"; }
+% ##}
+
+<div id="breeding_programs">
+  [loading...]
+</div>
+
 </&>
 
-<&| /page/info_section.mas, title=>"Year(s)" &>
+</td><td valign="top" >
+<&| /page/info_section.mas, title=>"Trial type", subtitle=>"[<a id=\"edit_trial_type\" >change</a>]" &>
+  <div id="trial_type">
+    [loading...]
+  </div>
+</&>
+
+</td></tr>
+<tr><td valign="top" >
+
+<&| /page/info_section.mas, title=>"Year(s)", subtitle => '[change]' &>
 <% join ", ", @years %>
 </&>
+</td><td valign="top" width="365" >
+<&| /page/info_section.mas, title=>"Location(s)", subtitle=>'[change]' &>
 
-<&| /page/info_section.mas, title=>"Location(s)" &>
-
-% foreach my $loc (@location_data) { 
-%  print "$loc->[1]<br />\n";
-%}
-
+<div id="trial_location">
+  [loading...]
 </&>
 
-<&| /page/info_section.mas, title=>"Description", collapsible=>0, collapsed=>0, hide_if_empty=>1, is_empty=> $description_empty &>
-%  print "$trial_description <br />\n";
+</div>
+</td></tr></table>
+
+<&| /page/info_section.mas, title=>"Description", collapsible=>0, collapsed=>0, hide_if_empty=>0, is_empty=> $description_empty, subtitle=>"[<a id=\"edit_trial_description\">edit</a>]" &>
+<div id="trial_description">[loading...]</div>
 </&>
 
+<div id="edit_trial_description_dialog">
+   Please enter the description for this trial:<br/>
+   <textarea id="trial_description_input" cols="50" rows="10"></textarea>
+</div>
 
-<&| /page/info_section.mas, title=>"Design", collapsible=>1, collapsed=>0, hide_if_empty=>1, is_empty=> $design_empty, subtitle=>'[<a id="view_layout_link">View Layout</a>]'&>
+<div id="edit_trial_type_dialog">
+  Please choose the type of this trial:<br />
+  <select id="trial_type_select"></select>
+</div>
 
+<&| /page/info_section.mas, title=>"Design", collapsible=>1, collapsed=>0, hide_if_empty=>1, is_empty=> $design_empty, subtitle=>"Download layout [<a id=\"download_layout_xls_link\" href=\"/breeders/trial/layout/download/$trial_id\">xls</a>] [<a id=\"download_layout_csv_link\" href=\"/breeders/trial/layout/download/$trial_id?format=csv\">csv</a>]"  &>
+
+% print STDERR "Check 8 (mason) : ".(time() - $start_time)."\n";
 %print "Design: $design_type <br /><br />";
 %print "Number of blocks: $number_of_blocks <br />";
 %print "Number of replicates: $number_of_replicates <br />";
@@ -130,14 +160,15 @@ my $subtitle = qq{<a id="show_change_breeding_program_link">change</a> } if $use
 
 <br /><br />
 
-<&| /page/info_section.mas, title=>"Traits assayed" &>
+<&| /page/info_section.mas, title=>"Traits assayed", subtitle=>"Download trial data [<a id=\"download_phenotypes_xls_link\" href=\"/breeders/trial/phenotype/download/$trial_id\">xls</a>] [<a id=\"download_phenotypes_csv_link\" href=\"/breeders/trial/phenotype/download/$trial_id?format=csv\">csv</a>] " &>
 % foreach my $trait (@phenotype_data) {
 % my $trait_id = $trait->[1];
-% print "<a href=\"/breeders_toolbox/trial/$trial_id/trait/$trait_id\">$trait->[0]</a> ($trait->[2] assays)<br />\n";
+% my $trait_name = ucfirst($trait->[0]);
+% print "$trait_name" . ' [ ' . "<a href=\"/breeders_toolbox/trial/$trial_id/trait/$trait_id\">view statistics</a>" . ' ] ' . "<br />";
 %}
 
 </&>
-
+% print STDERR "Check 8 (mason) : ".(time() - $start_time)."\n";
 % foreach my $p (@plot_data) { 
 %   print $p."<br />\n";
 % }
@@ -157,31 +188,33 @@ my $subtitle = qq{<a id="show_change_breeding_program_link">change</a> } if $use
 </&>
 
 % my $data_agreement_link = "Add/edit data agreement";
-% if ($user_can_modify) { $data_agreement_link = '<a id="add_data_agreement">Add/edit data agreement</a>'; }
+% if ($user_can_modify) { $data_agreement_link = '[<a id="add_data_agreement">Add/edit data agreement</a>]'; }
 <&| /page/info_section.mas, title=>"Data Agreement", is_subsection => 0, collapsible=>1, collapsed=>0,  subtitle=> $data_agreement_link  &>
   
 <& /breeders_toolbox/data_agreement.mas, trial_id => $trial_id &>
   
 </&>
 
-<!-- Phenotypic correlation analysis -->
-  <& /solgs/population/correlation.mas,
-    trial_id => $trial_id
-    &>
+<&| /page/info_section.mas, title=>'Delete trial data', subtitle=>'<font color="red">Deletion cannot be undone</font>', collapsed=>1, collapsible=>1 &>
+  <& /breeders_toolbox/trial/trial_deletion.mas, trial_id => $trial_id  &>
 
+</&>
+
+% print STDERR "Check 9 (mason) : ".(time() - $start_time)."\n";
+
+<!-- Phenotypic correlation analysis -->
+<& /solgs/population/correlation.mas,
+   trial_id => $trial_id
+&>
+
+  <!-- Population structure analysis -- PCA -->
+<& /solgs/model/pca.mas,
+   trial_id => $trial_id
+ &>
+
+% print STDERR "Check 10 (mason) : ".(time() - $start_time)."\n";
 
 <div id="trialIDDiv" class="trialIDDivClass" style="display:none;">
-    jQuery('#trial_design_view_layout').dialog({
-	autoOpen: false,
-	height: 500,
-	width: 400,
-        modal: true,
-        buttons: {
-        Close: function() {
-	    jQuery( this ).dialog( "close" );
-	}
-      }
-    }); 
 % print $trial_id;
 </div>
 
@@ -216,200 +249,35 @@ my $subtitle = qq{<a id="show_change_breeding_program_link">change</a> } if $use
   
 jQuery(document).ready(function () {
 
-  jQuery('#change_breeding_program_dialog').dialog( {
-     height: 150,
-     width: 300,
-     title: 'Select Breeding Program',
-     autoOpen: false,
-     buttons: {
-       'OK': function() {
-          associate_breeding_program();
-          jQuery('#change_breeding_program_dialog').dialog("close"); 
-       },
-       'Cancel': function() { jQuery('#change_breeding_program_dialog').dialog("close"); }
-     }
-  });
+  trial_detail_page_setup_dialogs();
 
+  load_breeding_program_info(<% $trial_id %>);
 
-  function get_breeding_select() { 
-    var programs = new Array();
-    jQuery.ajax( { 
-      url: '/breeders/programs',
-      async: false,
-      success: function(response) { 
-        programs = response;
-      },
-      error: function(response){ 
-        alert("An error occurred.");
-      }
-    });
-    var html = "";
-    for (var i=0; i< programs.length; i++) {  
-      	html += '<option value='+programs[i][0]+'>'+programs[i][1]+'</a>';
-    }
-    jQuery('#change_breeding_program_select').html(html);
-	
-   }
+  display_trial_description(<% $trial_id %>);
 
+  display_trial_location(<% $trial_id %>);
 
-  function associate_breeding_program() { 
-    var program = jQuery('#change_breeding_program_select').val();				    
-		     //alert("Program: "+program);
-    jQuery.ajax( { 
-      url: '/breeders/program/associate/'+program+'/'+ <% $trial_id %>,
-      async: false,
-      success: function(response) { 
-        alert("Associated program with id "+program + " to trial with id "+<% $trial_id %>);
-      }
-    });
-   }
+  var type = get_trial_type(<% $trial_id %>);
 
-
-    function open_create_spreadsheet_dialog() {
-        var list = new CXGN.List();
-        jQuery("#trait_list").html(list.listSelect("trait_list", [ 'traits' ]));
-        jQuery('#create_spreadsheet_dialog').dialog("open");
-    }
-
-    function create_spreadsheet() {
-        var trialID = parseInt(jQuery('#trialIDDiv').text());
-        var list = new CXGN.List();
-        var trait_list_id = jQuery('#trait_list_list_select').val();
-	var trait_list;
-	if (! trait_list_id == "") {
-            trait_list = JSON.stringify(list.getList(trait_list_id));
-	}
-        new jQuery.ajax({
-        type: 'POST',
-        url: '/ajax/phenotype/create_spreadsheet',
-	dataType: "json",
-        data: {
-          'trial_id': trialID,
-          'trait_list': trait_list,
-        },
-        success: function (response) {
-          if (response.error) {
-            alert(response.error);
-            jQuery('#open_create_spreadsheet_dialog').dialog("close");
-          } else {
-            alert('success');
-
-          }
-        },
-        error: function () {
-          alert('An error occurred creating a phenotype file.');
-          jQuery('#open_download_spreadsheet_dialog').dialog("close");
-        }
-      });
-
-    }
-
-
-    function open_create_fieldbook_dialog() {
-      var trialID = parseInt(jQuery('#trialIDDiv').text());
-      new jQuery.ajax({
-        type: 'POST',
-        url: '/ajax/fieldbook/create',
-	dataType: "json",
-        data: {
-          'trial_id': trialID,
-        },
-        success: function (response) {
-          if (response.error) {
-            alert(response.error);
-            jQuery('#open_create_fieldbook_dialog').dialog("close");
-          } else {
-            jQuery('#tablet_layout_download_link').attr('href',response.file);
-            jQuery("#tablet_field_layout_saved_dialog_message").dialog("open");
-            //alert(response.file);
-            jQuery('#open_create_fieldbook_dialog').dialog("close");
-          }
-        },
-        error: function () {
-          alert('An error occurred creating the field book.');
-          jQuery('#open_create_fieldbook_dialog').dialog("close");
-        }
-      });
-    }
-
-    jQuery( "#tablet_field_layout_saved_dialog_message" ).dialog({
-	autoOpen: false,
-	modal: true,
-	buttons: {
-            Ok: function() {
-		jQuery( this ).dialog( "close" );
-		location.reload();
-            }
-	}
-    });
-
-    jQuery('#create_spreadsheet_dialog').dialog({
-	autoOpen: false,
-        modal: true,
-	autoResize:true,
-        width: 500,
-        position: ['top', 75],
-        modal: true,
-        buttons: {
-	    Cancel: function() {
-		jQuery( this ).dialog( "close" );
-		return;
-	    },
-	    Create: function() {
-                create_spreadsheet();
-		//save_experimental_design(design_json);
-		//jQuery( this ).dialog( "close" );
-		//jQuery('#add_project_dialog').dialog("close");
-	    },
-        },
-    });
-
-  jQuery('#show_change_breeding_program_link').click(
-     function() {
-       jQuery('#change_breeding_program_dialog').dialog("open");
-       get_breeding_select();
-     }
-  );
+  display_trial_type(type);
 
   jQuery('#delete_breeding_program_trial_association_link').click(
      function() { 
-       var yes = confirm("Do you really want to remove this trial from the breeding program?");
-       if (yes) { 
-         jQuery.ajax( { 
-           url: '/breeders/program/remove/',
-           data: { },
-           async: false,
-           success: function(response) { 
-           }
-	});
-      }
-    }
+        var trial_id = get_trial_id();
 
-);
-    jQuery('#create_spreadsheet_link').click(function () {
-        open_create_spreadsheet_dialog();
-    });
-
-    jQuery('#create_fieldbook_link').click(function () {
-        open_create_fieldbook_dialog();
-    });
-
-    jQuery('#trial_design_view_layout').dialog({
-	autoOpen: false,
-	height: 500,
-	width: 800,
-        modal: true,
-        buttons: {
-        Close: function() {
-	    jQuery( this ).dialog( "close" );
+	var yes = confirm("Do you really want to remove this trial from the breeding program?");
+	if (yes) { 
+            jQuery.ajax( { 
+		url: '/breeders/program/remove/<% $breeding_program->[0]->[0] %>/'+trial_id,
+		data: { },
+		async: false,
+		success: function(response) { 
+		}
+	    });
 	}
-      }
-    }); 
-
-
-    jQuery('#view_layout_link').click(function () {
-       	jQuery('#trial_design_view_layout').dialog("open");
     });
+
+
 
 });
 

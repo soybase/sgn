@@ -4,9 +4,13 @@ package SGN::Controller::AJAX::BreedersToolbox;
 use Moose;
 
 use URI::FromHash 'uri';
+use Data::Dumper;
 
+use CXGN::List;
 use CXGN::BreedersToolbox::Projects;
 use CXGN::BreedersToolbox::Delete;
+use CXGN::Trial::TrialDesign;
+use CXGN::Trial::TrialCreate;
 
 BEGIN { extends 'Catalyst::Controller::REST' }
 
@@ -53,6 +57,18 @@ sub insert_new_project : Path("/ajax/breeders/project/insert") Args(0) {
     $c->stash->{rest} = { error => '' };
 }
 
+
+sub get_all_locations :Path("/ajax/breeders/location/all") Args(0) { 
+    my $self = shift;
+    my $c = shift;
+
+    my $bp = CXGN::BreedersToolbox::Projects->new( { schema => $c->dbic_schema("Bio::Chado::Schema") });
+
+    my $all_locations = $bp->get_all_locations();
+
+    $c->stash->{rest} = { locations => $all_locations };
+
+}
 
 sub insert_new_location :Path("/ajax/breeders/location/insert") Args(0) { 
     my $self = shift;
@@ -138,7 +154,7 @@ sub delete_location :Path('/ajax/breeders/location/delete') Args(1) {
 }
 	
 
-sub get_breeding_programs : Path('/breeders/programs') Args(0) { 
+sub get_breeding_programs : Path('/ajax/breeders/all_programs') Args(0) { 
     my $self = shift;
     my $c = shift;
 
@@ -170,6 +186,31 @@ sub associate_breeding_program_with_trial : Path('/breeders/program/associate') 
     }
     $c->stash->{rest} = $message;
     
+}
+
+
+sub remove_breeding_program_from_trial : Path('/breeders/program/remove') Args(2) { 
+    my $self = shift;
+    my $c = shift;
+    my $breeding_program_id = shift;
+    my $trial_id = shift;
+
+    my $message = "";
+
+
+    if ($c->user() && ( $c->user()->check_roles('submitter')  || $c->user()->check_roles('curator'))) { 
+	my $program = CXGN::BreedersToolbox::Projects->new( { schema=> $c->dbic_schema("Bio::Chado::Schema") } );
+	
+	$message = $program->remove_breeding_program_from_trial($breeding_program_id, $trial_id);
+	
+	#print STDERR "MESSAGE: $xmessage->{error}\n";
+    }
+    else { 
+	$message = { error => "You need to be logged in and have sufficient privileges to associate trials to programs." };
+    }
+    $c->stash->{rest} = $message;
+    
+
 }
 
 sub new_breeding_program :Path('/breeders/program/new') Args(0) { 
@@ -210,7 +251,20 @@ sub delete_breeding_program :Path('/breeders/program/delete') Args(1) {
 	$c->stash->{rest} = { error => "You don't have sufficient privileges to delete breeding programs." };
     }
 }
-	
+
+
+sub get_breeding_programs_by_trial :Path('/breeders/programs_by_trial/') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+    
+    my $p = CXGN::BreedersToolbox::Projects->new( { schema => $c->dbic_schema("Bio::Chado::Schema") } );
+
+    my $projects = $p->get_breeding_programs_by_trial($trial_id);
+
+    $c->stash->{rest} =   { projects => $projects };
+    
+}
 	    
 sub add_data_agreement :Path('/breeders/trial/add/data_agreement') Args(0) { 
     my $self = shift;
@@ -302,5 +356,191 @@ sub get_data_agreement :Path('/breeders/trial/data_agreement/get') :Args(0) {
 
 }
 
+sub get_all_years : Path('/ajax/breeders/trial/all_years' ) Args(0) { 
+    my $self = shift;
+    my $c = shift;
+
+    my $bp = CXGN::BreedersToolbox::Projects->new({ schema => $c->dbic_schema("Bio::Chado::Schema") });
+    my @years = $bp->get_all_years();
+
+    $c->stash->{rest} = { years => \@years };
+}
+
+sub get_trial_location : Path('/ajax/breeders/trial/location') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+    
+    my $t = CXGN::Trial->new(
+	{ 
+	    bcs_schema => $c->dbic_schema("Bio::Chado::Schema"),
+	    trial_id => $trial_id 
+	});
+    
+    if ($t) { 
+	$c->stash->{rest} = { location => $t->get_location() };
+    }
+    else { 
+	$c->stash->{rest} = { error => "The trial with id $trial_id does not exist" };
+	
+    }
+}
+
+sub get_trial_type : Path('/ajax/breeders/trial/type') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+
+    my $t = CXGN::Trial->new(
+	{ 
+	    bcs_schema => $c->dbic_schema("Bio::Chado::Schema"),
+	    trial_id => $trial_id 
+	});
+    
+    my $type = $t->get_project_type();
+    $c->stash->{rest} = { type => $type };
+}
+
+sub set_trial_type : Path('/ajax/breeders/trial/settype') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+    my $trial_id = shift;
+
+    my $type = $c->req->param("type");
+
+    if (!($c->user()->check_roles('curator') || $c->user()->check_roles('submitter'))) { 
+	$c->stash->{rest} = { error => 'You do not have the required privileges to edit the trial type of this trial.' };
+	return;
+    }
+
+    my $t = CXGN::Trial->new( 
+	{ 
+	    bcs_schema => $c->dbic_schema("Bio::Chado::Schema"),
+	    trial_id => $trial_id 
+	});
+
+    if (!$t) { 
+	$c->stash->{rest} = { error => "The specified trial with id $trial_id does not exist" };
+	return;
+    }
+    # remove previous associations
+    #
+    $t->dissociate_project_type();
+    
+    # set the new trial type
+    #
+    $t->associate_project_type($type);
+    
+    $c->stash->{rest} = { success => 1 };
+}
+
+sub get_all_trial_types : Path('/ajax/breeders/trial/alltypes') Args(0) { 
+    my $self = shift;
+    my $c = shift;
+    
+    my @types = CXGN::Trial::get_all_project_types($c->dbic_schema("Bio::Chado::Schema"));
+    
+    $c->stash->{rest} = { types => \@types };
+}
+
+sub genotype_trial : Path('/ajax/breeders/genotypetrial') Args(0) { 
+    my $self = shift;
+    my $c = shift;
+
+    if (!($c->user()->check_roles('curator') || $c->user()->check_roles('submitter'))) { 
+	$c->stash->{rest} = { error => 'You do not have the required privileges to create a genotyping trial.' };
+	return;
+    }
+
+    my $list_id = $c->req->param("list_id");
+    my $name = $c->req->param("name");
+    my $breeding_program_id = $c->req->param("breeding_program");
+    my $description = $c->req->param("description");
+    my $location_id = $c->req->param("location");
+    my $year = $c->req->param("year");
+
+    my $list = CXGN::List->new( { dbh => $c->dbc->dbh(), list_id => $list_id });
+    my $elements = $list->elements();
+
+    if (!$name || !$list_id || !$breeding_program_id || !$location_id || !$year) { 
+	$c->stash->{rest} = { error => "Please provide all parameters." };
+	return;
+    }
+
+    my $td = CXGN::Trial::TrialDesign->new( { schema => $c->dbic_schema("Bio::Chado::Schema") });
+
+    $td->set_stock_list($elements);
+
+    $td->set_block_size(96);
+
+    $td->set_design_type("genotyping_plate");
+    $td->set_trial_name($name);
+    my $design;
+
+    eval { 
+	$td->calculate_design();
+    };
+
+    if ($@) { 
+	$c->stash->{rest} = { error => "Design failed. Error: $@" };
+	return;
+    }
+    
+    $design = $td->get_design();
+    
+    if (exists($design->{error})) { 
+	$c->stash->{rest} = $design;
+	return;
+    }
+    print STDERR Dumper($design);
+    
+    my $schema = $c->dbic_schema("Bio::Chado::Schema");
+    my $location = $schema->resultset("NaturalDiversity::NdGeolocation")->find( { nd_geolocation_id => $location_id } );
+    if (!$location) { 
+	$c->stash->{rest} = { error => "Unknown location" };
+	return;
+    }
+
+    my $breeding_program = $schema->resultset("Project::Project")->find( { project_id => $breeding_program_id });
+    if (!$breeding_program) {
+	$c->stash->{rest} = { error => "Unknown breeding program" };
+	return;
+    }
+    
+    
+    my $ct = CXGN::Trial::TrialCreate->new( { 
+     	chado_schema => $c->dbic_schema("Bio::Chado::Schema"),
+     	phenome_schema => $c->dbic_schema("CXGN::Phenome::Schema"),
+     	metadata_schema => $c->dbic_schema("CXGN::Metadata::Schema"),
+     	dbh => $c->dbc->dbh(),
+     	user_name => $c->user()->get_object()->get_username(),
+     	trial_year => $year,
+	trial_location => $location->description(),
+	program => $breeding_program->name(), 
+	trial_description => $description,
+	design_type => 'genotyping_plate',
+	design => $design,
+	trial_name => $name,
+	is_genotyping => 1,
+    });
+    
+    my %message;
+
+    eval { 
+	%message = $ct->save_trial();
+    };
+
+    if ($@ || exists($message{error})) { 
+	$c->stash->{rest} = { 
+	    error => "Error saving the trial. $@ $message{error}" 
+	};
+	return;
+    }
+    $c->stash->{rest} = { 
+	message => "Successfully stored the trial.",
+	trial_id => $message{trial_id},
+    };
+    print STDERR Dumper(%message);
+}
 
 1;
