@@ -127,5 +127,22 @@ sub _parse_list_from_json {
   }
 }
 
+sub get_panels : Path('/ajax/breeders/get_panels') Args(0) { 
+    my $self = shift;
+    my $c = shift;
+
+    my $p = CXGN::BreedersToolbox::Accessions->new( { schema => $c->dbic_schema("Bio::Chado::Schema") } );
+
+    my $panels = $p->get_all_panels();
+
+    my %data = ();
+    foreach my $panel (@$panels) { 
+	my $accessions = $p->get_accessions_by_panel($panel->[0]);
+	$data{$panel->[1]} = $accessions;
+    }
+
+    $c->stash->{rest} = \%data;
+}
+
 
 1;

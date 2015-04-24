@@ -1,9 +1,112 @@
 
 <%args>
 $accessions
+#$accessions_by_population
 </%args>
 
 <%perl>
 my $accession_count = scalar(@{$accessions});
 print "Total accessions: $accession_count";
 </%perl>
+
+<& /util/import_javascript.mas, classes => [ 'jquery', 'jqueryui', 'jstree.dist.jstree' ] &>
+
+<table><tr><td valign="top">
+<div class="boxbgcolor5">
+Download<br />
+<button id="download_button" disabled="disabled" >Excel</button><br />
+<button id="download_button_csv" disabled="disabled" >CSV</button><br />
+<hr>
+Double click<br />population to download
+<!-- hr>
+<button id="delete" disabled="disabled" >Delete</button -->
+</div>
+<br />
+</td><td valign="top">
+<div id="accession_list" >[loading...]</div>
+</td>
+</tr></table>
+
+<script>
+
+  jQuery.noConflict(); 
+
+  jQuery(document).ready(function($) {  
+    
+    jQuery.ajax( { 
+      url: '/ajax/breeders/get_panels',
+      success: function(response) { 
+        var html = format(response);
+        jQuery('#accession_list').html(html);
+        jQuery('#accession_list').jstree();
+
+      },
+      error: function(response) { 
+        alert("An error occurred");
+      }
+  });
+
+  function format(s) { 
+    var html = "<ul>";
+    for (var k in s) { 
+      if(s.hasOwnProperty(k)) { 
+        html += "<li>"+ k;
+        if (s[k] !== null) { 
+          html += '<ul>';
+          for (var n=0; n<s[k].length; n++) { 
+       
+            html += '<li id="'+s[k][n][0]+'">'+s[k][n][1]+"</li>";
+
+          }
+          html += '</ul>';
+        }
+
+      }
+        html += '</li>';
+    }
+    html += "</ul>";
+     return html;
+
+   }
+
+     $('#accession_list').on("changed.jstree", function (e, data) {
+       if ($('#accession_list').jstree('is_leaf', data.node)) { 
+         $('#download_button').removeAttr('disabled');
+         $('#download_button_csv').removeAttr('disabled');
+       }
+       else { 
+         $('#download_button').attr('disabled', 'disabled');
+         $('#download_button_csv').attr('disabled', 'disabled');
+       }
+	 
+       
+         // }
+    });				      
+
+    $('#download_button').on('click', function () {
+        var selected = $('#accession_list').jstree('get_bottom_selected');
+        if (selected.length !== 0) { 
+	  window.open('/breeders/accessions/population/download/'+selected.join(","));
+        }
+        else { alert("No leaf nodes selected for download."); }
+       
+    });
+
+    $('#download_button_csv').on('click', function () {
+        var selected = $('#accession_list').jstree('get_bottom_selected');
+        if (selected.length !== 0) { 
+	  window.open('/breeders/accessions/population/download/'+selected.join(",")+'?format=csv');
+        }
+        else { alert("No leaf nodes selected for download."); }
+       
+    });
+
+    $("#accession_list").delegate("li", "dblclick", function(){ 
+      var node = $("#accession_list").jstree("get_node", this); 
+      if ($('#accession_list').jstree('is_leaf', node)) { 				       
+        window.open('/breeders_toolbox/accessions/'+node.id);
+      }
+    }); 
+  });
+  
+</script>
