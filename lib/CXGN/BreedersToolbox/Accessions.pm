@@ -77,7 +77,7 @@ sub get_accessions_by_panel {
     my $self = shift;
     my $panel_id = shift;
     my $panels;
-    my $panels = $self->_get_all_accessions_by_panel($panel_id);
+    $panels = $self->_get_all_accessions_by_panel($panel_id);
     return $panels;
 }
 

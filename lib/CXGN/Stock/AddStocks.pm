@@ -6,7 +6,7 @@ CXGN::Stock::AddStocks - a module to add a list of stocks.
 
 =head1 USAGE
 
- my $stock_add = CXGN::Stock::AddStocks->new({ schema => $schema, stocks => \@stocks, species => $species_name} );
+ my $stock_add = CXGN::Stock::AddStocks->new({ schema => $schema, stocks => \@stocks, species => $species_name, owner_name => $owner_name, accession_panel => $accession_panel_name} );
  my $validated = $stock_add->validate_stocks(); #is true when none of the stock names in the array exist in the database.
  $stock_add->add_accessions();
 
@@ -33,6 +33,7 @@ has 'schema' => (
 		);
 has 'stocks' => (isa => 'ArrayRef', is => 'rw', predicate => 'has_stocks');
 has 'species' => (isa => 'Str', is => 'rw', predicate => 'has_species');
+has 'accession_panel' => (isa => 'Str', is => 'rw', predicate => 'has_accession_panel');
 has 'owner_name' => (isa => 'Str', is => 'rw', predicate => 'has_owner_name',required => 1,);
 has 'dbh' => (is  => 'rw',predicate => 'has_dbh', required => 1,);
 has 'phenome_schema' => (
@@ -88,6 +89,25 @@ sub _add_stocks {
 		     dbxref => $stock_type,
 		    });
 
+    my $panel_member_cvterm = $schema->resultset("Cv::Cvterm")->create_with({
+	name   => 'panel_member_of',
+	cv     => 'stock relationship',
+	db     => 'null',
+	dbxref => 'panel_member_of',
+       });
+
+    my $accession_panel;
+    if ($self->has_accession_panel()) {
+	$accession_panel -> $schema->resultset("Stock::Stock")
+	    ->find({
+		uniquename => $self->get_accession_panel(),
+		   });
+	if (!$accession_panel){
+	    print STDERR "Could not find accession panel $accession_panel\n";
+	    return;
+	}
+    }
+
     foreach my $stock_name (@stocks) {
       my $stock = $schema->resultset("Stock::Stock")
 	->create({
@@ -96,6 +116,14 @@ sub _add_stocks {
 		  uniquename => $stock_name,
 		  type_id     => $stock_cvterm->cvterm_id,
 		 } );
+      if ($accession_panel) {
+	  $stock
+	  ->find_or_create_related('stock_relationship_objects', {
+								  type_id => $panel_member_cvterm->cvterm_id(),
+								  object_id => $accession_panel->stock_id(),
+								  subject_id => $stock->stock_id(),
+								 } );
+      }
       push (@added_stock_ids,  $stock->stock_id());
     }
   };

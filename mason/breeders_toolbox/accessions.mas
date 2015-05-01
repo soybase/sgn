@@ -17,7 +17,7 @@ Download<br />
 <button id="download_button" disabled="disabled" >Excel</button><br />
 <button id="download_button_csv" disabled="disabled" >CSV</button><br />
 <hr>
-Double click<br />population to download
+Double click<br />panel to download
 <!-- hr>
 <button id="delete" disabled="disabled" >Delete</button -->
 </div>
@@ -86,7 +86,7 @@ Double click<br />population to download
     $('#download_button').on('click', function () {
         var selected = $('#accession_list').jstree('get_bottom_selected');
         if (selected.length !== 0) { 
-	  window.open('/breeders/accessions/population/download/'+selected.join(","));
+//	  window.open('/breeders/accessions/population/download/'+selected.join(","));
         }
         else { alert("No leaf nodes selected for download."); }
        
@@ -95,7 +95,7 @@ Double click<br />population to download
     $('#download_button_csv').on('click', function () {
         var selected = $('#accession_list').jstree('get_bottom_selected');
         if (selected.length !== 0) { 
-	  window.open('/breeders/accessions/population/download/'+selected.join(",")+'?format=csv');
+//	  window.open('/breeders/accessions/population/download/'+selected.join(",")+'?format=csv');
         }
         else { alert("No leaf nodes selected for download."); }
        
@@ -104,7 +104,7 @@ Double click<br />population to download
     $("#accession_list").delegate("li", "dblclick", function(){ 
       var node = $("#accession_list").jstree("get_node", this); 
       if ($('#accession_list').jstree('is_leaf', node)) { 				       
-        window.open('/breeders_toolbox/accessions/'+node.id);
+//        window.open('/breeders_toolbox/accessions/'+node.id);
       }
     }); 
   });
