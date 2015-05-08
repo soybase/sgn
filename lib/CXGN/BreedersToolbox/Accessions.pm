@@ -105,7 +105,7 @@ sub _get_all_accessions_by_panel {
     my $panel_stock = $self->schema->resultset("Stock::Stock")->find({stock_id => $panel_id});
 
     # get all related stock relatonships of type panel_member_of
-    my $panel_relationships = $panel_stock->search_related("stock_relationship_subjects",{type_id => $panel_member_cvterm->type_id()});
+    my $panel_relationships = $panel_stock->search_related("stock_relationship_subjects",{type_id => $panel_member_cvterm->cvterm_id()});
  
     if ($panel_relationships) {
 	while (my $panel_relationship = $panel_relationships->next) {

@@ -24,6 +24,7 @@ use Moose;
 use MooseX::FollowPBP;
 use Moose::Util::TypeConstraints;
 use Try::Tiny;
+use CXGN::People::Person;
 
 has 'schema' => (
 		 is       => 'rw',
@@ -68,11 +69,32 @@ sub _add_stocks {
   my @added_stock_ids;
   my $phenome_schema = $self->get_phenome_schema();
 
-  my $organism = $schema->resultset("Organism::Organism")
-    ->find({
-	    species => $species,
-	   } );
-  my $organism_id = $organism->organism_id();
+  print STDERR "Species: $species\n";
+#  my $organism_id = $schema->resultset("Organism::Organism")
+#    ->search({
+#	'lower(me.species)' => {  like => '%'.lc( $species ).'%' }
+#	    species => $species,
+#	   } )->first()->organism_id();
+#  my $organism_id = $organism->organism_id();
+
+  #my $organism_rs = $schema->resultset('Organism::Organism')
+#                                 ->search({ 'lower(species)' => { -ilike => '%'.$species.'%' }});
+  #my $organism_id = $organism_rs->first({prefetch => 'organism_id'})->organism_id();
+  #my $organism_id = $organism_rs->get_column('organism_id')->first();
+  #my $organism = $schema->resultset("Organism::Organism")->find({species => $species});
+  #my $organism_id = $organism;
+
+#  my $s = $schema->resultset('Organism::Organism');
+#  my @results = $s->search({ species => { ilike => '%'.$species.'%' }},
+#                           { rows => 15 },
+#                          )
+#                  ->get_column('species')
+#                  ->all;
+
+  my $organism_id = 47476;
+
+  print STDERR "Organism id: $organism_id\n";
+  #my $organism_id = $organism_rs->search({ 'me.organism_id' => { -in => $organism_rs->get_column('organism_id')->as_query } });
 
   #lookup user by name
   my $owner_name = $self->get_owner_name();;
@@ -89,6 +111,13 @@ sub _add_stocks {
 		     dbxref => $stock_type,
 		    });
 
+    my $panel_cvterm = $schema->resultset("Cv::Cvterm")->create_with(
+      { name   => 'accession_panel',
+      cv     => 'stock type',
+      db     => 'null',
+      dbxref => 'accession_panel',
+    });
+
     my $panel_member_cvterm = $schema->resultset("Cv::Cvterm")->create_with({
 	name   => 'panel_member_of',
 	cv     => 'stock relationship',
@@ -96,11 +125,16 @@ sub _add_stocks {
 	dbxref => 'panel_member_of',
        });
 
+
+
     my $accession_panel;
     if ($self->has_accession_panel()) {
-	$accession_panel -> $schema->resultset("Stock::Stock")
-	    ->find({
+	$accession_panel = $schema->resultset("Stock::Stock")
+	    ->find_or_create({
 		uniquename => $self->get_accession_panel(),
+		name => $self->get_accession_panel(),
+		organism_id => $organism_id,
+		type_id => $panel_cvterm->cvterm_id(),
 		   });
 	if (!$accession_panel){
 	    print STDERR "Could not find accession panel $accession_panel\n";
