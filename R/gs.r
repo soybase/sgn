@@ -296,6 +296,32 @@ genoData <- read.table(genoFile,
 
 genoData   <- data.matrix(genoData[order(row.names(genoData)), ])
 
+
+#impute genotype values for obs with missing values,
+#based on mean of neighbouring 10 (arbitrary) obs
+genoDataMissing <-c()
+
+if (sum(is.na(genoData)) > 0) {
+  genoDataMissing<- c('yes')
+    message("sum of geno missing values, ", sum(is.na(genoData)) )
+    genoData <- kNNImpute(genoData, 10)
+    genoData <- data.frame(genoData)
+
+    #extract columns with imputed values
+    genoData <- subset(genoData,
+                       select = grep("^x", names(genoData))
+                       )
+
+    #remove prefix 'x.' from imputed columns
+    names(genoData) <- sub("x.", "", names(genoData))
+
+    genoData <- round(genoData, digits = 0)
+    genoData <- data.matrix(genoData)
+  }
+
+
+
+
 predictionTempFile <- grep("prediction_population",
                        inFiles,
                        ignore.case = TRUE,
@@ -351,8 +377,8 @@ message('lines with both genotype and phenotype data: ', length(row.names(common
 #include in the genotype dataset only observation lines
 #with phenotype data
 message("genotype lines before filtering for phenotyped only: ", length(row.names(genoData)))        
-genoData<-genoData[(rownames(genoData) %in% rownames(commonObs)), ]
-message("genotype lines after filtering for phenotyped only: ", length(row.names(genoData)))
+genoDataFiltered <- genoData[(rownames(genoData) %in% rownames(commonObs)), ]
+message("genotype lines after filtering for phenotyped only: ", length(row.names(genoDataFiltered)))
 #drop observation lines without genotype data
 message("phenotype lines before filtering for genotyped only: ", length(row.names(phenoTrait)))        
 
@@ -365,36 +391,16 @@ message("phenotype lines after filtering for genotyped only: ", length(row.names
 #a set of only observation lines with genotype data
 traitPhenoData <- as.data.frame(round(phenoTrait, digits=2))           
 phenoTrait     <- data.matrix(phenoTrait)
-genoDataMatrix <- data.matrix(genoData)
+genoDataFiltered <- data.matrix(genoDataFiltered)
 
-#impute genotype values for obs with missing values,
-#based on mean of neighbouring 10 (arbitrary) obs
-genoDataMissing <-c()
-if (sum(is.na(genoDataMatrix)) > 0) {
-  genoDataMissing<- c('yes')
-    message("sum of geno missing values, ", sum(is.na(genoDataMatrix)) )
-    genoDataMatrix <-kNNImpute(genoDataMatrix, 10)
-    genoDataMatrix <-as.data.frame(genoDataMatrix)
-
-    #extract columns with imputed values
-    genoDataMatrix <- subset(genoDataMatrix,
-                         select = grep("^x", names(genoDataMatrix))
-                )
-
-    #remove prefix 'x.' from imputed columns
-    names(genoDataMatrix) <- sub("x.", "", names(genoDataMatrix))
-
-    genoDataMatrix <- round(genoDataMatrix, digits = 0)
-    genoDataMatrix <- data.matrix(genoDataMatrix)
-  }
 
 #impute missing data in prediction data
  predictionDataMissing <- c()
 if (length(predictionData) != 0) {
   #purge markers unique to both populations
-  commonMarkers  <- intersect(names(data.frame(genoDataMatrix)), names(predictionData))
+  commonMarkers  <- intersect(names(data.frame(genoDataFiltered)), names(predictionData))
   predictionData <- subset(predictionData, select = commonMarkers)
-  genoDataMatrix <- subset(genoDataMatrix, select= commonMarkers)
+  genoDataFiltered <- subset(genoDataFiltered, select= commonMarkers)
   
   predictionData <- data.matrix(predictionData)
  
@@ -419,9 +425,9 @@ if (length(predictionData) != 0) {
 }
 
 #change genotype coding to [-1, 0, 1], to use the A.mat ) if  [0, 1, 2]
-genoTrCode <- grep("2", genoDataMatrix[1, ], fixed=TRUE, value=TRUE)
+genoTrCode <- grep("2", genoDataFiltered[1, ], fixed=TRUE, value=TRUE)
 if(length(genoTrCode) != 0) {
-  genoDataMatrix <- genoDataMatrix - 1
+  genoDataFiltered <- genoDataFiltered - 1
 }
 
 if (length(predictionData) != 0 ) {
@@ -434,7 +440,7 @@ if (length(predictionData) != 0 ) {
 ordered.markerEffects <- c()
 if ( length(predictionData) == 0 ) {
   markerEffects <- mixed.solve(y = phenoTrait,
-                               Z = genoDataMatrix
+                               Z = genoDataFiltered
                                )
 
   ordered.markerEffects <- data.matrix(markerEffects$u)
@@ -454,11 +460,11 @@ if ( length(predictionData) == 0 ) {
 #additive relationship model
 #calculate the inner products for
 #genotypes (realized relationship matrix)
-genocrsprd <- tcrossprod(genoDataMatrix)
-print(genocrsprd[1:5, 1:5])
+genocrsprd <- tcrossprod(genoDataFiltered)
+
 #construct an identity matrix for genotypes
 identityMatrix <- diag(nrow(phenoTrait))
-print(identityMatrix[1:5, 1:5]);                  
+                 
 iGEBV <- mixed.solve(y = phenoTrait,
                      Z = identityMatrix,
                      K = genocrsprd
@@ -468,7 +474,7 @@ iGEBVu <- iGEBV$u
 
 heritability <- c()
 if ( is.null(predictionFile) == TRUE ) {
-    heritability <- round((iGEBV$Vu /(iGEBV$Vu + iGEBV$Ve)) * 100, digits=2)
+    heritability <- round((iGEBV$Vu /(iGEBV$Vu + iGEBV$Ve) * 100), digits=3)
     cat("\n", file=varianceComponentsFile,  append=TRUE)
     cat('Error variance', iGEBV$Ve, file=varianceComponentsFile, sep="\t", append=TRUE)
     cat("\n", file=varianceComponentsFile,  append=TRUE)
@@ -535,7 +541,7 @@ reps <- round_any(genoNum, 10, f = ceiling) %/% 10
 genotypeGroups <-c()
 
 if (genoNum %% 10 == 0) {
-    genotypeGroups <- rep(1:10, reps)   
+    genotypeGroups <- rep(1:10, reps)
   } else {
     genotypeGroups <- rep(1:10, reps) [- (genoNum %% 10) ]
   }
@@ -543,52 +549,56 @@ if (genoNum %% 10 == 0) {
 set.seed(4567)                                   
 genotypeGroups <- genotypeGroups[ order (runif(genoNum)) ]
 
-for (i in 1:reps) {
+for (i in 1:10) {
   tr <- paste("trPop", i, sep = ".")
   sl <- paste("slPop", i, sep = ".")
  
   trG <- which(genotypeGroups != i)
   slG <- which(genotypeGroups == i)
- 
+  
   assign(tr, trG)
   assign(sl, slG)
 
   kblup <- paste("rKblup", i, sep = ".")
   
-  result <- kinship.BLUP(y = phenoTrait[trG],
-                         G.train = genoDataMatrix[trG, ],
-                         G.pred = genoDataMatrix[slG, ],                      
+  result <- kinship.BLUP(y = phenoTrait[trG, ],
+                         G.train = genoDataFiltered[trG, ],
+                         G.pred = genoDataFiltered[slG, ],                      
                          mixed.method = "REML",
                          K.method = "RR",
                          )
  
   assign(kblup, result)
- 
-#calculate cross-validation accuracy
-  accuracy <- try(cor(result$g.pred, phenoTrait[slG]))
 
+#calculate cross-validation accuracy  
+  valCorData <- merge(phenoTrait[slG, ], result$g.pred, by=0, all=FALSE)
+  rownames(valCorData) <- valCorData[, 1]
+  valCorData[, 1]      <- NULL
+ 
+  accuracy <- try(cor(valCorData))
   validation <- paste("validation", i, sep = ".")
 
-  cvTest <- paste("Test", i, sep = " ")
+  cvTest <- paste("Validation test", i, sep = " ")
 
-  if (class(accuracy) != "try-error")
+  if ( class(accuracy) != "try-error")
     {
-      accuracy <- round(accuracy, digits = 2)
+      accuracy <- round(accuracy[1,2], digits = 3)
       accuracy <- data.matrix(accuracy)
-
+    
       colnames(accuracy) <- c("correlation")
       rownames(accuracy) <- cvTest
-    
-      assign(validation, accuracy)
 
-      validationAll <- rbind(validationAll, accuracy)
+      assign(validation, accuracy)
+      
+      if (!is.na(accuracy[1,1])) {
+        validationAll <- rbind(validationAll, accuracy)
+      }    
     }
 }
 
-validationAll <- data.matrix(validationAll)
 validationAll <- data.matrix(validationAll[order(-validationAll[, 1]), ])
      
-if (is.null(validationAll) == FALSE) {
+if (!is.null(validationAll)) {
     validationMean <- data.matrix(round(colMeans(validationAll),
                                       digits = 2
                                       )
@@ -609,10 +619,10 @@ predictionPopResult <- c()
 predictionPopGEBVs  <- c()
 
 if (length(predictionData) != 0) {
-    message("running prediction for selection candidates...marker data", ncol(predictionData), " vs. ", ncol(genoDataMatrix))
+    message("running prediction for selection candidates...marker data", ncol(predictionData), " vs. ", ncol(genoDataFiltered))
 
     predictionPopResult <- kinship.BLUP(y = phenoTrait,
-                                        G.train = genoDataMatrix,
+                                        G.train = genoDataFiltered,
                                         G.pred = predictionData,
                                         mixed.method = "REML",
                                         K.method = "RR"
@@ -703,7 +713,7 @@ if (!is.null(formattedPhenoData) & length(formattedPhenoDataFile) != 0) {
 }
 
 if (!is.null(genoDataMissing)) {
-  write.table(genoDataMatrix,
+  write.table(genoData,
               file = genoFile,
               sep = "\t",
               col.names = NA,
