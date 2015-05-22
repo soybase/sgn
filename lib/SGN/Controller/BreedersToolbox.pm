@@ -95,8 +95,19 @@ sub manage_accessions : Path("/breeders/accessions") Args(0) {
     my $ac = CXGN::BreedersToolbox::Accessions->new( { schema=>$schema });
 
     my $accessions = $ac->get_all_accessions($c);
+    my $panels = $ac->get_all_panels();
+
+    my %data = ();
+    foreach my $panel (@$panels) { 
+	my $accessions = $ac->get_accessions_by_panel($panel->[0]);
+	$data{$panel->[1]} = $accessions;
+    }
+
+    my $accessions_by_panel = \%data;
 
     $c->stash->{accessions} = $accessions;
+    $c->stash->{panels} = $panels;
+    $c->stash->{accessions_by_panel} = $accessions_by_panel;
 
     $c->stash->{template} = '/breeders_toolbox/manage_accessions.mas';
 
