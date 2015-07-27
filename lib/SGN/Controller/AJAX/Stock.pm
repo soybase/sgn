@@ -875,15 +875,24 @@ sub parents_GET : Path('/ajax/stock/parents') Args(0) {
     $parent_types{$female_parent_type_id} = "female";
     $parent_types{$male_parent_type_id} = "male";
 
-    my $parent_rs = $schema->resultset("Stock::StockRelationship")->search( { 'me.type_id' => { -in => [ $female_parent_type_id, $male_parent_type_id] }, object_id => $stock_id })->search_related("subject");
-
     my @parents;
-    while (my $p = $parent_rs->next()) { 
-	push @parents, [ 
-	    $p->get_column("stock_id"), 
-	    $p->get_column("uniquename"), 
-	];
+
+    foreach my $gender ($female_parent_type_id, $male_parent_type_id) { 
+	my $parent_rs = $schema->resultset("Stock::StockRelationship")->search( { 'me.type_id' => $gender, object_id => $stock_id })->search_related("subject");
 	
+	if ($parent_rs->count() > 1) { 
+	    $c->stash->{rest} = { error => "The stock $stock_id has multiple parents of type $gender - cannot determine parents." };
+	    return;
+	}
+
+	while (my $p = $parent_rs->next()) { 
+	    push @parents, [ 
+		$p->get_column("stock_id"), 
+		$p->get_column("uniquename"), 
+		$parent_types{$gender},
+	    ];
+	    
+	}
     }
     $c->stash->{rest} = { 
 	stock_id => $stock_id,
@@ -1264,4 +1273,30 @@ sub get_phenotypes {
     return $subject_phenotypes;
 }
 
+sub get_pedigree_string : Chained('stock/get_stock') Args(1) { 
+    my $self = shift;
+    my $c = shift;
+    my $levels = shift || 1;
+
+    my %pedigree;
+    my $current_stock = $c->stash->{stock_row}->stock_id();
+    my $current_name = $c->stash->{stock_row}->uniquename();
+
+    while (my $i <= $levels) { 
+	my $parents = $self->parents($c->stash->{stock_row}->stock_id());
+	$i++;
+	$pedigree{$current_name} = [ $parents->[0][1], $parents->[1][1] ];
+    }
+
+
+}
+
+
+sub recursive_parents { 
+    my $self = shift;
+    my $c = shift;
+    
+    
+
+}
 1;
