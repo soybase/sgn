@@ -1,0 +1,1287 @@
+LABEL	ITC	GENOTYPE	GENOTYPE_NAME_ORIGINAL	SYNONYM1	SYNONYM2	SYNONYM3	SYNONYM4	PLOIDY	GERMPLASM_GROUP	CATEGORY	INSTITUTE	LOCATION	LOCATION_CODE	CURATOR
+1	ITC0249	Calcutta-4	Calcutta-4	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+2	ITC0728	Maia-Oa	Maia Oa	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+3	ITC0074	Malaccensis	Malaccensis	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+4	ITC1179	Monyet	Monyet 	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+5	NA	Cultivar-Rose	Cultivar Rose	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+6	NA	Zebrina	Zebrina	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+7	ITC1177	Zebrina	Zebrina	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+8	ITC0250	Malaccensis	Malaccensis	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+9	ITC0609	Pahang	Pahang	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+10	ITC0966	Zebrina-GF	Zebrina GF	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+12	ITC0393	Truncata	Truncata	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+13	ITC1349	Pisang-Serun-400	P.Serun 400	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+14	ITC0393	M-a-Truncata	M.a truncata	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+15	ITC1345	Pisang-kra	Pisang kra	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+16	NA	Giahui	Giahui	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+17	NA	Pisang-lilin	Pisang lilin	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+18	ITC1178	Buitenzorg	Buitenzorg	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+19	ITC0610	Tuu-gia	Tuu gia	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+20	NA	Kuspaka	Kuspaka	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+21	NA	Pagatau	Pagatau	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+22	ITC0078	Wh-o-gu	Whogu	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+23	NA	Bagul	Bagul	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+24	NA	Galeo	Galeo	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+25	NA	Kokopo	Kokopo	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+26	NA	Porapora	Porapora	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+27	NA	Yalim	Yalim	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+28	NA	Merik	Merik	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+29	NA	Pitu	Pitu	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+30	NA	Wambo	Wambo	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+31	NA	Gunih	Gunih	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+32	ITC1305	Paji	Paji	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+33	NA	Duningi	Duningi	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+34	NA	Banksii-897	Banksii 897	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+35	ITC0574	Robusta	Robusta	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+36	ITC1467	Kisanga-machi	Kisanga machi	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+37	ITC0768	Lacatan	 Lacatan	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+38	NA	M-princesa	M. princesa	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+39	NA	Petite-Naine	Petite Naine	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+40	NA	P-jari-buaya	P. jari buaya	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+41	ITC0019	I-C-2	 I.C.2	NA	NA	NA	NA	4X	AAAA	Collection	IITA	Sendusu	SEN	mibatte
+42	ITC0164	Rugondo	Rugondo	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+43	ITC1452	Huti-Shumba-nyeru	Huti Shumba nyeru	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+44	ITC1456	Huti-RB	Huti RB	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+45	ITC1462	Suu	Suu	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+46	NA	Mshale	Mshale	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+47	ITC1451	Kitarasha	Kitarasha	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+48	ITC1224	Kikundi	Kikundi	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+49	ITC1458	llalyi-red	llalyi red	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+50	NA	Namadhi	Namadhi	NA	NA	NA	NA	3X 	AAA	Collection	IITA	Sendusu	SEN	mibatte
+51	ITC1468	Kahuti	Kahuti	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+52	NA	Mbwazirume	Mbwazirume	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+53	NA	Ibwi	Ibwi	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+54	NA	Kibuzi	Kibuzi	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+55	ITC1461	Ntebwa	Ntebwa	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+56	ITC1459	Mlema	Mlema	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+57	NA	Ntindi-II	Ntindi II	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+58	ITC1454	Makyugu-I	Makyugu I	NA	NA	NA	NA	2X	AA	Collection	IITA	Sendusu	SEN	mibatte
+59	ITC1466	Nshonowa	Nshonowa	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+60	NA	Tereza	Tereza	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+61	ITC1457	Haa-haa	Haa haa	NA	NA	NA	NA	3X	AAAh	Collection	IITA	Sendusu	SEN	mibatte
+62	NA	Mlelembo	Mlelembo	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+63	NA	SH-3436-9	SH 3436-9	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+64	NA	S-Ndizi	S. Ndizi	NA	NA	NA	NA	3X	AAB	Collection	IITA	Sendusu	SEN	mibatte
+65	NA	FHIA-18	FHIA 18	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+66	NA	Pisang-ceylan	Pisang ceylan	NA	NA	NA	NA	NA	NA	Collection	IITA	Sendusu	SEN	mibatte
+67	ITC0010	Bluggoe	Bluggoe	NA	NA	NA	NA	3X	ABB	Collection	IITA	Sendusu	SEN	mibatte
+68	ITC0243	P-Radjah	P. Radjah	NA	NA	NA	NA	3X	AAB	Collection	IITA	Sendusu	SEN	mibatte
+69	ITC0364	Silver-Bluggoe	Silver Bluggoe	NA	NA	NA	NA	3X	ABB	Collection	IITA	Sendusu	SEN	mibatte
+70	ITC0396	Pelipita	Pelipita	NA	NA	NA	NA	3X	ABB	Collection	IITA	Sendusu	SEN	mibatte
+71	ITC0058	Cacambou	Cacambou	NA	NA	NA	NA	3X	ABB	Collection	IITA	Sendusu	SEN	mibatte
+72	ITC0116	Saba	Saba	NA	NA	NA	NA	3X	ABB	Collection	IITA	Sendusu	SEN	mibatte
+73	ITC0246	Cameroun	Cameroun 	NA	NA	NA	NA	2X	BB	Collection	IITA	Sendusu	SEN	mibatte
+74	ITC0526	Kluai-Namwa-Khom	K.N. Khom	NA	NA	NA	NA	3X	ABB	Collection	IITA	Sendusu	SEN	mibatte
+75	NA	Balbisiana	Balbisiana	NA	NA	NA	NA	2X	BB	Collection	IITA	Sendusu	SEN	mibatte
+76	ITC0087	Kayinja	Kayinja	NA	NA	NA	NA	3X	ABB	Collection	IITA	Sendusu	SEN	mibatte
+77	ITC1120	Tani	Tani	NA	NA	NA	NA	2X	BB	Collection	IITA	Sendusu	SEN	mibatte
+78	ITC0213	P-awak	P. awak	NA	NA	NA	NA	3X	AAA	Collection	IITA	Sendusu	SEN	mibatte
+79	NA	Kisubi	Kisubi	NA	NA	NA	NA	2X	AB	Collection	IITA	Sendusu	SEN	mibatte
+80	NA	Musa-ornata	Musa ornata	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+81	NA	Pisang-mas	Pisang mas	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+82	NA	Kirum	Kirum	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+83	NA	Kokopo	Kokopo	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+84	NA	M-a-ssp-Malaccensis-0704	M. a. ssp. Malaccensis 0704	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+85	NA	M-a-burmanicoides	M.a. burmanicoides	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+86	NA	Mshale	Mshale	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+87	NA	TMB2X8142-1	TMB2X8142-1	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+88	NA	TMB2X9128-3	TMB2X9128-3	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+89	NA	2866K-4	2866K-4	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+90	NA	1235S-12	1235S-12	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+91	NA	M-a-ssp-Malaccensis	M. a. ssp. Malaccensis 	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+92	NA	Bagul	Bagul	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+93	NA	Zebrina	Zebrina	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+94	NA	Mlambichi	Mlambichi	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+95	NA	Mjenga-Michael	Mjenga 'Michael'	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+96	NA	Musa-schizocarpa	Musa schizocarpa	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+97	NA	Musa-balbisiana	Musa balbisiana	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+98	NA	Musa-balbisiana-1-65-454	Musa balbisiana 1-65-454	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+99	NA	Psang-Radjat	Psang Radjat	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+100	NA	Musa-textilis	Musa textilis	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+101	NA	Inori-remove-Diana	Inori (remove Diana)	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+102	NA	Kuspak	Kuspak	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+103	NA	Galeo	Galeo	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+104	NA	Ntinda-1	Ntinda 1	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+105	NA	Huti-red-bud	Huti red bud	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+106	NA	Kahuti	Kahuti	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+107	ITC0766	Paliama-Banksii	Paliama (Banksii) 	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+108	NA	SH-3142	SH 3142	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+109	NA	M-balbisiana-cameroun-246-no-plant	M.balbisiana (cameroun 246) no plant	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+110	NA	Muraru-red-bell-Thika	Muraru red bell (Thika)	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+111	NA	Kamunyira	Kamunyira	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+112	NA	Safe-Velchi	Safe Velchi	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+113	NA	Vunapope	Vunapope 	NA	NA	NA	NA	2X	AB	Collection	NARObioversity	Mbarara	MBA	robooni
+114	NA	Asupina	Asupina	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+115	NA	Fai-Palagi	Fai Palagi	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+116	NA	Pisang-Umbuk	Pisang Umbuk	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+117	NA	Umalag	Umalag	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+118	NA	Sabra	Sabra	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+119	NA	Kar-Ngou	Kar Ngou	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+120	NA	Bira	Bira	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+121	NA	Morong-Princesa	Morong Princesa	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+122	NA	Cultivar-Rose	Cultivar Rose	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+123	NA	M-a-Ssp-Zebrina-Mala-Oa-0748	M.a. Ssp. Zebrina (Mala Oa) 0748	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+124	NA	Pitu	Pitu	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+125	NA	Porapora	Porapora	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+126	ITC0869	Mala	Mala ITC 0869	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+127	NA	TMB2-x-9722-1	TMB2 x 9722-1	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+128	NA	TMB2-x-8075-7	TMB2 x 8075-7	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+129	NA	3162K-5	3162K-5	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+130	NA	12468S-3	12468S-3	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+131	NA	SH-3362	SH 3362	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+132	NA	Yendisi	Yendisi	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+133	NA	Ndyali	Ndyali	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+134	NA	Paka	Paka	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+135	NA	0774-Inarnibal	0774 Inarnibal	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+136	NA	Kisubi	Kisubi	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+137	NA	Tango	Tango	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+138	NA	Too	To'o	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+139	NA	Niyirmyk	Niyirmyk	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+140	NA	Gunih	Gunih	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+141	NA	Fu-Des	Fu Des	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+142	NA	Pisang-tongat	Pisang tongat	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+143	ITC0610	Tuu-gia	Tuu gia (610)	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+144	NA	Mlelembo	Mlelembo	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+145	ITC1187	Tomolo	Tomolo ITC 1187	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+146	NA	9722-1	9722-1	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+147	NA	Pisang-Jaribuaya	Pisang Jaribuaya	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+148	NA	Muraru-green-bell	Muraru green bell 	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+149	NA	Makyughu	Makyughu	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+150	NA	Majimaji	Majimaji	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+151	NA	Kokor	Kokor	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+152	NA	Kunnan	Kunnan	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+153	NA	Musa-Acuminata-ssp-Truncata	Musa Acuminata ssp. Truncata	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+154	NA	Paracido-del-Rey	Paracido del Rey	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+155	ITC0046	Monthan	Monthan 0046	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+156	NA	Pisang-Masak-Hijau	Pisang Masak Hijau	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+157	NA	Petite-Naine	Petite Naine	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+158	NA	Kelong-Mekintu	Kelong Mekintu	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+159	NA	Pisang-Bakar	Pisang Bakar	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+160	NA	M-a-ssp-Zebrina-0968	M.a.ssp. Zebrina 0968	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+161	NA	Mwitu-pemba	Mwitu pemba	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+162	NA	M-a-ssp-malaccensis-type-pisang-serun	M.a ssp.malaccensis type pisang serun	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+163	NA	Pisang-Lillin	Pisang Lillin	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+164	NA	M-a-ssp-Burmannica-type-long-tavoy	M.a ssp. Burmannica type long tavoy	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+165	NA	Pisang-Jari-Buaya	Pisang Jari Buaya	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+166	ITC0985	Apindikay	Apindikay ITC 0985	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+167	NA	TMB2-x-9172	TMB2 x 9172	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+168	NA	SH-3217	SH 3217	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+169	NA	3146K-3	3146K-3 	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+170	NA	Yanum-Yefan	Yanum Yefan	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+171	NA	TMB2-x-5015-1	TMB2 x 5015-1	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+172	NA	Musa-burmanica	Musa burmanica	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+173	NA	Kambani-Rungwe	Kambani (Rungwe)	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+174	NA	Halahala	Halahala	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+175	NA	M-a-ssp-Banksii-type-Madang	M.a ssp. Banksii type 'Madang'	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+176	NA	M-a-ssp-Microcarpa-type-Borneo	M.a ssp. Microcarpa type Borneo	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+177	NA	ETI-Kehel	ETI Kehel	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+178	NA	M-a-ssp-Zebrina-type-Monyet	M.a ssp. Zebrina type Monyet	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+179	NA	M-a-ssp-Banksii-089	M.a ssp. Banksii 089	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+180	NA	Hova	Hova	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+181	NA	Dimaemamosi	Dimaemamosi	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+182	NA	Yalim	Yalim	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+183	NA	Wambo	Wambo	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+184	NA	Tjau-lagada	Tjau lagada	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+185	NA	Waigu	Waigu	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+186	NA	Makyugyu	Makyugyu	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+187	NA	Nshonowa	Nshonowa	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+188	NA	Khaithong-Ruang	Khaithong Ruang	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+189	NA	TMB-x-9128-3	TMB x 9128-3	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+190	NA	Muraru-Mshare	Muraru Mshare	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+191	NA	Muraru-Mlalu	Muraru Mlalu	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+192	NA	Muraru	Muraru	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+193	NA	Njuru	Njuru	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+194	NA	Musa-balbisiana-type-Tani	Musa balbisiana type  Tani	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+195	NA	Batuhan-Intermidiate-Apex	Batuhan Intermidiate Apex	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+196	NA	Vei-Mama	Vei Mama	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+197	NA	Chuoi-Vahoungo	Chuoi Vahoungo	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+198	NA	Pisang-Serun-404	Pisang Serun 404	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+199	NA	Chuoi-Tieu-Lien	Chuoi Tieu Lien	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+200	NA	Tumay	Tumay	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+201	NA	Kunaimp	Kunaimp	NA	NA	NA	NA	2X	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+202	NA	Gonja-Kakira	Gonja Kakira	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+203	NA	Gonja-Mamba	Gonja Mamba	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+204	NA	Goloro	Goloro	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+205	NA	Prata	Prata	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+206	NA	Sukari-Ndiizi	Sukari Ndiizi	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+207	NA	Buro-Cemsa	Buro Cemsa	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+208	NA	Kivuvu	Kivuvu	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+209	NA	Musa-Kayinja	Musa Kayinja	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+210	NA	Cachaco-Enano	Cachaco Enano	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+211	NA	Dole	Dole	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+212	NA	Pisang-Nangk	Pisang Nangk	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+213	NA	SH3436-9	SH3436-9	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+214	NA	549/7	549/7	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+215	NA	TMBX25511-2	TMBX25511-2	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+216	NA	TMBX5295-1	TMBX5295-1	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+217	NA	Tu6	Tu6	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+218	NA	PV0344	PV0344	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+219	NA	Towoole	Towoole	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+220	NA	Red-Bogoya	Red Bogoya	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+221	NA	Valley	Valley	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+222	NA	Palauda	Palauda	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+223	NA	CCTV215	CCTV215	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+224	NA	Chinese-Cavendish	Chinese Cavendish	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+225	NA	white-sweet	white sweet	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+226	NA	Embu	Embu	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+227	NA	Silk-1	Silk 1	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+228	NA	Silk-2	Silk 2	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+229	NA	Mysore	Mysore	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+230	NA	Suu	Suu	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+231	NA	Mlema	Mlema	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+232	NA	Foulah	Foulah	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+233	NA	Paji	Paji	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+234	ITC1016	Balbisiana	Balbisiana	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+235	ITC0094	Balbisiana-10852	Balbisiana (10852)	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+236	ITC0621	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+237	ITC0002	Dwarf-cavendish	Dwarf cavendish	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+238	ITC1233	Dwonka	Dwonka	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+239	ITC1175	Iholena-lele	Iholenalele	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+240	ITC0167	Isha	Isha	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+241	ITC0087	Kayinja	Kayinja	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+242	ITC0172	Kibungo-I	Kibungo	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+243	ITC0332	Laknau	Laknau	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+244	ITC0182	Muniamimba	Muniamimba	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+245	ITC0637	Musa-ornata	Musa ornata	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+246	ITC0571	Mons-Mari-GL1	Mons Mari (GL1)	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+247	ITC0792	Niukin	Niukin	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+248	ITC0226	Ntanga-4	Ntanga4	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+249	ITC0742	Poteau-nain	Poteaunain	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+250	ITC0677	Pisang-Gajih-Merah	Pisang GajihMerah	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+251	ITC0003	Rubosta-Poyo	Rubosta	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+252	ITC1162	Supari	Supari	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+253	ITC0936	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+254	ITC1216	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+255	ITC0890	Schizocarpa	Musaschizocarp	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+256	ITC0618	Musa-peekeli-ssp-Angustingemma	Musapeekeli ssp. Angustingemma	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+257	ITC0813	Wain	Wain	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+258	ITC0081	Igitsiri-Intuntu	Igitsiri	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+259	ITC0123	Simili-Radjah	Simili Radjah	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+260	ITC0245	Safet-Velchi	Safet Velchi	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+261	ITC0247	Hondurus	Hondurus	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+262	ITC0249	Calcutta-4	Calcutta 4	NA	NA	NA	NA	2X	AA	Collection	NARObioversity	Mbarara	MBA	robooni
+263	ITC0277	Leite	Leite	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+264	ITC0312	Pisang-Jaribuaya	Pisang Jaribuaya	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+265	ITC0361	Blue-Java	Blue Java	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+266	ITC0450	Pisang-pelambang	Pisang pelambang	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+267	ITC0472	Pelipita	Pelipita	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+268	ITC0575	Red-Dacca	Red Dacca	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+269	ITC0587	Pisang-Rajah-South-Johnstone	Pisang rajah	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+270	ITC0649	Faconah	Faconah	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+271	ITC0653	Pisang-mas	Pisang mas	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+272	ITC0654	Petite-naine	Petite naine	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+273	ITC0659	Namwakhom	Namwakhom	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+274	ITC0662	Khai-Thong-Ruang	Khai Thong Ruang	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+275	ITC0766	Paliama	Paliama	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+276	ITC0767	Dole	Dole	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+277	ITC0769	Figue-Pomme-Geante	Figue Pomme Geante	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+278	ITC0825	Uzakan	Uzakan	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+279	ITC1120	Tani	Tani	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+280	ITC1121	Pisang-Lilin	Pisang Lilin	NA	NA	NA	NA	2X	AA	Collection	NARObioversity	Mbarara	MBA	robooni
+281	ITC1122	Gros-michel	Gros michel	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+282	ITC1177	Zebrina	Zebrina	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+283	ITC1287	Pisang-berangan	Pisang berangan	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+284	ITC1441	Pisang-ceylan	Pisang ceylan	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+285	ITC1483	Monthan	Monthan	NA	NA	NA	NA	NA	NA	Collection	NARObioversity	Mbarara	MBA	robooni
+286	NA	SH-3362	SH 3362	NA	NA	NA	NA	2X	AA	Improved-Diploid	IITA	Sendusu	SEN	mibatte
+287	NA	SH3217	SH3217	NA	NA	NA	NA	2X	AA	Improved-Diploid	IITA	Sendusu	SEN	mibatte
+288	ITC1437	TMB2X9128-3	TMB2X9128-3	NA	NA	NA	NA	2X	AA	Improved-Diploid	IITA	Sendusu	SEN	mibatte
+289	NA	TMB2X8075-7	TMB2X8075-7	NA	NA	NA	NA	2X	AA	Improved-Diploid	IITA	Sendusu	SEN	mibatte
+290	NA	TMB2X7197-2	TMB2X7197-2	NA	NA	NA	NA	2X	AA	Improved-Diploid	IITA	Sendusu	SEN	mibatte
+291	NA	TMB2X5265-1	TMB2X5265-1	NA	NA	NA	NA	2X	AA	Improved-Diploid	IITA	Sendusu	SEN	mibatte
+292	NA	5610S-1	5610S-1	NA	NA	NA	NA	2X	AA	Improved-Diploid	IITA	Sendusu	SEN	mibatte
+293	NA	10969S-1	10969S-1	NA	NA	NA	NA	2X	AA	Improved-Diploid	IITA	Sendusu	SEN	mibatte
+294	ITC0966	ZEBRINA-GF	ZEBRINA GF	NA	NA	NA	NA	2X	AA	Improved-Diploid	IITA	Sendusu	SEN	mibatte
+295	NA	02145-1320	02145/1320	NA	NA	NA	NA	2X	AA	Improved-Diploid	IITA	Sendusu	SEN	mibatte
+296	NA	1814	1814	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+297	NA	2710	2710	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+298	NA	716	716	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+299	NA	703	703	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+300	NA	2216	2216	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+301	NA	2125	2125	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+302	NA	1019	1019	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+303	NA	2320	2320	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+304	NA	919	919	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+305	NA	1119	1119	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+306	NA	1603	1603	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+307	NA	1702	1702	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+308	NA	2905	2905	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+309	NA	402	402	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+310	NA	TMB2x9172	TMB2x9172	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+311	NA	TMB2X8075-7	TMB2X8075-7	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+312	NA	ZEBRINA-GF	ZEBRINA GF	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+313	NA	SH3362	SH3362	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+314	NA	02145/1320	02145/1320	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+315	NA	AG201087-4	AG201087-4	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+316	NA	AG201087-3	AG201087-3	NA	NA	NA	NA	2X	AA	Improved-Diploid	NARO	Kawanda	KAW	robooni
+317	NA	Calcutta-4-X-Zebrina-GF	Calcutta 4 X Zebrina GF	NA	NA	NA	NA	2X	AA	Diploids-segregating-mapping-population	IITA	Sendusu	SEN	mibatte
+318	NA	Calcutta-4-X-Pisang-lilin	Calcutta 4 X Pisang lilin	NA	NA	NA	NA	2X	AA	Diploids-segregating-mapping-population	IITA	Sendusu	SEN	mibatte
+319	NA	Monyet-X-Kokopo	Monyet X Kokopo	NA	NA	NA	NA	2X	AA	Diploids-segregating-mapping-population	IITA	Sendusu	SEN	mibatte
+320	NA	6142-1-X-8075-7	6142-1 X 8075-7	NA	NA	NA	NA	2X	AA	Diploids-segregating-mapping-population	IITA	Sendusu	SEN	mibatte
+321	NA	Kasaska-x-Borneo	Kasaska x Borneo	NA	NA	NA	NA	2X	AA	Diploids-segregating-mapping-population	NARO	Kawanda	KAW	robooni
+322	NA	Mshale-x-Calcata-4	Mshale x Calcata 4	NA	NA	NA	NA	NA	NA	Segregating-population	NARO	Kawanda	KAW	robooni
+323	NA	Enyeru	Enyeru	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+324	NA	Entukura	Entukura	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+325	NA	IITA-Nakyetengu	IITA-Nakyetengu	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+326	NA	Nakayonga	Nakayonga	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+327	NA	Nfuuka	Nfuuka	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+328	NA	Tereza	Tereza	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+329	NA	Kabucuragye	Kabucuragye	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+330	NA	Namwezi	Namwezi	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+331	NA	Enzirabahima	Enzirabahima	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+332	NA	Nakasabira	Nakasabira	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+333	NA	Kazirakwe	Kazirakwe	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+334	NA	Nakawere	Nakawere	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+335	NA	Kubucuragye	Kubucuragye	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+336	NA	Bitambi	Bitambi	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+337	NA	Namande	Namande	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+338	NA	Namwezi	Namwezi	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+339	NA	Nfuuka	Nfuuka	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+340	NA	Nakasabira	Nakasabira	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+341	NA	Nakayonga	Nakayonga	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+342	NA	Tereza	Tereza	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+343	NA	Kazirakwe	Kazirakwe	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+344	NA	Entukura	Entukura	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+345	NA	Rwambarara	Rwambarara	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+346	NA	Enzirabahima	Enzirabahima	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+347	NA	Nante	Nante	NA	NA	NA	NA	3X	AAA	EAHB-triploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+348	NA	Kahuti	Kahuti	NA	NA	NA	NA	2X	AA	Mchare-diploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+349	NA	Hutishamba	Hutishamba	NA	NA	NA	NA	2X	AA	Mchare-diploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+350	NA	Mshale	Mshale	NA	NA	NA	NA	2X	AA	Mchare-diploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+351	NA	Muraru	Muraru	NA	NA	NA	NA	2X	AA	Mchare-diploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+352	NA	Mlelembo	Mlelembo	NA	NA	NA	NA	2X	AA	Mchare-diploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+353	NA	Kamunyila	Kamunyila	NA	NA	NA	NA	2X	AA	Mchare-diploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+354	NA	Nshonowa	Nshonowa	NA	NA	NA	NA	2X	AA	Mchare-diploid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+355	NA	917K-2	917K-2	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+356	NA	1201K-1	1201K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+357	NA	1438K-1	1438K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+358	NA	660K-1	660K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+359	NA	401K-1	401K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+360	NA	222K-1	222K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+361	NA	365K-1	365K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+362	NA	376K-7	376K-7	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	IITA	Sendusu	SEN	mibatte
+363	NA	660K-1	660K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+364	NA	222K-1	222K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+365	NA	401K-1	401K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+366	NA	376K-7	376K-7	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+367	NA	1411K-1	1411K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+368	NA	1201K-1	1201K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+369	NA	1154K-1	1154K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+370	NA	917K-2	917K-2	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+371	NA	199K-3	199K-3	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+372	NA	246K-1	246K-1	NA	NA	NA	NA	4X	AAAA	Tetraploid-hybrid-used-as-a-female-parent	NARO	Kawanda	KAW	robooni
+373	NA	26787S-1	26787S-1	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+374	NA	27885S-1	27885S-1	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+375	NA	29561S-2	29561S-2	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+376	NA	28200S-3	28200S-3	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+377	NA	27914S-24	27914S-24	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+378	NA	29792S-14	29792S-14	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+379	NA	26337S-37	26337S-37	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+380	NA	27074S-1	27074S-1	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+381	NA	28974S-11	28974S-11	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+382	NA	27401S-1	27401S-1	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+383	NA	27885S-14	27885S-14	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+384	NA	27935S-12	27935S-12	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+385	NA	28060S-5	28060S-5	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+386	NA	27825S-4	27825S-4	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+387	NA	28246S-7	28246S-7	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+388	NA	27833S-3	27833S-3	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+389	NA	29561S-3	29561S-3	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+390	NA	22598S-2	22598S-2	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+391	NA	29608S-1	29608S-1	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+392	NA	27873S-26	27873S-26	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+393	NA	28776S-2	28776S-2	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+394	NA	28036S-2	28036S-2	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+395	NA	27914S-3	27914S-3	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+396	NA	26815S-33	26815S-33	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+397	NA	26975S-4	26975S-4	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+398	NA	27246S-4	27246S-4	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+399	NA	29673S-12	29673S-12	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+400	NA	28033S-19	28033S-19	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+401	NA	25343S-4	25343S-4	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+402	NA	26288S-4	26288S-4	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+403	NA	27873S-38	27873S-38	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+404	NA	28434S-2	28434S-2	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+405	NA	26335S-23	26335S-23	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+406	NA	25909S-3	25909S-3	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+407	NA	28225S-2	28225S-2	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+408	NA	29490S-1	29490S-1	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+409	NA	29716S-5	29716S-5	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	IITA	Sendusu	SEN	mibatte
+410	NA	9019K	9019K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+411	NA	252K	252K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+412	NA	6360K	6360K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+413	NA	247K	247K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+414	NA	203K	203K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+415	NA	236K	236K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+416	NA	13250K-1	13250K-1 	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+417	NA	12658K-1	12658K-1	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+418	NA	273K	273K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+419	NA	20K	20K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+420	NA	286K	286K 	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+421	NA	307K	307K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+422	NA	282K-10	282K-10	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+423	NA	201069K	201069K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+424	NA	254K	254K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+425	NA	258K	258K	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+426	NA	6880K-2	6880K-2	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+427	NA	9063K-9	9063K-9	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+428	NA	7069K-1	7069K-1	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+429	NA	8037K-12	8037K-12	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+430	NA	8037K-26	8037K-26	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+431	NA	8067K-2	8067K-2	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+432	NA	8053K-1	8053K-1	NA	NA	NA	NA	3X	AAA	Hybrid-in-PYT	NARO	Kawanda	KAW	robooni
+433	NA	NARITA-1 	NARITA 1  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+434	NA	NARITA-2	NARITA 2	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+435	NA	NARITA-3 	NARITA 3  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+436	NA	NARITA-4	NARITA 4	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+437	NA	NARITA-5	NARITA 5	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+438	NA	NARITA-6	NARITA 6	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+439	NA	NARITA-7  	NARITA 7  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+440	NA	NARITA-8    	NARITA 8     	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+441	NA	NARITA-9     	NARITA 9      	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+442	NA	NARITA-10 	NARITA 10  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+443	NA	NARITA-11 	NARITA 11  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+444	NA	NARITA-12	NARITA 12 	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+445	NA	NARITA-13 	NARITA 13 	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+446	NA	NARITA-14 	NARITA 14  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+447	NA	NARITA-15 	NARITA 15  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+448	NA	NARITA-16	NARITA 16 	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+449	NA	NARITA-17 	NARITA 17  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+450	NA	NARITA-18 	NARITA 18  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+451	NA	NARITA-19 	NARITA 19  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+452	NA	NARITA-20	NARITA 20 	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+453	NA	NARITA-21 	NARITA 21  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+454	NA	NARITA-22	NARITA 22	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+455	NA	NARITA-23 	NARITA 23  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+456	NA	NARITA-24 	NARITA 24 	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+457	NA	NARITA-25 	NARITA 25  	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+458	NA	NARITA-26	NARITA 26	NA	NA	NA	NA	3X	AAA	Secondary-triploid	IITA	Sendusu	SEN	mibatte
+459	NA	M19	M19	NA	NA	NA	NA	3X	AAA	Secondary-triploid	NARO	Kawanda	KAW	robooni
+460	NA	M20	M20	NA	NA	NA	NA	3X	AAA	Secondary-triploid	NARO	Kawanda	KAW	robooni
+461	NA	M25	M25	NA	NA	NA	NA	3X	AAA	Secondary-triploid	NARO	Kawanda	KAW	robooni
+462	NA	M27	M27	NA	NA	NA	NA	3X	AAA	Secondary-triploid	NARO	Kawanda	KAW	robooni
+463	NA	M28	M28	NA	NA	NA	NA	3X	AAA	Secondary-triploid	NARO	Kawanda	KAW	robooni
+464	NA	M29	M29	NA	NA	NA	NA	3X	AAA	Secondary-triploid	NARO	Kawanda	KAW	robooni
+465	ITC0504	NA	KABANA  1H	NA	NA	NA	NA	4X	AAAB	Released	NARO	Kawanda	KAW	robooni
+466	ITC0506	NA	KABANA  2H	NA	NA	NA	NA	4X	AABB	Released	NARO	Kawanda	KAW	robooni
+467	ITC1264	NA	KABANA  3H	NA	NA	NA	NA	4X	AAAA	Released	NARO	Kawanda	KAW	robooni
+468	ITC1265	NA	KABANA  4H	NA	NA	NA	NA	4X	AAAA	Released	NARO	Kawanda	KAW	robooni
+469	ITC1123	NA	KABANA  5 	NA	NA	NA	NA	3X	AAA	Released	NARO	Kawanda	KAW	robooni
+470	NA	KABANA-6H	KABANA 6H	NA	NA	NA	NA	3X	AAA	Released	NARO	Kawanda	KAW	robooni
+471	NA	KABANA-7H	KABANA 7H	NA	NA	NA	NA	3X	AAA	Released	NARO	Kawanda	KAW	robooni
+472	NA	11777S-6	11777S-6	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+473	NA	1201K-1	1201K-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+474	NA	12419S-13	12419S-13	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+475	NA	12468S-1	12468S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+476	NA	12468S-18	12468S-18	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+477	NA	12468S-6	12468S-6	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+478	NA	12477S-13	12477S-13	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+479	NA	12479S-1	12479S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+480	NA	12479S-13	12479S-13	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+481	NA	12571S-15	12571S-15	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+482	NA	12603S-1	12603S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+483	NA	12618S-1	12618S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+484	NA	12949s-2	12949s-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+485	NA	13284S-1	13284S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+486	NA	13522S-5	13522S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+487	NA	13573S-1	13573S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+488	NA	1438K-1	1438K-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+489	NA	14539S-4	14539S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+490	NA	16243S-1	16243S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+491	NA	16457S-2	16457S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+492	NA	17503S-3	17503S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+493	NA	1968-2	1968-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+494	NA	19798s-2	19798s-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+495	NA	21086S-1	21086S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+496	NA	2180K-6	2180K-6	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+497	NA	222K-1	222K-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+498	NA	24434S-3	24434S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+499	NA	24583S-2	24583S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+500	NA	24948S-10	24948S-10	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+501	NA	24948S-13	24948S-13	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+502	NA	24948S-18	24948S-18	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+503	NA	24948S-2	24948S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+504	NA	24948S-21	24948S-21	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+505	NA	24948S-22	24948S-22	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+506	NA	24948S-24	24948S-24	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+507	NA	24948S-27	24948S-27	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+508	NA	24948S-29	24948S-29	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+509	NA	24948S-9	24948S-9	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+510	NA	25031S-1	25031S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+511	NA	25031S-15	25031S-15	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+512	NA	25031S-16	25031S-16	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+513	NA	25031S-17	25031S-17	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+514	NA	25031S-19	25031S-19	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+515	NA	25031S-27	25031S-27	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+516	NA	25031S-33	25031S-33	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+517	NA	25031S-34	25031S-34	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+518	NA	25031S-7	25031S-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+519	NA	25066S-1	25066S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+520	NA	25066S-2	25066S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+521	NA	25089S-4	25089S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+522	NA	25102S-1	25102S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+523	NA	25117S-1	25117S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+524	NA	25117S-2	25117S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+525	NA	25117S-3	25117S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+526	NA	25628S-11	25628S-11	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+527	NA	25328S-3	25328S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+528	NA	25356S-1	25356S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+529	NA	25371S-2	25371S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+530	NA	25435S-4	25435S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+531	NA	25457S-1	25457S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+532	NA	25474S-5	25474S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+533	NA	25499S-7	25499S-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+534	NA	25508S-1	25508S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+535	NA	25583S-2	25583S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+536	NA	25623S-11	25623S-11	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+537	NA	25653S-3	25653S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+538	NA	25680S-11	25680S-11	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+539	NA	25680S-13	25680S-13	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+540	NA	25737S-1	25737S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+541	NA	25909S-3	25909S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+542	NA	25974S-?	25974S-?	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+543	NA	25974S-1	25974S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+544	NA	25974S-11	25974S-11	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+545	NA	25974S-13	25974S-13	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+546	NA	25974S-15	25974S-15	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+547	NA	25974S-17	25974S-17	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+548	NA	25974S-18	25974S-18	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+549	NA	25974S-31	25974S-31	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+550	NA	25974S-35	25974S-35	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+551	NA	26039S-2	26039S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+552	NA	26060S-1	26060S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+553	NA	26075S-6	26075S-6	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+554	NA	26075S-7	26075S-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+555	NA	26075S-8	26075S-8	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+556	NA	26224S-1	26224S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+557	NA	2625K-1	2625K-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+558	NA	26260S-3	26260S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+559	NA	26288S-4	26288S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+560	NA	26315S-1	26315S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+561	NA	26315S-3	26315S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+562	NA	26316S-14	26316S-14	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+563	NA	26316S-7	26316S-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+564	NA	26317S-1	26317S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+565	NA	26337S-11A	26337S-11A	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+566	NA	26337S-11B	26337S-11B	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+567	NA	26337S-2	26337S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+568	NA	26337S-22A	26337S-22A	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+569	NA	26337S-22B	26337S-22B	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+570	NA	26337S-28	26337S-28	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+571	NA	26337S-32	26337S-32	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+572	NA	26337S-34	26337S-34	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+573	NA	26337S-39	26337S-39	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+574	NA	26337S-40	26337S-40	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+575	NA	26337S-43	26337S-43	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+576	NA	26363S-1	26363S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+577	NA	26369S-4	26369S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+578	NA	26369S-8	26369S-8	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+579	NA	26466S-2	26466S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+580	NA	26466S-5	26466S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+581	NA	26530S-1	26530S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+582	NA	26540S-182	26540S-182	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+583	NA	26660S-1	26660S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+584	NA	26666S-1	26666S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+585	NA	26709S-1	26709S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+586	NA	26725S-1	26725S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+587	NA	26787S-7	26787S-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+588	NA	26815S-8	26815S-8	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+589	NA	26815S-9	26815S-9	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+590	NA	26820S-1	26820S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+591	NA	26840S-10	26840S-10	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+592	NA	26840S-5	26840S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+593	NA	26840S-7	26840S-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+594	NA	26840S-9	26840S-9	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+595	NA	26874S-5	26874S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+596	NA	26975S-1	26975S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+597	NA	26975S-2	26975S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+598	NA	26990S-11	26990S-11	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+599	NA	26990S-4	26990S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+600	NA	26998S-1	26998S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+601	NA	27073S-1	27073S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+602	NA	27074s-1	27074s-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+603	NA	27184S-4	27184S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+604	NA	27184S-6	27184S-6	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+605	NA	27184S-8	27184S-8	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+606	NA	27261S-1	27261S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+607	NA	27261S-10	27261S-10	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+608	NA	27261S-11	27261S-11	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+609	NA	27262S-1	27262S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+610	NA	27262S-3	27262S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+611	NA	27264S-2	27264S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+612	NA	2729K-2	2729K-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+613	NA	27334S-5	27334S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+614	NA	27346S-2	27346S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+615	NA	27346S-4	27346S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+616	NA	2734K-1	2734K-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+617	NA	27401S-1	27401S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+618	NA	27437S-1	27437S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+619	NA	27494S-12	27494S-12	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+620	NA	27494s-4	27494s-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+621	NA	27494S-5	27494S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+622	NA	27524S-12A	27524S-12A	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+623	NA	27524S-12B	27524S-12B	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+624	NA	27524S-30	27524S-30	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+625	NA	27528S-1	27528S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+626	NA	27579s-1	27579s-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+627	NA	27579S-3	27579S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+628	NA	27684S-5	27684S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+629	NA	27713S-1	27713S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+630	NA	27744S-1	27744S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+631	NA	27770S-4	27770S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+632	NA	27825S-4	27825S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+633	NA	27833S-13	27833S-13	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+634	NA	27873S-12	27873S-12	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+635	NA	27873S-14	27873S-14	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+636	NA	27873S-17	27873S-17	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+637	NA	27873S-18	27873S-18	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+638	NA	27873S-26	27873S-26	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+639	NA	27873S-31	27873S-31	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+640	NA	27873S-33	27873S-33	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+641	NA	27873S-37	27873S-37	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+642	NA	27873S-38	27873S-38	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+643	NA	27873S-4	27873S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+644	NA	27873S-5	27873S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+645	NA	27873S-7	27873S-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+646	NA	27885S-1	27885S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+647	NA	27885S-9	27885S-9	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+648	NA	27886S-5	27886S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+649	NA	27914S-1	27914S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+650	NA	27914S-11	27914S-11	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+651	NA	27914S-13	27914S-13	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+652	NA	27914S-18	27914S-18	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+653	NA	27914S-21	27914S-21	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+654	NA	27914S-22	27914S-22	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+655	NA	27914S-24	27914S-24	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+656	NA	27914S-26	27914S-26	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+657	NA	27914S-3	27914S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+658	NA	27914S-6	27914S-6	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+659	NA	27914S-7	27914S-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+660	NA	27914S-8	27914S-8	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+661	NA	27915S-2	27915S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+662	NA	27915S-3	27915S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+663	NA	27935S-1	27935S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+664	NA	27935S-7	27935S-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+665	NA	27960S-1	27960S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+666	NA	28030S-2	28030S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+667	NA	28030S-6	28030S-6	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+668	NA	28033S-14	28033S-14	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+669	NA	28033S-18	28033S-18	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+670	NA	28033S-23	28033S-23	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+671	NA	28033S-3	28033S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+672	NA	28033S-9	28033S-9	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+673	NA	28036S-11	28036S-11	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+674	NA	28036S-2	28036S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+675	NA	28060S-8	28060S-8	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+676	NA	28068S-9	28068S-9	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+677	NA	28071S-1	28071S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+678	NA	28073S-1	28073S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+679	NA	28077S-5	28077S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+680	NA	28095S-1	28095S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+681	NA	28164S-15	28164S-15	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+682	NA	28164S-3	28164S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+683	NA	28165S-1	28165S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+684	NA	28188S-2	28188S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+685	NA	28200S-3	28200S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+686	NA	28246S-4	28246S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+687	NA	28246S-7	28246S-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+688	NA	28256s-1	28256s-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+689	NA	28257S-1	28257S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+690	NA	28257S-2	28257S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+691	NA	28257S-4	28257S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+692	NA	28260S-2	28260S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+693	NA	28263S-2	28263S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+694	NA	28432S-19	28432S-19	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+695	NA	28432S-20	28432S-20	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+696	NA	28432S-3	28432S-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+697	NA	28434S-9	28434S-9	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+698	NA	28452S-11	28452S-11	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+699	NA	28465S-2	28465S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+700	NA	28465S-21	28465S-21	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+701	NA	28476S-7	28476S-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+702	NA	28476S-8	28476S-8	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+703	NA	28479S-2	28479S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+704	NA	28481S-1	28481S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+705	NA	28492S-1	28492S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+706	NA	28506S-1	28506S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+707	NA	28528S-1	28528S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+708	NA	28561S-2	28561S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+709	NA	28561S-5	28561S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+710	NA	28776S-2	28776S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+711	NA	28780S-1	28780S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+712	NA	28974S-11	28974S-11	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+713	NA	28974S-15	28974S-15	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+714	NA	28974S-22	28974S-22	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+715	NA	28974S-29	28974S-29	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+716	NA	29114S-1	29114S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+717	NA	29114S-14	29114S-14	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+718	NA	29114S-24	29114S-24	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+719	NA	29165S-5	29165S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+720	NA	29275S-1	29275S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+721	NA	29275S-4	29275S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+722	NA	29275S-5	29275S-5	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+723	NA	29285S-20	29285S-20	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+724	NA	29364S-2	29364S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+725	NA	29586S-4	29586S-4	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+726	NA	3123K-1	3123K-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+727	NA	3637K-13	3637K-13	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+728	NA	365K-1	365K-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+729	NA	376K-7	376K-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+730	NA	401K-1	401K-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+731	NA	5610S-1	5610S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+732	NA	660K-1	660K-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+733	NA	7197-2	7197-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+734	NA	7798S-2	7798S-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+735	NA	8075-7	8075-7	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+736	NA	8386S-19	8386S-19	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+737	NA	861S-1	861S-1	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+738	NA	9128-3	9128-3	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+739	NA	917K-2	917K-2	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+740	NA	9187S-8	9187S-8	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+741	NA	9494S-10	9494S-10	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+742	NA	9494S-36	9494S-36	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+743	NA	9750S-13	9750S-13	NA	NA	NA	NA	NA	NA	Genomics-training-population	IITA	Sendusu	SEN	mibatte
+744	ITC0211	Balbisiana	Balbisiana 	NA	NA	NA	NA	2x	balbisiana	Collection	IITA	Arusha	ARU	buwimana
+745	ITC0247	Honduras	Honduras	NA	NA	NA	NA	2x	balbisiana	Collection	IITA	Arusha	ARU	buwimana
+746	ITC0248	Singapuri	Singapuri	NA	NA	NA	NA	2x	balbisiana	Collection	IITA	Arusha	ARU	buwimana
+747	ITC0271	Eti-Kehel	Eti Kehel 	NA	NA	NA	NA	2x	balbisiana	Collection	IITA	Arusha	ARU	buwimana
+748	ITC0545	Balbisiana	Balbisiana	NA	NA	NA	NA	2x	balbisiana	Collection	IITA	Arusha	ARU	buwimana
+749	ITC0626	Balbisiana	Balbisiana	NA	NA	NA	NA	2x	balbisiana	Collection	IITA	Arusha	ARU	buwimana
+750	ITC0249	Calcutta-4	Calcutta 4	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+751	ITC0283	Long-Tavoy	Long Tavoy	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+752	ITC0672	Pa-Rayong	Pa (Rayong)	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+753	ITC0660	Khae-Phrae-x	Khae (Phrae) x	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+754	ITC0480	Pisang-Buntal	Pisang Buntal	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+755	ITC0653	Pisang-Mas	Pisang Mas	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+756	ITC0392	Dátil	Dátil	NA	NA	NA	NA	2x	AB	Collection	IITA	Arusha	ARU	buwimana
+757	ITC1252	Datil	Datil	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+758	ITC0250	Malaccensis	Malaccensis	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+759	ITC0609	Pahang	Pahang	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+760	ITC1345	Pisang-Kra	Pisang Kra	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+761	ITC1348	Pisang-Serun-404	Pisang Serun 404	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+762	ITC0320	Paka	Paka	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+763	ITC0712	AAcv-Rose	AAcv Rose	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+764	ITC0728	Maia-Oa	Maia Oa	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+765	ITC1177	Zebrina	Zebrina	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+766	ITC0966	Zebrina-G-F	Zebrina (G.F.)	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+767	ITC0063	Pisang-Tongat	Pisang Tongat	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+768	ITC0393	Truncata	Truncata	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+769	ITC0090	Tjau-Lagada	Tjau Lagada	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+770	ITC0253	Borneo	Borneo	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+771	ITC0310	Morong-Princesa	Morong Princesa	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+772	ITC0312	Pisang-Jari-Buaya	Pisang Jari Buaya	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+773	ITC0314	Pisang-Sipulu	Pisang Sipulu	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+774	ITC0316	Saing-Todloh	Saing Todloh	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+775	ITC0254	Madang	Madang	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+776	ITC0299	Guyod	Guyod	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+777	ITC0373	Uwati	Uwati	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+778	ITC0428	Higa	Higa	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+779	ITC0465	Waigu	Waigu	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+780	ITC0600	Waimara	Waimara	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+781	ITC0601	Hung-Tu	Hung Tu	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+782	ITC0607	Somani	Somani	NA	NA	NA	NA	2x	NA	Collection	IITA	Arusha	ARU	buwimana
+783	ITC0663	Khai-Nai-On	Khai Nai On	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+784	ITC0717	Nzumoheli-I	Nzumoheli I	NA	NA	NA	NA	2x	AAA	Collection	IITA	Arusha	ARU	buwimana
+785	ITC0766	Paliama	Paliama	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+786	ITC0774	Yenai	Yenai	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+787	ITC0899	Tamat	Tamat	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+788	ITC0932	Gilasalasa	Gilasalasa	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+789	ITC0939	Fu-Des	Fu Des	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+790	ITC0942	Yendisi	Yendisi	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+791	ITC0943	Kwaro	Kwaro	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+792	ITC1004	To-o	To'o	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+793	ITC1028	Agutay	Agutay	NA	NA	NA	NA	2x	acuminata	Collection	IITA	Arusha	ARU	buwimana
+794	ITC1187	Tomolo	Tomolo	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+795	ITC1446	Makyughu-II	Makyughu II	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+796	ITC1454	Makyughu-I	Makyughu I	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+797	ITC1455	Mshale-Mlelembo	Mshale Mlelembo	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+798	ITC1460	Ijihu-Inkundu	Ijihu Inkundu	NA	NA	NA	NA	2x	NA	Collection	IITA	Arusha	ARU	buwimana
+799	ITC1466	Nshonowa	Nshonowa	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+800	ITC1468	Kahuti	Kahuti	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+801	ITC1559	Huti-green-bell	Huti green bell	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+802	NA	Huti-white	Huti-white	NA	NA	NA	NA	2x	NA	Collection	IITA	Arusha	ARU	buwimana
+803	NA	Mshare-laini	Mshare laini	NA	NA	NA	NA	2x	NA	Collection	IITA	Arusha	ARU	buwimana
+804	ITC0281	Akondro-Mainty	Akondro Mainty	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+805	ITC0127	Kamaramasenge	Kamaramasenge	NA	NA	NA	NA	3x	AB	Collection	IITA	Arusha	ARU	buwimana
+806	ITC0245	Safet-Velchi	Safet Velchi	NA	NA	NA	NA	2x	AB	Collection	IITA	Arusha	ARU	buwimana
+807	ITC0459	Ney-Poovan	Ney Poovan	NA	NA	NA	NA	3x	AB	Collection	IITA	Arusha	ARU	buwimana
+808	ITC0990	Vunapope	Vunapope	NA	NA	NA	NA	3x	AB	Collection	IITA	Arusha	ARU	buwimana
+809	ITC1034	Kunnan	Kunnan 	NA	NA	NA	NA	2x	AB	Collection	IITA	Arusha	ARU	buwimana
+810	ITC1558	Kayinja	Kayinja	NA	NA	NA	NA	NA	AB	Collection	IITA	Arusha	ARU	buwimana
+811	ITC0081	Igitsiri-Intuntu	Igitsiri (Intuntu)	NA	NA	NA	NA	3x	AAAh	Collection	IITA	Arusha	ARU	buwimana
+812	ITC0084	Mbwazirume	Mbwazirume	NA	NA	NA	NA	3x	AAAh	Collection	IITA	Arusha	ARU	buwimana
+813	ITC0085	Nakitengwa	Nakitengwa	NA	NA	NA	NA	3x	AAAh	Collection	IITA	Arusha	ARU	buwimana
+814	ITC0732	N-Dundu	N'Dundu	NA	NA	NA	NA	3x	AAAh	Collection	IITA	Arusha	ARU	buwimana
+815	ITC1180	Nakitengwa	Nakitengwa	NA	NA	NA	NA	3x	AAAh	Collection	IITA	Arusha	ARU	buwimana
+816	ITC1353	Nante	Nante	NA	NA	NA	NA	3x	AAAh	Collection	IITA	Arusha	ARU	buwimana
+817	ITC1354	Enzirabahima	Enzirabahima	NA	NA	NA	NA	3x	AAAh	Collection	IITA	Arusha	ARU	buwimana
+818	ITC1355	Kazirakwe	Kazirakwe	NA	NA	NA	NA	3x	AAAh	Collection	IITA	Arusha	ARU	buwimana
+819	ITC1458	Ilalyi-red	Ilalyi red	NA	NA	NA	NA	3x	AAAh	Collection	IITA	Arusha	ARU	buwimana
+820	ITC1463	Ntindii-II	Ntindii II	NA	NA	NA	NA	3x	AA	Collection	IITA	Arusha	ARU	buwimana
+821	ITC1464	Ntindii-I	Ntindii I	NA	NA	NA	NA	3x	AAAh	Collection	IITA	Arusha	ARU	buwimana
+822	ITC1546	Kisukari-usiniguse	Kisukari usiniguse	NA	NA	NA	NA	3x	AAA	Collection	IITA	Arusha	ARU	buwimana
+823	ITC1564	Mlali	Mlali	NA	NA	NA	NA	3x	AAA	Collection	IITA	Arusha	ARU	buwimana
+824	ITC1622	Ifanaiya	Ifanaiya	NA	NA	NA	NA	3x	AAAh	Collection	IITA	Arusha	ARU	buwimana
+825	NA	Ndishi	Ndishi	NA	NA	NA	NA	3x	NA	Collection	IITA	Arusha	ARU	buwimana
+826	ITC0277	Leite	Leite	NA	NA	NA	NA	3x	AAA	Collection	IITA	Arusha	ARU	buwimana
+827	ITC0477	Inarnibal	Inarnibal	NA	NA	NA	NA	3x	AAA	Collection	IITA	Arusha	ARU	buwimana
+828	ITC0575	Red-Dacca	Red Dacca	NA	NA	NA	NA	3x	AAA	Collection	IITA	Arusha	ARU	buwimana
+829	ITC0654	Petite-Naine	Petite Naine	NA	NA	NA	NA	3x	AAA	Collection	IITA	Arusha	ARU	buwimana
+830	ITC1122	Gros-Michel	Gros-Michel	NA	NA	NA	NA	3x	AAA	Collection	IITA	Arusha	ARU	buwimana
+831	ITC0829	Mata-Kun	Mata Kun	NA	NA	NA	NA	3x	AAA	Collection	IITA	Arusha	ARU	buwimana
+832	ITC1287	Pisang-Berangan	Pisang Berangan	NA	NA	NA	NA	3x	AAA	Collection	IITA	Arusha	ARU	buwimana
+833	ITC1336	JD-Yangambi	JD Yangambi	NA	NA	NA	NA	3x	AAA	Collection	IITA	Arusha	ARU	buwimana
+834	ITC0662	Khai-Thong-Ruang	Khai Thong Ruang	NA	NA	NA	NA	3x	AAA	Collection	IITA	Arusha	ARU	buwimana
+835	ITC1450	Kisukari-Usiniguse	Kisukari Usiniguse	NA	NA	NA	NA	3x	AA	Collection	IITA	Arusha	ARU	buwimana
+836	ITC0076	Pome	Pome	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+837	ITC0207	Prata	Prata	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+838	ITC0336	Improved-Lady-Finger	Improved Lady Finger	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+839	ITC0649	Foconah	Foconah	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+840	ITC0962	Prata-ana	Prata ana	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+841	ITC1472	Kerala	Kerala	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+842	ITC0348	Silk	Silk	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+843	ITC0769	Figue-Pomme-Géante	Figue Pomme Géante	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+844	ITC1379	Chuoi-Man	Chuoi Man	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+845	ITC0519	Obubit-Ntanga-green-mutant	Obubit Ntanga green mutant	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+846	ITC1441	Pisang-Ceylan	Pisang Ceylan	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+847	ITC0825	Uzakan	Uzakan	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+848	ITC0535	Kluai-Roi-Wi	Kluai Roi Wi	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+849	ITC0450	Pisang-Palembang	Pisang Palembang	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+850	ITC0587	Pisang-Rajah-South-Johnstone	Pisang Rajah (South Johnstone)	NA	NA	NA	NA	3x	AAB	Collection	IITA	Arusha	ARU	buwimana
+851	ITC0993	Yawa-Dwarf	Yawa Dwarf	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+852	ITC0087	Kayinja	Kayinja	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+853	ITC0213	Pisang-Awak	Pisang Awak	NA	NA	NA	NA	4x	ABB	Collection	IITA	Arusha	ARU	buwimana
+854	ITC0526	Kluai-Namwa-Khom	Kluai Namwa Khom	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+855	ITC0659	Namwa-Khom	Namwa Khom	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+856	ITC0123	Simili-Radjah	Simili Radjah	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+857	ITC0361	Blue-Java	Blue Java	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+858	ITC1483	Monthan	Monthan	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+859	ITC0051	Foulah-4	Foulah 4	NA	NA	NA	NA	4x	ABB	Collection	IITA	Arusha	ARU	buwimana
+860	ITC0394	Cardaba	Cardaba	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+861	ITC0643	Cachaco	Cachaco	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+862	ITC0173	Gipungusi	Gipungusi	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+863	ITC0767	Dole	Dole	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+864	ITC0338	Blue-Torres-Strait-Island	Blue Torres Strait Island	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+865	ITC0364	Silver-Bluggoe	Silver Bluggoe	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+866	ITC0472	Pelipita	Pelipita	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+867	ITC0692	Pisang-Kepok	Pisang Kepok	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+868	ITC0698	Pisang-Kepok-Bung	Pisang Kepok Bung	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+869	ITC0795	Daru	Daru	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+870	ITC0803	Kandrian	Kandrian	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+871	ITC0804	Rana	Rana	NA	NA	NA	NA	3x	ABB	Collection	IITA	Arusha	ARU	buwimana
+872	ITC0647	Lep-Chang-Kut	Lep Chang Kut	NA	NA	NA	NA	3x	BBB	Collection	IITA	Arusha	ARU	buwimana
+873	ITC0473	Balonkawe	Balonkawe	NA	NA	NA	NA	3x	ABBB	Collection	IITA	Arusha	ARU	buwimana
+874	ITC0652	Kluai-Tiparot	Kluai Tiparot	NA	NA	NA	NA	3x	ABBB	Collection	IITA	Arusha	ARU	buwimana
+875	ITC1310	PV-42-53	PV 42-53	NA	NA	NA	NA	4x	NA	Collection	IITA	Arusha	ARU	buwimana
+876	ITC1437	TMB2x-9128-3	TMB2x 9128-3	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+877	ITC0425	SH-3142	SH-3142	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+878	ITC1448	IITA-hybrid-2145-1320	IITA hybrid 2145/1320	NA	NA	NA	NA	2x	AA	Collection	IITA	Arusha	ARU	buwimana
+879	ITC1437	TMB2x-9128-3	TMB2x 9128-3	NA	NA	NA	NA	2x	AA	Improved-Diploid	IITA	Arusha	ARU	buwimana
+880	ITC0425	SH-3142	SH-3142	NA	NA	NA	NA	2x	AA	Improved-Diploid	IITA	Arusha	ARU	buwimana
+881	ITC1448	IITA-hybrid-2145-1320	IITA hybrid 2145/1320	NA	NA	NA	NA	2x	AA	Improved-Diploid	IITA	Arusha	ARU	buwimana
+882	NA	Calcutta-4-X-Zebrina-GF	Calcutta 4 X Zebrina GF	NA	NA	NA	NA	2X	AA	Diploids-segregating-mapping-population	IITA	Arusha	ARU	buwimana
+883	NA	Pahang-X-Guyod	Pahang X Guyod	NA	NA	NA	NA	2X	AA	Diploids-segregating-mapping-population	IITA	Arusha	ARU	buwimana
+884	NA	Borneo-X-Paliama	Borneo X Paliama	NA	NA	NA	NA	2X	AA	Diploids-segregating-mapping-population	IITA	Arusha	ARU	buwimana
+885	ITC0081	Igitsiri-Intuntu	Igitsiri (Intuntu)	NA	NA	NA	NA	3x	AAAh	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+886	ITC0084	Mbwazirume	Mbwazirume	NA	NA	NA	NA	3x	AAAh	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+887	ITC0085	Nakitengwa	Nakitengwa	NA	NA	NA	NA	3x	AAAh	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+888	ITC0150	Inzirabahima	Inzirabahima	NA	NA	NA	NA	3x	AAAh	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+889	ITC1180	Nakitengwa	Nakitengwa	NA	NA	NA	NA	3x	AAAh	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+890	ITC1353	Nante	Nante	NA	NA	NA	NA	3x	AAAh	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+891	ITC1354	Enzirabahima	Enzirabahima	NA	NA	NA	NA	3x	AAAh	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+892	ITC1355	Kazirakwe	Kazirakwe	NA	NA	NA	NA	3x	AAAh	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+893	ITC1458	Ilalyi-red	Ilalyi red	NA	NA	NA	NA	3x	AAAh	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+894	ITC1463	Ntindii-II	Ntindii II	NA	NA	NA	NA	3x	AA	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+895	ITC1464	Ntindii-I	Ntindii I	NA	NA	NA	NA	3x	AAAh	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+896	ITC1564	Mlali	Mlali	NA	NA	NA	NA	3x	AAA	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+897	ITC1622	Ifanaiya	Ifanaiya	NA	NA	NA	NA	3x	AAAh	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+898	NA	Ndishi	Ndishi	NA	NA	NA	NA	3x	NA	EAHB-triploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+899	ITC1446	Makyughu-II	Makyughu II	NA	NA	NA	NA	2x	AA	Mchare-diploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+900	ITC1454	Makyughu-I	Makyughu I	NA	NA	NA	NA	2x	AA	Mchare-diploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+901	ITC1455	Mshale-Mlelembo	Mshale Mlelembo	NA	NA	NA	NA	2x	AA	Mchare-diploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+902	ITC1460	Ijihu-Inkundu	Ijihu Inkundu	NA	NA	NA	NA	2x	AA	Mchare-diploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+903	ITC1466	Nshonowa	Nshonowa	NA	NA	NA	NA	2x	AA	Mchare-diploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+904	ITC1468	Kahuti	Kahuti	NA	NA	NA	NA	2x	AA	Mchare-diploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+905	ITC1559	Huti-green-bell	Huti green bell	NA	NA	NA	NA	2x	AA	Mchare-diploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+906	NA	Huti-white	Huti-white	NA	NA	NA	NA	2x	AA	Mchare-diploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+907	NA	Mchare-laini	Mchare laini	NA	NA	NA	NA	2x	AA	Mchare-diploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+908	ITC0281	Akondro-Mainty	Akondro Mainty	NA	NA	NA	NA	2x	AA	Mchare-diploid-used-as-a-female-parent	IITA	Arusha	ARU	buwimana
+909	ITC0249	Calcutta-4	Calcutta 4	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+910	ITC0250	Malaccensis	Malaccensis	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+911	ITC0600	Waimara	Waimara	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+912	ITC0603	Somani	Somani	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+913	ITC0712	AAcv-Rose	AAcv Rose	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+914	ITC0939	Fu-Des	Fu Des	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+915	ITC0966	Zebrina-G-F	Zebrina (G.F.)	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+916	ITC1121	Pisang-lilin	Pisang lilin	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+917	ITC0920	Dimaemamosi	Dimaemamosi	NA	NA	NA	NA	3x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+918	ITC0932	Gilasalasa	Gilasalasa	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+919	ITC0078	Wh-o-gu	Wh-o-gu	NA	NA	NA	NA	3x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+920	ITC0257	Heva	Heva	NA	NA	NA	NA	3x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+921	ITC0265	SN-2	SN 2	NA	NA	NA	NA	4x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+922	ITC0266	Sowmuk	Sowmuk	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+923	ITC0267	NBA-14	NBA 14	NA	NA	NA	NA	4x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+924	ITC0269	Niyarma-Yik	Niyarma Yik	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+925	ITC0270	NBB-11	NBB 11	NA	NA	NA	NA	4x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+926	ITC0276	Pisang-Madu	Pisang Madu	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+927	ITC0279	Bie-Yeng	Bie Yeng	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+928	ITC0298	Beram	Beram	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+929	ITC0299	Guyod	Guyod	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+930	ITC0306	Medja	Medja	NA	NA	NA	NA	3x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+931	ITC0343	UPLB	UPLB	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+932	ITC0373	Uwati	Uwati	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+933	ITC0427	Bandjim	Bandjim	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+934	ITC0453	Banksii	Banksii	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+935	ITC0460	Padri	Padri	NA	NA	NA	NA	4x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+936	ITC0462	Monjet	Monjet	NA	NA	NA	NA	4x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+937	ITC0464	Higa	Higa	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+938	ITC0467	Banksii	Banksii	NA	NA	NA	NA	4x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+939	ITC0471	Bebek	Bebek	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+940	ITC0507	Pisang-Madu	Pisang Madu	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+941	ITC0591	Kasaska	Kasaska	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+942	ITC0592	Beo	Beo	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+943	ITC0595	Pagatau	Pagatau	NA	NA	NA	NA	3x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+944	ITC0601	Hung-Tu	Hung Tu	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+945	ITC0604	Japaraka-no-1	Japaraka no.1	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+946	ITC0605	Japaraka-no-2	Japaraka no.2	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+947	ITC0606	Hybrid	Hybrid	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+948	ITC0607	Hybrid	Hybrid	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+949	ITC0612	Mambee-Thu	Mambee Thu	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+950	ITC0616	Hawain-2	Hawain 2	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+951	ITC0617	Hawain-3	Hawain 3	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+952	ITC0620	Banksii	Banksii	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+953	ITC0623	Banksii	Banksii	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+954	ITC0773	Mpiajhap	Mpiajhap	NA	NA	NA	NA	2x	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+955	ITC0254	Madang	Madang	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+956	ITC0341	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+957	ITC0428	Higa	Higa	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+958	ITC0432	Pamoti-On	Pamoti-On	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+959	ITC0465	Waigu	Waigu	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+960	ITC0466	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+961	ITC0602	Hawain-3	Hawain 3	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+962	ITC0766	Paliama	Paliama	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+963	ITC0776	Kekiau	Kekiau	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+964	ITC0782	Agul	Agul	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+965	ITC0798	Garunga	Garunga	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+966	ITC0799	Palakaur	Palakaur	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+967	ITC0806	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+968	ITC0809	Maleb	Maleb	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+969	ITC0810	Sihir	Sihir	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+970	ITC0819	Uyam	Uyam	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+971	ITC0826	Yourie	Yourie	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+972	ITC0834	Kungor	Kungor	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+973	ITC0853	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+974	ITC0865	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+975	ITC0867	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+976	ITC0868	Porapora	Porapora	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+977	ITC0879	M-acuminata-ssp-banksii	M. acuminata ssp. banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+978	ITC0882	Kwosriake	Kwosriake	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+979	ITC0884	Awondaeke	Awondaeke	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+980	ITC0885	Musa-acuminata-ssp-banksii	Musa acuminata ssp. banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+981	ITC0896	Musa-acuminata-ssp-banksii	Musa acuminata ssp. banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+982	ITC0935	Sosi	Sosi	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+983	ITC0936	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+984	ITC0938	Buka	Buka	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+985	ITC0954	Ungota	Ungota	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+986	ITC0955	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+987	ITC0984	Yangun-Yefan	Yangun Yefan	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+988	ITC1186	Tangamor	Tangamor	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+989	ITC1189	Gobusik	Gobusik	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+990	ITC1214	Terema	Terema	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+991	ITC1218	M-schizocarpa?	M. schizocarpa?	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+992	ITC1219	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+993	ITC1244	Mapua	Mapua	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+994	ITC1446	Makyughu-II	Makyughu II	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+995	ITC1452	Huti-Shumba-Nyelu	Huti (Shumba Nyelu)	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+996	ITC1454	Makyughu-I	Makyughu I	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+997	ITC1455	Mshale-Mlelembo	Mshale Mlelembo	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+998	ITC1456	Huti-RB	Huti RB	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+999	ITC1466	Nshonowa	Nshonowa	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1000	ITC1468	Kahuti	Kahuti	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1001	ITC1544	Mlelembo	Mlelembo	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1002	ITC1552	Ndyali	Ndyali	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1003	ITC1559	Huti-green-bell	Huti green bell	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1004	ITC1561	Makyughu-2-Mshare	Makyughu 2-Mshare	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1005	ITC1579	Mshare-Mrerembo	Mshare Mrerembo	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1006	ITC1587	Pisang-Klutuk-Wulung	Pisang Klutuk Wulung	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1007	ITC0378	Higa	 Higa	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1008	ITC0779	Tangamor	Tangamor	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1009	ITC0780	Mamakila	Mamakila	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1010	ITC0794	Lalalur	Lalalur	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1011	ITC0796	Kirkirnan	Kirkirnan	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1012	ITC1011	Kospuke	Kospuke	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1013	ITC1209	Hawain-No-2	Hawain No. 2	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1014	ITC1216	Banksii	Banksii	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1015	ITC0532	Khai-Kampengpeth	Khai (Kampengpeth)	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1016	ITC0678	Pisang-Jeran	Pisang Jeran	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1017	ITC1120	Tani	Tani	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1018	ITC0258	Pisang-Madu	Pisang Madu	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1019	ITC0308	Huwundu-Vita	Huwundu Vita	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1020	ITC0310	Morong-Princesa	Morong Princesa	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1021	ITC0314	Pisang-Sipulu	Pisang Sipulu	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1022	ITC0317	Umbarim	Umbarim	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1023	ITC0436	Tin-Yo-I-King	Tin-Yo I-King	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1024	ITC0440	Morong-Princesa	Morong Princesa	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1025	ITC0442	Gu-Nin-Chio	Gu Nin Chio	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1026	ITC0590	Vudu-Papua	Vudu Papua	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1027	ITC0596	Tapo	Tapo	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1028	ITC0653	Pisang-Mas	Pisang Mas	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1029	ITC0663	Khai-Nai-On	Khai Nai On	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1030	ITC0689	Pisang-Bangkahulu	Pisang Bangkahulu	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1031	ITC0695	Pisang-Perecet	Pisang Perecet	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1032	ITC0714	Kirun	Kirun	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1033	ITC0770	Navaradam	Navaradam	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1034	ITC0771	Lalalur	Lalalur	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1035	ITC0777	Pitu	Pitu	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1036	ITC0785	Aivip	Aivip	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1037	ITC0792	Niukin	Niukin	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1038	ITC0797	Pama	Pama	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1039	ITC0816	Kenar	Kenar	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1040	ITC0821	Meleng	Meleng	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1041	ITC0838	Bega	Bega	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1042	ITC0849	Sepi	Sepi	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1043	ITC0869	Mala	Mala	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1044	ITC0887	Grupnai	Grupnai	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1045	ITC0888	Wikago	Wikago	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1046	ITC0892	Pai-ka	Pai ka	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1047	ITC0893	Adina	Adina	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1048	ITC0894	Tainga	Tainga	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1049	ITC0895	Moina	Moina	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1050	ITC0903	Bavaya	Bavaya	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1051	ITC0919	Ivi-Ivi	Ivi Ivi	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1052	ITC1157	Pisang-Oli	Pisang Oli	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1053	ITC0943	Kwaro	Kwaro	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1054	ITC0951	Teengi	Te'engi	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1055	ITC0986	Avalira	Avalira	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1056	ITC0989	Tagomor	Tagomor	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1057	ITC1012	Tango	Tango	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1058	ITC1019	Pongani	Pongani	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1059	ITC1020	Kwonta	Kwonta	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1060	ITC1150	Morong-Princesa	Morong Princesa	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1061	ITC1206	Spiral	Spiral	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1062	ITC1210	Marakudu	Marakudu	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1063	ITC1220	Yalumia	Yalumia	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1064	ITC1243	Kokopo	Kokopo	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1065	ITC1252	Datil	Datil	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1066	ITC1371	Chuoi-cau-man	Chuoi cau man	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1067	NA	Huti-white	Huti-white	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1068	NA	Ndishi	Ndishi	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1069	NA	Mchare-laini	Mchare laini	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1070	ITC0281	Akondro-Mainty	Akondro Mainty	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1071	NA	Kisukari-Mchare	Kisukari Mchare	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1072	ITC1460	Ijihu-Inkundu	Ijihu Inkundu	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1073	ITC1264	FHIA-17	FHIA-17	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1074	ITC1265	FHIA-23	FHIA-23	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1075	ITC1418	FHIA-25	FHIA-25	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1076	ITC1284	SH-3436-6	SH-3436-6	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1077	ITC1307	SH-3640	SH-3640	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1078	ITC1334	SH-3746	SH-3746	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1079	ITC1350	SH-3748	SH-3748	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1080	ITC1351	SH-3756	SH-3756	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1081	ITC1352	SH-3764	SH-3764	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1082	ITC1283	SH-3436-9	SH-3436-9	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1083	ITC1318	SH-3436-9	SH-3436-9	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1084	ITC1324	SH-3751	SH-3751	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1085	ITC1333	SH-3751	SH-3751	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1086	ITC0825	Uzakan	Uzakan	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1087	ITC0942	Yendisi	Yendisi	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1088	ITC0997	Manameg-Green	Manameg Green	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1089	ITC0413	No-110	No. 110	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1090	NA	Pisang-Jari-Buaya	Pisang Jari Buaya	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1091	NA	Morong-Princesa	Morong Princesa	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1092	NA	Pa-Patthalong	Pa Patthalong	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1093	NA	Galeo	Galeo	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1094	NA	Pitu	Pitu	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1095	NA	Bluggoe	Bluggoe	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1096	NA	Tjau-Lagada	Tjau Lagada	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1097	NA	Padri	Padri	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1098	NA	Musa-velutina	Musa velutina	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1099	ITC0015	Essang	Essang	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1100	ITC0017	Gabon-2	Gabon 2	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1101	ITC0022	Mulolou	Mulolou	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1102	ITC0028	Nazika	Nazika	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1103	ITC0033	Bungaoisan	Bungaoisan	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1104	ITC0041	Didiedi	Didiedi	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1105	ITC0044	Niangafelo	Niangafelo	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1106	ITC0054	Diby-2	Diby 2	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1107	ITC0075	Gabon-4	Gabon 4	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1108	ITC0098	Baka	Baka	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1109	ITC0103	Moungeli	Moungeli	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1110	ITC0109	Obino-l-Ewai	Obino l'Ewai	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1111	ITC0111	Agbagba	Agbagba	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1112	ITC0112	Bobby-Tannap	Bobby Tannap	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1113	ITC0121	Ihitisim	Ihitisim	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1114	ITC0128	Tshambunu	Tshambunu	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1115	ITC0142	Msisa	Msisa	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1116	ITC0203	Niabang	Niabang	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1117	ITC0206	Lifongo-Liko	Lifongo Liko	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1118	ITC0208	Atali-Kiogo	Atali Kiogo	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1119	ITC0209	Bise-Egome-2	Bise Egome 2	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1120	ITC0215	Mbi-Egome-1	Mbi Egome 1	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1121	ITC0219	Apem-Pa	Apem Pa	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1122	ITC0223	Apantu	Apantu	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1123	ITC0224	75-19S	75-19S	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1124	ITC0227	Ntanga-6	Ntanga 6	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1125	ITC0229	Abomienu	Abomienu	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1126	ITC0231	Apem-Onniaba	Apem Onniaba	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1127	ITC0232	Egjoga	Egjoga	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1128	ITC0233	Mbirinyong	Mbirinyong	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1129	ITC0235	Obubit-Ukom	Obubit Ukom	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1130	ITC0236	Ngok-Egome	Ngok Egome	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1131	ITC0282	Banane-serpent	Banane serpent	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1132	ITC0324	Red-Plantain-Hembra	Red Plantain Hembra	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1133	ITC0325	Wine-Plantain	Wine Plantain	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1134	ITC0389	Zue-Ekon	Zue Ekon	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1135	ITC0487	Ntanga-3	Ntanga 3	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1136	ITC0489	Mimi-Abue	Mimi Abue	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1137	ITC0496	Cantebalon	Cantebalon	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1138	ITC0499	Obubit-Ntanga-2	Obubit Ntanga 2	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1139	ITC0511	Nselouka	Nselouka	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1140	ITC0515	Okoyo-Ukom	Okoyo Ukom	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1141	ITC0516	Eberedia-Ukom	Eberedia Ukom	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1142	ITC0517	Orishele	Orishele	ITC1325	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1143	ITC0519	Obubit-Ntanga-green-mutant	Obubit Ntanga green mutant	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1144	ITC0520	Mbi-Egome-3	Mbi Egome 3	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1145	ITC0521	Madre-del-Platanar	Madre del Platanar	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1146	ITC0558	Curare	Curare	ITC1165	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1147	ITC0559	Curare-Enano	Curare Enano	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1148	ITC0628	Hartón-Maqueo	Hartón Maqueo	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1149	ITC0630	Dominico-Hartón-Rojo	Dominico Hartón Rojo	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1150	ITC0635	Dominico-macho	Dominico macho	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1151	ITC0636	Dominico-500	Dominico 500	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1152	ITC0641	Dominico-Rojo	Dominico Rojo	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1153	ITC0642	Hartón-Tigre	Hartón Tigre	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1154	ITC0645	Plátano-Hartón	Plátano Hartón	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1155	ITC0964	Ovang	Ovang	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1156	ITC0965	Bo-ahiu-Abue	Bo-ahiu Abue	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1157	ITC1126	Batard	Batard	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1158	ITC1129	Big-Ebanga	Big Ebanga	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1159	ITC1131	Moto-Ebanga	Moto Ebanga	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1160	ITC1132	3-Hands-Planty	3 Hands Planty	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1161	ITC1397	French-Reversion-reddish-pseudostem	French Reversion, reddish pseudostem	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1162	NA	Red-plantain	Red plantain	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1163	NA	Walungu-8	Walungu 8	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1164	NA	Okele	Okele	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1165	NA	O-Ntanga	O. Ntanga 	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1166	NA	AO-157	AO 157	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1167	NA	Mbi-Egome	Mbi Egome	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1168	NA	Mzuzu-nothing-but-green	Mzuzu nothing but green	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1169	NA	Purple-plantain	Purple plantain	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1170	NA	Dwarf-French-Plantain	Dwarf French Plantain	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1171	NA	MOO9	MOO9	NA	NA	NA	NA	NA	NA	Collection-Breeding	IITA	Ibadan	IBA	delamah
+1172	ITC0080	Balbisiana	Balbisiana 	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1173	ITC0084	Mbwazirume	Mbwazirume	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1174	ITC0123	Simili-Radjah	Simili Radjah	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1175	ITC0245	Safet-Velchi	Safet Velchi	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1176	ITC0249	Calcutta-4	Calcutta 4	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1177	ITC0277	Leite	Leite	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1178	ITC0312	Pisang-Jari-Buaya	Pisang Jari Buaya	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1179	ITC0361	Blue-Java	Blue Java	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1180	ITC0450	Pisang-Palembang	Pisang Palembang	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1181	ITC0472	Pelipita	Pelipita	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1182	ITC0575	Red-Dacca	Red Dacca	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1183	ITC0587	Pisang-Rajah-South-Johnstone	Pisang Rajah (South Johnstone)	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1184	ITC0649	Foconah	Foconah	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1185	ITC0653	Pisang-Mas	Pisang Mas	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1186	ITC0654	Petite-Naine	Petite Naine	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1187	ITC0659	Namwa-Khom	Namwa Khom	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1188	ITC0662	Khai-Thong-Ruang	Khai Thong Ruang	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1189	ITC0766	Paliama	Paliama	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1190	ITC0767	Dole	Dole	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1191	ITC0769	Figue-Pomme-Géante	Figue Pomme Géante	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1192	ITC0825	Uzakan	Uzakan	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1193	ITC1120	Tani	Tani	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1194	ITC1121	Pisang-Lilin	Pisang Lilin	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1195	ITC1122	Gros-Michel	Gros-Michel	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1196	ITC1187	Tomolo	Tomolo	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1197	ITC1287	Pisang-Berangan	Pisang Berangan	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1198	ITC1441	Pisang-Ceylan	Pisang Ceylan	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1199	ITC1483	Monthan	Monthan	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1200	ITC1177	Zebrina	Zebrina	NA	NA	NA	NA	NA	NA	Taxonomic-ref-collection	IITA	Ibadan	IBA	delamah
+1201	NA	Bobby-Tannap	Bobby Tannap	NA	NA	NA	NA	NA	NA	Plantain-triploid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1202	NA	Obino-Lewai	Obino L'ewai	NA	NA	NA	NA	NA	NA	Plantain-triploid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1203	NA	Mbi-Egome	Mbi Egome	NA	NA	NA	NA	NA	NA	Plantain-triploid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1204	NA	EKUL-1142	EKUL 1142	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1205	NA	1297-3	1297-3	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1206	NA	1448-1	1448-1	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1207	NA	2829-62	2829-62	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1208	NA	8075-7	8075-7	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1209	ITC1437	TMB2x-9128-3	TMB2x 9128-3	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1210	NA	9128-3	9128-3	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1211	ITC0425	SH-3142	SH 3142	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1212	NA	SH-3362	SH 3362	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1213	NA	25447-S7-R3P4	25447-S7 R3P4	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1214	NA	25447-S7-R4P11	25447-S7 R4P11	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1215	NA	25447-S7-R4P30	25447-S7 R4P30	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1216	NA	25447-S7-R5P26-4	25447-S7 R5P26(4)	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1217	NA	25447-S7-R8P27	25447-S7 R8P27	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1218	NA	25447-S7-R11P10	25447-S7 R11P10	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1219	NA	25291-1-R7P24	25291-1 R7P24	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1220	NA	25291-1-R3P12	25291-1 R3P12	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1221	NA	25447-S7-R2P8	25447-S7 R2P8	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1222	NA	25291-1-R1P3	25291-1 R1P3	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1223	NA	25291-S4-R6P13	25291-S4 R6P13	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1224	NA	25291-1-R10P13	25291-1 R10P13	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1225	NA	25291-S26-R10P34	25291-S26 R10P34	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1226	NA	25291-1A	25291-1A	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1227	NA	25291-S26	25291-S26  	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1228	NA	25291-S62	25291-S62	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1229	NA	25291-S89	25291-S89	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1230	NA	25447-S7	25447-S7	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1231	NA	25291-1	25291-1	NA	NA	NA	NA	NA	NA	Improved-diploid	IITA	Ibadan	IBA	delamah
+1232	NA	612-74	612-74	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1233	NA	548-4-PITA-1	548-4 (PITA 1)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1234	NA	548-9-PITA-2	548-9 (PITA 2)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1235	NA	5511-2-PITA-3	5511-2 (PITA 3)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1236	NA	582-4-PITA-4	582-4 (PITA 4)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1237	NA	2796-5-PITA-5	2796-5 (PITA 5)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1238	NA	4698-1-PITA-6	4698-1 (PITA 6)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1239	NA	1658-4-PITA-7	1658-4 (PITA 7)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1240	NA	7002-1-PITA-8	7002-1 (PITA 8)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1241	NA	2637-49-PITA-11	2637-49 (PITA 11)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1242	NA	7356-1-PITA-18	7356-1 (PITA 18)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1243	NA	6930-1-PITA-12	6930-1 (PITA 12)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1244	NA	7152-2-PITA-14	7152-2 (PITA 14)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1245	NA	4479-1-PITA-17	4479-1 (PITA 17)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1246	NA	5295-1-BITA-3	5295-1 (BITA 3)	NA	NA	NA	NA	NA	NA	tetraploid-hybrid-used-as-female-parent	IITA	Ibadan	IBA	delamah
+1247	NA	23688-2-PITA-21	23688-2 (PITA 21)	NA	NA	NA	NA	NA	NA	Secondary-triploid	IITA	Ibadan	IBA	delamah
+1248	NA	23907-18-PITA-22	23907-18 (PITA 22)	NA	NA	NA	NA	NA	NA	Secondary-triploid	IITA	Ibadan	IBA	delamah
+1249	NA	25333-S90-PITA-23	25333-S90 (PITA 23)	NA	NA	NA	NA	NA	NA	Secondary-triploid	IITA	Ibadan	IBA	delamah
+1250	NA	25344-18-PITA-24	25344-18 (PITA 24)	NA	NA	NA	NA	NA	NA	Secondary-triploid	IITA	Ibadan	IBA	delamah
+1251	NA	25729-5-PITA-25	25729-5 (PITA 25)	NA	NA	NA	NA	NA	NA	Secondary-triploid	IITA	Ibadan	IBA	delamah
+1252	NA	26636-2-PITA-26	26636-2 (PITA 26)	NA	NA	NA	NA	NA	NA	Secondary-triploid	IITA	Ibadan	IBA	delamah
+1253	NA	26285-PITA-27	26285 (PITA 27)	NA	NA	NA	NA	NA	NA	Secondary-triploid	IITA	Ibadan	IBA	delamah
+1254	NA	30456-3-BITA-8	30456-3 (BITA 8)	NA	NA	NA	NA	NA	NA	Secondary-triploid	IITA	Ibadan	IBA	delamah
+1255	NA	24408-S22-BITA-7	24408-S22 (BITA 7)	NA	NA	NA	NA	NA	NA	Secondary-triploid	IITA	Ibadan	IBA	delamah
+1256	NA	30804	30804	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1257	NA	33675	33675	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1258	NA	33657-3	33657-3	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1259	NA	33657-2	33657-2	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1260	NA	33448-2	33448-2	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1261	NA	33448-1	33448-1	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1262	NA	30456-2	30456-2	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1263	NA	30456-1	30456-1	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1264	NA	29650	29650	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1265	NA	29603	29603	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1266	NA	28401	28401	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1267	NA	SH3217	SH3217	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1268	NA	9839-3	9839-3 	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1269	NA	16952	16952	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1270	NA	9719-7	9719-7	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1271	NA	9839-2	9839-2	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1272	NA	26365-4	26365-4	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1273	NA	25144-S8	25144-S8	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1274	NA	15108-6	15108-6	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1275	NA	27511	27511	NA	NA	NA	NA	NA	NA	hybrid	IITA	Ibadan	IBA	delamah
+1276	NA	BRS-Platina	BRS  Platina	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
+1277	NA	BRS-Princesa	BRS   Princesa	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
+1278	NA	BRS-Tropical	BRS Tropical	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
+1279	NA	BRS-Japira	BRS Japira	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
+1280	NA	BRS-Victoria	BRS Victoria	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
+1281	NA	BRS-Caprichosa	BRS Caprichosa	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
+1282	NA	BRS-Garantida	BRS Garantida	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
+1283	NA	BRS-Pacovan-Ken	BRS Pacovan Ken	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
+1284	NA	BRS-Preciosa	BRS Preciosa	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
+1285	NA	BRS-Thap-Maeo	BRS Thap Maeo	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
+1286	NA	Pacovan	Pacovan	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
+1287	NA	Prata-Ana	Prata Ana	NA	NA	NA	NA	NA	NA	EMBRAPA-MarketPlace-germplasm	IITA	Ibadan	IBA	delamah
