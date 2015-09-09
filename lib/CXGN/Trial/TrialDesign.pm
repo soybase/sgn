@@ -330,13 +330,14 @@ sub _get_alpha_lattice_design {
     $block_size = $self->get_block_size();
     print STDERR "block size = $block_size\n";
     if ($block_size < 3) {
-      die "Block size must be greater than 2 for alpha lattice design\n";
-    }
-    #	print "stock_list: ".scalar(@stock_list)."block_size: $block_size\n";
-    if (scalar(@stock_list) % $block_size != 0) {
-      #die "Number of stocks (".scalar(@stock_list).") for alpha lattice design is not divisible by the block size ($block_size)\n";
-	}
-    else {
+		die "Block size must be greater than 2 for alpha lattice design\n";
+		}
+		#	print "stock_list: ".scalar(@stock_list)."block_size: $block_size\n";
+		#if (scalar(@stock_list) % $block_size != 0) {
+	if (scalar(@stock_list) % $block_size == 0) {
+		#die "Number of stocks (".scalar(@stock_list).") for alpha lattice design is not divisible by the block size ($block_size)\n";
+		}
+	else {
 		my $dummy_var = scalar(@stock_list) % $block_size;		  
 		my $stocks_to_add = $block_size - $dummy_var;
 #		print "$stock_list\n";
@@ -344,15 +345,18 @@ sub _get_alpha_lattice_design {
 			push(@stock_list, $stock_list[0]);
 		}
 		$self->set_stock_list(\@stock_list);
-	}
+		}
    
-    $number_of_blocks = scalar(@stock_list)/$block_size;
-    if ($number_of_blocks < $block_size) {
-      die "The number of blocks ($number_of_blocks) for alpha lattice design must not be less than the block size ($block_size)\n";
-    }
-  } else {
+		$number_of_blocks = scalar(@stock_list)/$block_size;
+	if ($number_of_blocks < $block_size) {
+		die "The number of blocks ($number_of_blocks) for alpha lattice design must not be less than the block size ($block_size)\n";
+		}
+  } 
+  
+  else {
     die "No block size specified\n";
   }
+  
   if ($self->has_number_of_reps()) {
     $number_of_reps = $self->get_number_of_reps();
     if ($number_of_reps < 2) {

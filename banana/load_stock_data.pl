@@ -158,6 +158,8 @@ my @columns = $spreadsheet->column_labels();
 # LABEL    NAME    UNIQUENAME    GENOTYPE    SYNONYM1    SYNONYM2    PLOIDY    GERMPLASM_GROUP    CATEGORY    INSTITUTE    LOCATION    LOCATION_CODE    CURATOR    PROJECT_NAME    PROJECT_DESCRIPTION    PROJECT_TYPE    YEAR
 # 1    Calcutta-4    Calcutta-4_ITC0249_2015_Collection_IITA_SEN    Calcutta-4    ITC0249        2X    AA    Collection    IITA    Sendusu    SEN    mibatte    2015_Collection_IITA_SEN    Collection, IITA-Sendusu, 2015    2015_banana_germplasm    2015
 
+#query1 = insert into db (name, description, urlprefix, url) values ('MGIS', 'Musa germplasm information system','http', 'crop-diversity.org/mgis/accession-search?accession_name=&accession_numbers=');
+#my $sth = $dbh->prepare($query1);
 
 my ($new_count,$existing, $count, $syn_count, $merge);
 my $coderef= sub  {
@@ -184,6 +186,10 @@ my $coderef= sub  {
         my $year = $spreadsheet->value_at($num, "YEAR");
         my $project_description = $spreadsheet->value_at($num, "PROJECT_DESCRIPTION");
         #my $project_description = "$name $project_type ($year) $location";
+      
+       # my $query2 = insert into stock_dbxref (dbxref_id, stock_id) values (?, ?);
+       # my $sth = $dbh -> prepare($query2);
+       # $sth->execute($dbxref_id,$stock_id);
        
         print"project descr is $project_description /n";
        
@@ -224,6 +230,12 @@ my $coderef= sub  {
         print "MERGE: stocks " . join (", " , @stock_names) . "need to be merged\n";
         $merge .= "$accession : merge stock_ids :  " .join (", " , @stock_ids) . "( names: " . join (" | " , @stock_names) . ")\n";
     }
+    
+    # find or create db MGIS -db
+    # for each accession enter into stock_dbref table -dbxref
+    # enter dbxref stcok table stock-dbxref
+    # stock
+    
     my $stock = $existing_stock ? $existing_stock :
         $schema->resultset("Stock::Stock")->find_or_create(
         { organism_id => $organism_id,
