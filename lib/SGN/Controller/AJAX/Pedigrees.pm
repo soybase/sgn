@@ -166,12 +166,11 @@ sub check_stocks {
     my $error_alert = "";
     
     foreach my $stock_name (@$stock_names) {	
-	my $stock;
 	my $number_of_stocks_found;
 	my $stock_lookup = CXGN::Stock::StockLookup->new(schema => $schema);
 	$stock_lookup->set_stock_name($stock_name);
-	$stock = $stock_lookup->get_stock_exact();
-	$number_of_stocks_found = $stock_lookup->get_matching_stock_count();
+	my $stock_rs = $stock_lookup->get_stock_exact();
+	$number_of_stocks_found = $stock_rs->count();
 	if ($number_of_stocks_found > 1) {
 	    $errors{$stock_name} = "Multiple stocks found matching $stock_name\n";
 	}
