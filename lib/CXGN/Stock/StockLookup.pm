@@ -129,7 +129,7 @@ sub _get_stock_resultset_exact {
 	      'lower(uniquename)' => lc($stock_name),
 	     },
 	     {
-	      join => { 'stockprops' => 'type'} ,
+#####	      join => { 'stockprops' => 'type'} ,
 	      distinct => 1,
 	     }
 	    );
