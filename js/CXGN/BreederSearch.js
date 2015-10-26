@@ -384,7 +384,7 @@ window.onload = function initialize() {
 
     	jQuery.ajax( { 
 	    url: '/ajax/breeder/search/stocks',
-	    timeout: 60000,
+	    timeout: 200000,
 	    method: 'POST',
 	    data: {'select1':select1, 'select2':select2, 'c1_data': c1_data.join(","),  'c2_data': c2_data.join(","), 'select3':select3, 'select4': select4, 'c3_data': c3_data.join(","), 'genotypes': get_genotype_checkbox()  },
 	    beforeSend: function(){
