@@ -21,6 +21,12 @@ jQuery( document ).ready( function() {
                 json: true,
                 post: function () { },
                 complete: function (response) {
+                    if (response.success == 1){
+                        check_async_status(response.job_id);
+                    } else {
+                        hidePhenotypeUploadWorkingModal();
+                        alert('An Error Occured Submitting Async Phenotype Upload.');
+                    }
                     hidePhenotypeUploadWorkingModal();
                     displayPhenotypeUploadStoreResponse(response, "spreadsheet");
                 },
@@ -97,6 +103,29 @@ jQuery( document ).ready( function() {
         });  
 
 });
+
+function check_async_status(job_id){
+    var done = false;
+    while (done == false) {
+        jQuery.ajax({
+            async: false,
+            url: '/async/check/'+jobid,
+            success: function(response) {
+                if (response.status === "Complete") {
+                    done = true;
+                    finish_blast(jobid, seq_count);
+                } else {
+                    update_status('.');
+                }
+            },
+            error: function(response) {
+                hidePhenotypeUploadWorkingModal(); 
+                alert("An error occurred checking async job status.");
+                done=true;
+            }
+        });
+    }
+}
 
 function initializeUploadPhenotype(uploadFile, message, file_form, url) {
     if (uploadFile === '') {

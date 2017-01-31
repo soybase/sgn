@@ -28,24 +28,42 @@ use Data::Dumper;
 use Carp qw /croak/ ;
 use Pod::Usage;
 use CXGN::Phenotypes::StorePhenotypes;
-use Storable qw | nstore retrieve freeze thaw |;
-$Storable::Eval = 1;
-$Storable::forgive_me = 1;
+#use Storable qw | nstore retrieve freeze thaw |;
+use JSON;
+use Bio::Chado::Schema;
+use CXGN::Metadata::Schema;
+use CXGN::Phenome::Schema;
 
-our ($opt_i);
+our ($opt_i, $opt_D, $opt_U, $opt_p);
 
-getopts('i:');
+getopts('i:D:U:p:');
 
-if (!$opt_i) {
-    die "Must provide options -i (input)\n";
+if (!$opt_i || !$opt_D || !$opt_U || !$opt_p) {
+    die "Must provide options -i (input) -D (database name) -U (db user) -p (dbpass) \n";
 }
 
-my $input_hash = thaw($opt_i);
+my $bcs_schema = Bio::Chado::Schema->connect(
+    "dbi:Pg:database=$opt_D", # DSN Line
+    $opt_U,                    # Username
+    $opt_p           # Password
+);
+my $metadata_schema = CXGN::Metadata::Schema->connect(
+    "dbi:Pg:database=$opt_D", # DSN Line
+    $opt_U,                    # Username
+    $opt_p           # Password
+);
+my $phenome_schema = CXGN::Phenome::Schema->connect(
+    "dbi:Pg:database=$opt_D", # DSN Line
+    $opt_U,                    # Username
+    $opt_p           # Password
+);
+
+my $input_hash = decode_json($opt_i);
 
 my $store_phenotypes = CXGN::Phenotypes::StorePhenotypes->new(
-    bcs_schema=>$input_hash->{bcs_schema},
-    metadata_schema=>$input_hash->{metadata_schema},
-    phenome_schema=>$input_hash->{phenome_schema},
+    bcs_schema=>$bcs_schema,
+    metadata_schema=>$metadata_schema,
+    phenome_schema=>$phenome_schema,
     user_id=>$input_hash->{user_id},
     stock_list=>$input_hash->{stock_list},
     trait_list=>$input_hash->{trait_list},
@@ -57,4 +75,5 @@ my $store_phenotypes = CXGN::Phenotypes::StorePhenotypes->new(
 );
 my ($verified_warning, $verified_error) = $store_phenotypes->verify();
 
-return ($verified_warning, $verified_error);
+print STDOUT $verified_warning."\n";
+print STDOUT $verified_error."\n";

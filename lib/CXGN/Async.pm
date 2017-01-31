@@ -13,7 +13,8 @@ my $job = CXGN::Async->new({
     basepath=>$c->config->{basepath}
 });
 my $job_id = $job->run_job();
-my $status = $job->status($job_id);
+my $status = $job->get_status($job_id);
+my $result = $job->get_result($job_id);
 
 =head1 DESCRIPTION
 
@@ -54,7 +55,27 @@ has 'cluster_shared_tempdir' => ( isa => 'Str',
     required => 1,
 );
 
+has 'tempfiles_subdir' => ( isa => 'Str',
+    is => 'rw',
+    required => 1,
+);
+
 has 'basepath' => ( isa => 'Str',
+    is => 'rw',
+    required => 1,
+);
+
+has 'database_name' => ( isa => 'Str',
+    is => 'rw',
+    required => 1,
+);
+
+has 'database_user' => ( isa => 'Str',
+    is => 'rw',
+    required => 1,
+);
+
+has 'database_password' => ( isa => 'Str',
     is => 'rw',
     required => 1,
 );
@@ -78,29 +99,27 @@ sub run_job {
       $job_type."_XXXXXX",
       DIR=> $tmp_output,
     );
-
+    print STDERR Dumper $file;
     my $job_id = basename($file);
     my @command = ('perl');
     if ($job_type eq 'phenotype_upload_verify'){
         push @command, $self->basepath().'/bin/async/phenotype_upload_verify.pl';
         push @command, '-i';
         push @command, $self->inputs();
+        push @command, '-D';
+        push @command, $self->database_name();
+        push @command, '-U';
+        push @command, $self->database_user();
+        push @command, '-p';
+        push @command, $self->database_password();
     }
-
+    print STDERR Dumper \@command;
     my $job;
     eval {
         $job = CXGN::Tools::Run->run_cluster(
             @command,
             {
                 temp_base => $tmp_output,
-                #queue => $c->config->{'web_cluster_queue'},
-                #working_dir => $tmp_output,
-
-                # temp_base => $c->config->{'cluster_shared_tempdir'},
-                # queue => $c->config->{'web_cluster_queue'},
-                # working_dir => $c->config->{'cluster_shared_tempdir'},
-
-                # don't block and wait if the cluster looks full
                 max_cluster_jobs => 1_000_000_000,
                 backend => 'slurm'
             }
@@ -118,7 +137,7 @@ sub run_job {
     return $job_id;
 }
 
-sub status {
+sub get_status {
     my $self = shift;
     my $job_id = shift;
     my $job_type = $self->job_type();
@@ -129,8 +148,37 @@ sub status {
     if ( $job->alive ){
         return "Running";
     } else {
+        # the job has finished
+        # copy the cluster temp file back into "apache space"
+        my $result_file = $self->jobid_to_file($job_id.".out");
+
+        my $job_out_file = $job->out_file();
+        for( 1..10 ) {
+            uncache($job_out_file);
+            last if -f $job_out_file;
+            sleep 1;
+        }
+        -f $job_out_file or die "job output file ($job_out_file) doesn't exist";
+        -r $job_out_file or die "job output file ($job_out_file) not readable";
+
+        copy($job_out_file, $result_file) or die "Can't copy result file '$job_out_file' to $result_file ($!)";
+
+      	#clean up the job tempfiles
+      	$job->cleanup();
         return "Complete";
     }
+}
+
+sub get_result {
+    my $self = shift;
+    my $job_id = shift;
+    my $result_file = $self->jobid_to_file($job_id.".out");
+}
+
+sub jobid_to_file {
+    my $self = shift;
+    my $job_id = shift;
+    return File::Spec->catfile($self->basepath(), $self->tempfiles_subdir(), "$job_id");
 }
 
 1;

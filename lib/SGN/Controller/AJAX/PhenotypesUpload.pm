@@ -28,10 +28,7 @@ use File::Copy;
 use Data::Dumper;
 use CXGN::Phenotypes::StorePhenotypes;
 use CXGN::Async;
-use Storable qw | nstore retrieve store freeze |;
-use File::Temp qw | tempfile |;
-$Storable::Deparse = 1;
-$Storable::forgive_me = 1;
+use JSON;
 
 BEGIN { extends 'Catalyst::Controller::REST' }
 
@@ -45,9 +42,6 @@ __PACKAGE__->config(
 sub upload_phenotype_verify :  Path('/ajax/phenotype/upload_verify') : ActionClass('REST') { }
 sub upload_phenotype_verify_POST : Args(1) {
     my ($self, $c, $file_type) = @_;
-    my $schema = $c->dbic_schema("Bio::Chado::Schema");
-    my $metadata_schema = $c->dbic_schema("CXGN::Metadata::Schema");
-    my $phenome_schema = $c->dbic_schema("CXGN::Phenome::Schema");
     my $user_id = $c->can('user_exists') ? $c->user->get_object->get_sp_person_id : $c->sp_person_id;
 
     my ($success_status, $error_status, $parsed_data, $plots, $traits, $phenotype_metadata, $timestamp_included, $overwrite_values, $image_zip) = _prep_upload($c, $file_type);
@@ -62,9 +56,6 @@ sub upload_phenotype_verify_POST : Args(1) {
     }
 
     my %input = (
-        bcs_schema=>$schema,
-        metadata_schema=>$metadata_schema,
-        phenome_schema=>$phenome_schema,
         user_id=>$user_id,
         stock_list=>$plots,
         trait_list=>$traits,
@@ -73,27 +64,27 @@ sub upload_phenotype_verify_POST : Args(1) {
         metadata_hash=>$phenotype_metadata,
         image_zipfile_path=>$image_zip,
     );
-    
-    my $tmp_file = $c->config->{cluster_shared_tempdir}."/async_input";
-    mkdir $tmp_file if ! -d $tmp_file;
-    
-    my ($fh, $file) = tempfile( 
-      "asyncinput_XXXXXX",
-      DIR=> $tmp_file,
-    );
-    my $serialized = freeze \%input;
 
     my $job = CXGN::Async->new({
         job_type=>'phenotype_upload_verify',
-        inputs=>$serialized,
+        inputs=>encode_json \%input,
         cluster_shared_tempdir=>$c->config->{cluster_shared_tempdir},
-        basepath=>$c->config->{basepath}
+        tempfiles_subdir=>$c->tempfiles_subdir('phenotype_upload_verify'),
+        basepath=>$c->config->{basepath},
+        database_name=>$c->config->{dbname},
+        database_user=>$c->config->{dbuser},
+        database_password=>$c->config->{dbpass},
     });
     my $job_id = $job->run_job();
     print STDERR Dumper $job_id;
-    my $status = $job->status($job_id);
 
-    $c->stash->{rest} = {success => 1};
+    if ($job_id){
+        $c->stash->{rest} = { success => 1, job_id => $job_id};
+        $c->detach();
+    } else {
+        $c->stash->{rest} = { error => 1 };
+        $c->detach();
+    }
 }
 
 sub upload_phenotype_store :  Path('/ajax/phenotype/upload_store') : ActionClass('REST') { }
