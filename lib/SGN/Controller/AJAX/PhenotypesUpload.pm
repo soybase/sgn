@@ -27,6 +27,11 @@ use File::Spec::Functions;
 use File::Copy;
 use Data::Dumper;
 use CXGN::Phenotypes::StorePhenotypes;
+use CXGN::Async;
+use Storable qw | nstore retrieve store freeze |;
+use File::Temp qw | tempfile |;
+$Storable::Deparse = 1;
+$Storable::forgive_me = 1;
 
 BEGIN { extends 'Catalyst::Controller::REST' }
 
@@ -56,7 +61,7 @@ sub upload_phenotype_verify_POST : Args(1) {
         $timestamp = 1;
     }
 
-    my $store_phenotypes = CXGN::Phenotypes::StorePhenotypes->new(
+    my %input = (
         bcs_schema=>$schema,
         metadata_schema=>$metadata_schema,
         phenome_schema=>$phenome_schema,
@@ -68,20 +73,27 @@ sub upload_phenotype_verify_POST : Args(1) {
         metadata_hash=>$phenotype_metadata,
         image_zipfile_path=>$image_zip,
     );
+    
+    my $tmp_file = $c->config->{cluster_shared_tempdir}."/async_input";
+    mkdir $tmp_file if ! -d $tmp_file;
+    
+    my ($fh, $file) = tempfile( 
+      "asyncinput_XXXXXX",
+      DIR=> $tmp_file,
+    );
+    my $serialized = freeze \%input;
 
-    my $warning_status;
-    my ($verified_warning, $verified_error) = $store_phenotypes->verify();
-    if ($verified_error) {
-        push @$error_status, $verified_error;
-        $c->stash->{rest} = {success => $success_status, error => $error_status };
-        return;
-    }
-    if ($verified_warning) {
-        push @$warning_status, $verified_warning;
-    }
-    push @$success_status, "File data verified. Plot names and trait names are valid.";
+    my $job = CXGN::Async->new({
+        job_type=>'phenotype_upload_verify',
+        inputs=>$serialized,
+        cluster_shared_tempdir=>$c->config->{cluster_shared_tempdir},
+        basepath=>$c->config->{basepath}
+    });
+    my $job_id = $job->run_job();
+    print STDERR Dumper $job_id;
+    my $status = $job->status($job_id);
 
-    $c->stash->{rest} = {success => $success_status, warning => $warning_status, error => $error_status};
+    $c->stash->{rest} = {success => 1};
 }
 
 sub upload_phenotype_store :  Path('/ajax/phenotype/upload_store') : ActionClass('REST') { }
