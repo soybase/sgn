@@ -1,4 +1,8 @@
 
+var submit_store_button;
+var submit_verify_button;
+var upload_phenotype_status;
+
 jQuery( document ).ready( function() { 
 
     //For Spreadsheet Upload
@@ -10,8 +14,12 @@ jQuery( document ).ready( function() {
         json: true,
         post: function () { },
         complete: function (response) {
-            hidePhenotypeUploadWorkingModal();
+            var job_id;
             displayPhenotypeUploadVerifyResponse(response, "spreadsheet");
+            if (response.job_id){
+                job_id = response.job_id;
+                check_async_status(job_id, 'phenotype_upload_verify');
+            }
 
             jQuery("#upload_spreadsheet_phenotype_submit_store").click( function() {
                 initializeUploadPhenotype(jQuery("#upload_spreadsheet_phenotype_file_input").val(), "Storing Spreadsheet File and Data", "#upload_spreadsheet_phenotype_file_form", "/ajax/phenotype/upload_store/spreadsheet");
@@ -25,7 +33,7 @@ jQuery( document ).ready( function() {
                         check_async_status(response.job_id);
                     } else {
                         hidePhenotypeUploadWorkingModal();
-                        alert('An Error Occured Submitting Async Phenotype Upload.');
+                        alert('An Error Occured Submitting Async Phenotype Upload Store.');
                     }
                     hidePhenotypeUploadWorkingModal();
                     displayPhenotypeUploadStoreResponse(response, "spreadsheet");
@@ -104,27 +112,74 @@ jQuery( document ).ready( function() {
 
 });
 
-function check_async_status(job_id){
-    var done = false;
-    while (done == false) {
+var checking;
+function check_async_status(job_id, job_type){
+    updatePhenotypeUploadWorkingModal("Processing job: "+job_id);
+    checking = setInterval(function() {
         jQuery.ajax({
             async: false,
-            url: '/async/check/'+jobid,
+            url: '/async/check/'+job_type+'/'+job_id,
             success: function(response) {
+                console.log(response);
                 if (response.status === "Complete") {
-                    done = true;
-                    finish_blast(jobid, seq_count);
-                } else {
-                    update_status('.');
+                    get_result(job_id, job_type);
                 }
             },
             error: function(response) {
                 hidePhenotypeUploadWorkingModal(); 
                 alert("An error occurred checking async job status.");
-                done=true;
+                clearInterval(checking);
             }
         });
-    }
+    }, 500);
+}
+
+function get_result(job_id, job_type){
+    clearInterval(checking);
+    jQuery.ajax({
+        async: false,
+        url: '/async/result/'+job_type+'/'+job_id,
+        success: function(response) {
+            console.log(response);
+            hidePhenotypeUploadWorkingModal();
+            if (response.success) {
+                if (job_type == 'phenotype_upload_verify'){
+                    var verified_warning = response.result[0];
+                    var verified_error = response.result[1];
+                    console.log(verified_warning);
+                    console.log(verified_error);
+                    var message_text = "<ul class='list-group'>";
+                    if (verified_error && verified_error != "\n"){
+                        jQuery(submit_store_button).attr('disabled', true);
+                        message_text += "<li class='list-group-item list-group-item-danger'>";
+                	    message_text += "<span class='badge'><span class='glyphicon glyphicon-remove'></span></span>";
+                	    message_text += verified_error;
+                	    message_text += "</li>";
+                    }
+                    if (verified_warning && verified_warning != "\n"){
+                        message_text += "<li class='list-group-item list-group-item-warning'>";
+                        message_text += "<span class='badge'><span class='glyphicon glyphicon-asterisk'></span></span>";
+                        message_text += "Warnings are shown in yellow. Either fix the file and try again or continue with storing the data.<hr>Warnings notifying you that values already exist in the database can be disregarded if your data is indeed new.<hr>To overwrite previously stored values: <input type='checkbox' id='phenotype_upload_overwrite_values' name='phenotype_upload_overwrite_values' /><br><br>";
+                        message_text += "</li>";
+                        message_text += "<li class='list-group-item list-group-item-warning'>";
+                        message_text += "<span class='badge'><span class='glyphicon glyphicon-asterisk'></span></span>";
+                        message_text += verified_warning;
+                        message_text += "</li>";
+                    }
+                    message_text += "</ul>";
+                    console.log(message_text);
+                    console.log(upload_phenotype_status);
+                    jQuery(upload_phenotype_status).append(message_text);
+                }
+            } else {
+                alert("An error occurred getting result.");
+            }
+        },
+        error: function(response) {
+            hidePhenotypeUploadWorkingModal(); 
+            alert("An error occurred getting result.");
+        }
+    });
 }
 
 function initializeUploadPhenotype(uploadFile, message, file_form, url) {
@@ -142,6 +197,10 @@ function showPhenotypeUploadWorkingModal(message) {
     jQuery('#working_modal').modal("show");
 }
 
+function updatePhenotypeUploadWorkingModal(message) {
+    jQuery('#working_msg').html(message);
+}
+
 function hidePhenotypeUploadWorkingModal() {
     jQuery('#working_modal').modal("hide");
 }
@@ -149,59 +208,45 @@ function hidePhenotypeUploadWorkingModal() {
 
 function displayPhenotypeUploadVerifyResponse(response, upload_type) {
     if (upload_type == "spreadsheet") {
-	var submit_verify_button = "#upload_spreadsheet_phenotype_submit_verify";
-	var submit_store_button = "#upload_spreadsheet_phenotype_submit_store";
-	var upload_phenotype_status = "#upload_phenotype_spreadsheet_verify_status";
+        submit_verify_button = "#upload_spreadsheet_phenotype_submit_verify";
+        submit_store_button = "#upload_spreadsheet_phenotype_submit_store";
+        upload_phenotype_status = "#upload_phenotype_spreadsheet_verify_status";
     }
     else if (upload_type == "datacollector") {
-	var submit_verify_button = "#upload_datacollector_phenotype_submit_verify";
-	var submit_store_button = "#upload_datacollector_phenotype_submit_store";
-	var upload_phenotype_status = "#upload_phenotype_datacollector_verify_status";
+        submit_verify_button = "#upload_datacollector_phenotype_submit_verify";
+        submit_store_button = "#upload_datacollector_phenotype_submit_store";
+        upload_phenotype_status = "#upload_phenotype_datacollector_verify_status";
     }
     else if (upload_type == "fieldbook") {
-	var submit_verify_button = "#upload_fieldbook_phenotype_submit_verify";
-	var submit_store_button = "#upload_fieldbook_phenotype_submit_store";
-	var upload_phenotype_status = "#upload_phenotype_fieldbook_verify_status";
+        submit_verify_button = "#upload_fieldbook_phenotype_submit_verify";
+        submit_store_button = "#upload_fieldbook_phenotype_submit_store";
+        upload_phenotype_status = "#upload_phenotype_fieldbook_verify_status";
     }
 
     jQuery(submit_verify_button).attr('disabled', true);
     var message_text = "<hr><ul class='list-group'>";
     if (response.success) {
-	var arrayLength = response.success.length;
-	for (var i = 0; i < arrayLength; i++) {
-	    message_text += "<li class='list-group-item list-group-item-success'>";
-	    message_text += "<span class='badge'><span class='glyphicon glyphicon-ok'></span></span>";
-	    message_text += response.success[i];
-	    message_text += "</li>";
- 	}
-	jQuery(submit_store_button).attr('disabled', false);
+        var arrayLength = response.success.length;
+        for (var i = 0; i < arrayLength; i++) {
+            message_text += "<li class='list-group-item list-group-item-success'>";
+            message_text += "<span class='badge'><span class='glyphicon glyphicon-ok'></span></span>";
+            message_text += response.success[i];
+            message_text += "</li>";
+        	}
+        jQuery(submit_store_button).attr('disabled', false);
     }
     if (response.error) {
         var errorarrayLength = response.error.length;
-	for (var i = 0; i < errorarrayLength; i++) {
-	    message_text += "<li class='list-group-item list-group-item-danger'>";
-	    message_text += "<span class='badge'><span class='glyphicon glyphicon-remove'></span></span>";
-	    message_text += response.error[i];
-	    message_text += "</li>";
-  	}
-	if (errorarrayLength > 0) {
-	   jQuery(submit_store_button).attr('disabled', true);
-	}
-    }
-    if (response.warning) {
-        var warningarrayLength = response.warning.length;
-	if (warningarrayLength > 0) {
-	    message_text += "<li class='list-group-item list-group-item-warning'>";
-	    message_text += "<span class='badge'><span class='glyphicon glyphicon-asterisk'></span></span>";
-	    message_text += "Warnings are shown in yellow. Either fix the file and try again or continue with storing the data.<hr>Warnings notifying you that values already exist in the database can be disregarded if your data is indeed new.<hr>To overwrite previously stored values: <input type='checkbox' id='phenotype_upload_overwrite_values' name='phenotype_upload_overwrite_values' /><br><br>";
-	    message_text += "</li>";
-	    for (var i = 0; i < warningarrayLength; i++) {
-	        message_text += "<li class='list-group-item list-group-item-warning'>";
-	       	message_text += "<span class='badge'><span class='glyphicon glyphicon-asterisk'></span></span>";
-	       	message_text += response.warning[i];
-	       	message_text += "</li>";
-  	    }
-	}
+        for (var i = 0; i < errorarrayLength; i++) {
+            message_text += "<li class='list-group-item list-group-item-danger'>";
+            message_text += "<span class='badge'><span class='glyphicon glyphicon-remove'></span></span>";
+            message_text += response.error[i];
+            message_text += "</li>";
+        	}
+        if (errorarrayLength > 0) {
+           jQuery(submit_store_button).attr('disabled', true);
+           return false;
+        }
     }
     message_text += "</ul>";
     jQuery(upload_phenotype_status).html(message_text);

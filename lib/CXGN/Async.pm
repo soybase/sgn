@@ -47,7 +47,7 @@ has 'job_type' => ( isa => 'Str',
 
 has 'inputs' => ( isa => 'Str',
     is => 'rw',
-    required => 1,
+    required => 0,
 );
 
 has 'cluster_shared_tempdir' => ( isa => 'Str',
@@ -67,17 +67,17 @@ has 'basepath' => ( isa => 'Str',
 
 has 'database_name' => ( isa => 'Str',
     is => 'rw',
-    required => 1,
+    required => 0,
 );
 
 has 'database_user' => ( isa => 'Str',
     is => 'rw',
-    required => 1,
+    required => 0,
 );
 
 has 'database_password' => ( isa => 'Str',
     is => 'rw',
-    required => 1,
+    required => 0,
 );
 
 sub BUILD {
@@ -173,6 +173,8 @@ sub get_result {
     my $self = shift;
     my $job_id = shift;
     my $result_file = $self->jobid_to_file($job_id.".out");
+    my @lines = read_file $result_file;
+    return \@lines;
 }
 
 sub jobid_to_file {

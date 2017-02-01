@@ -79,7 +79,7 @@ sub upload_phenotype_verify_POST : Args(1) {
     print STDERR Dumper $job_id;
 
     if ($job_id){
-        $c->stash->{rest} = { success => 1, job_id => $job_id};
+        $c->stash->{rest} = { success => $success_status, job_id => $job_id};
         $c->detach();
     } else {
         $c->stash->{rest} = { error => 1 };
