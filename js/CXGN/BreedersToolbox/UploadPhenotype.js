@@ -13,6 +13,7 @@ jQuery( document ).ready( function() {
     jQuery("#upload_spreadsheet_phenotype_file_form").iframePostForm({
         json: true,
         post: function () { },
+        timeout: 7200000,
         complete: function (response) {
             var job_id;
             displayPhenotypeUploadVerifyResponse(response, "spreadsheet");
@@ -28,6 +29,7 @@ jQuery( document ).ready( function() {
             jQuery("#upload_spreadsheet_phenotype_file_form").iframePostForm({
                 json: true,
                 post: function () { },
+                timeout: 7200000,
                 complete: function (response) {
                     if (response.success == 1){
                         check_async_status(response.job_id);
@@ -50,6 +52,7 @@ jQuery( document ).ready( function() {
     jQuery("#upload_datacollector_phenotype_file_form").iframePostForm({
         json: true,
         post: function () { },
+        timeout: 7200000,
         complete: function (response) {
             hidePhenotypeUploadWorkingModal();
             displayPhenotypeUploadVerifyResponse(response, "datacollector");
@@ -61,6 +64,7 @@ jQuery( document ).ready( function() {
             jQuery("#upload_datacollector_phenotype_file_form").iframePostForm({
                 json: true,
                 post: function () { },
+                timeout: 7200000,
                 complete: function (response) {
                     hidePhenotypeUploadWorkingModal();
                     displayPhenotypeUploadStoreResponse(response, "datacollector");
@@ -77,6 +81,7 @@ jQuery( document ).ready( function() {
     jQuery("#upload_fieldbook_phenotype_file_form").iframePostForm({
         json: true,
         post: function () { },
+        timeout: 7200000,
         complete: function (response) {
             hidePhenotypeUploadWorkingModal();
             displayPhenotypeUploadVerifyResponse(response, "fieldbook");
@@ -88,6 +93,7 @@ jQuery( document ).ready( function() {
             jQuery("#upload_fieldbook_phenotype_file_form").iframePostForm({
                 json: true,
                 post: function () { },
+                timeout: 7200000,
                 complete: function (response) {
                     hidePhenotypeUploadWorkingModal();
                     displayPhenotypeUploadStoreResponse(response, "fieldbook");

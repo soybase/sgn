@@ -42,9 +42,8 @@ __PACKAGE__->config(
 sub upload_phenotype_verify :  Path('/ajax/phenotype/upload_verify') : ActionClass('REST') { }
 sub upload_phenotype_verify_POST : Args(1) {
     my ($self, $c, $file_type) = @_;
-    my $user_id = $c->can('user_exists') ? $c->user->get_object->get_sp_person_id : $c->sp_person_id;
 
-    my ($success_status, $error_status, $parsed_data, $plots, $traits, $phenotype_metadata, $timestamp_included, $overwrite_values, $image_zip) = _prep_upload($c, $file_type);
+    my ($success_status, $error_status, $parsed_data, $plots, $traits, $phenotype_metadata, $timestamp_included, $overwrite_values, $image_zip, $user_id) = _prep_upload($c, $file_type);
     if (scalar(@$error_status)>0) {
         $c->stash->{rest} = {success => $success_status, error => $error_status };
         return;
@@ -93,9 +92,8 @@ sub upload_phenotype_store_POST : Args(1) {
     my $schema = $c->dbic_schema("Bio::Chado::Schema");
     my $metadata_schema = $c->dbic_schema("CXGN::Metadata::Schema");
     my $phenome_schema = $c->dbic_schema("CXGN::Phenome::Schema");
-    my $user_id = $c->can('user_exists') ? $c->user->get_object->get_sp_person_id : $c->sp_person_id;
 
-    my ($success_status, $error_status, $parsed_data, $plots, $traits, $phenotype_metadata, $timestamp_included, $overwrite_values, $image_zip) = _prep_upload($c, $file_type);
+    my ($success_status, $error_status, $parsed_data, $plots, $traits, $phenotype_metadata, $timestamp_included, $overwrite_values, $image_zip, $user_id) = _prep_upload($c, $file_type);
     if (scalar(@$error_status)>0) {
         $c->stash->{rest} = {success => $success_status, error => $error_status };
         return;
@@ -155,7 +153,7 @@ sub upload_phenotype_store_POST : Args(1) {
 
 sub _prep_upload {
     my ($c, $file_type) = @_;
-    my $uploader = CXGN::UploadFile->new();
+    my $user_id = $c->can('user_exists') ? $c->user->get_object->get_sp_person_id : $c->sp_person_id;
     my $parser = CXGN::Phenotypes::ParseUpload->new();
     my @success_status;
     my @error_status;
@@ -215,7 +213,16 @@ sub _prep_upload {
     my $time = DateTime->now();
     my $timestamp = $time->ymd()."_".$time->hms();
 
-    my $archived_filename_with_path = $uploader->archive($c, $subdirectory, $upload_tempfile, $upload_original_name, $timestamp);
+    my $uploader = CXGN::UploadFile->new({
+        tempfile => $upload_tempfile,
+        subdirectory => $subdirectory,
+        archive_path => $c->config->{archive_path},
+        archive_filename => $upload_original_name,
+        timestamp => $timestamp,
+        user_id => $user_id,
+        user_role => $user_type
+    });
+    my $archived_filename_with_path = $uploader->archive();
     my $md5 = $uploader->get_md5($archived_filename_with_path);
     if (!$archived_filename_with_path) {
         push @error_status, "Could not save file $upload_original_name in archive.";
@@ -230,10 +237,16 @@ sub _prep_upload {
     if ($image_zip) {
         my $upload_original_name = $image_zip->filename();
         my $upload_tempfile = $image_zip->tempname;
-        my %phenotype_metadata;
-        my $time = DateTime->now();
-
-        $archived_image_zipfile_with_path = $uploader->archive($c, $subdirectory, $upload_tempfile, $upload_original_name, $timestamp);
+        my $uploader = CXGN::UploadFile->new({
+            tempfile => $upload_tempfile,
+            subdirectory => $subdirectory."_images",
+            archive_path => $c->config->{archive_path},
+            archive_filename => $upload_original_name,
+            timestamp => $timestamp,
+            user_id => $user_id,
+            user_role => $user_type
+        });
+        $archived_image_zipfile_with_path = $uploader->archive();
         my $md5 = $uploader->get_md5($archived_image_zipfile_with_path);
         if (!$archived_image_zipfile_with_path) {
             push @error_status, "Could not save images zipfile $upload_original_name in archive.";
@@ -287,7 +300,7 @@ sub _prep_upload {
         }
     }
 
-    return (\@success_status, \@error_status, \%parsed_data, \@plots, \@traits, \%phenotype_metadata, $timestamp_included, $overwrite_values, $archived_image_zipfile_with_path);
+    return (\@success_status, \@error_status, \%parsed_data, \@plots, \@traits, \%phenotype_metadata, $timestamp_included, $overwrite_values, $archived_image_zipfile_with_path, $user_id);
 }
 
 #########
