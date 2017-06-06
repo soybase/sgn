@@ -56,6 +56,9 @@ sub upload_phenotype_verify_POST : Args(1) {
     }
 
     my %input = (
+        bcs_schema=>$schema,
+        metadata_schema=>$metadata_schema,
+        phenome_schema=>$phenome_schema,
         user_id=>$user_id,
         stock_list=>$plots,
         trait_list=>$traits,
@@ -131,11 +134,14 @@ sub upload_phenotype_store_POST : Args(1) {
     #}
     #push @$success_status, "File data verified. Plot names and trait names are valid.";
 
-    my $stored_phenotype_error = $store_phenotypes->store();
+    my ($stored_phenotype_error, $stored_phenotype_success) = $store_phenotypes->store();
     if ($stored_phenotype_error) {
         push @$error_status, $stored_phenotype_error;
         $c->stash->{rest} = {success => $success_status, error => $error_status};
         return;
+    }
+    if ($stored_phenotype_success) {
+        push @$success_status, $stored_phenotype_success;
     }
 
     if ($image_zip) {
@@ -147,7 +153,6 @@ sub upload_phenotype_store_POST : Args(1) {
     }
 
     push @$success_status, "Metadata saved for archived file.";
-    push @$success_status, "File data successfully stored.";
 
     $c->stash->{rest} = {success => $success_status, error => $error_status};
 }
@@ -370,7 +375,7 @@ sub update_plot_phenotype_POST : Args(0) {
     $c->detach;
   }
 
-  my $store_error = $store_phenotypes->store();
+  my ($store_error, $store_success) = $store_phenotypes->store();
   if ($store_error) {
       $c->stash->{rest} = {error => $store_error};
       $c->detach;
