@@ -1,0 +1,23 @@
+<%doc>
+
+=head1 NAME
+
+/haploytype_vis/index.mas
+
+=head1 DESCRIPTION
+
+A component for displaying haplotypes alongside pedigree for accessions
+
+=head1 AUTHOR
+
+Thomas Chan <nm249@cornell.edu>
+
+</%doc>
+
+<h1>Haplotype Visualizer</h1>
+
+<& /util/import_css.mas, paths => [
+    'bootstrap/v1.css',
+    '/css/jquery.css',
+    'http://foo.bar/buzz.css'
+] &>

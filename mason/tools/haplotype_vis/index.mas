@@ -1,0 +1,35 @@
+<%doc>
+
+=head1 NAME
+
+/haplotype_vis/index.mas
+
+=head1 DESCRIPTION
+
+This visualized the haplotypes of accessions and populations in a pedigree
+format.
+
+=head1 AUTHOR
+
+Thomas chan <tlc247@cornell.edu>
+
+</%doc>
+
+<& /page/page_title.mas, title=>"Haplotype Visualization" &>
+
+<& /util/import_css.mas, paths => ['tools/haplotype_vis.css'] &>
+
+<& '/util/import_javascript.mas', classes => [ 'jquery', 'jqueryui', 'popup', 'CXGN.List', 'CXGN.Login', 'd3.d3v4Min','brapi.BrAPI','brapi.StudyComparison'] &>
+
+<h4>Sample</h4>
+<select>
+	<option value="Accession">Accession</option>
+	<option value="Population">POpulation</population>
+</select>
+
+<h4>Haplotype</h4>
+<select>
+	<option value="Existing">Existing</option>
+	<option value="Custom">Custome</option>
+</select>
+
