@@ -22,10 +22,8 @@ Thomas Chan <nm249@cornell.edu>
 
 <div class="row">
     <div class="col-sm-8">
-        <!-- Make visual responsive -->
-        <svg width="650" height="650">
-            <rect y="0" x="0" width="650" height="650" style="fill-opacity:0.0;stroke-width:5;stroke:black"/>
-        </svg>
+        <div class="graph">
+        </div>
     </div>
 
     <div class="col-sm-4">
@@ -85,10 +83,51 @@ $(document).ready(function() {
         var elements = $('div.selected').children().hide(); // hide all the elements
         var value = $(this).val();
 
-        if (value.length) { // if somethings' selected
+        if (value != null) { // if somethings' selected
             elements.filter('.' + value).show(); // show the ones we want
         }
     }).trigger('change');
+});
+
+var svg_container = d3.select("div.graph").append("svg").attr("width", 400).attr("height", 200);
+
+var bunchoheights = [
+    [1,2,16,20,14,9,21],
+    [3,5,8,25],
+    [3,19,5,5,8,25],
+    [6,4,3],
+    [30,22,8,12,3,4]
+]
+
+function draw(data) {
+    var barPadding = 5;
+    var barWidth = (400 / data.length);
+
+    var chart = svg_container.selectAll("rect")
+                             .data(data);
+
+    var chart_enter = chart.enter().append("rect");
+
+    chart.merge(chart_enter)
+         .transition()
+         .attr("y", function(d) {
+            return 200 - d
+         })
+         .attr("height", function(d) {
+            return d;
+         })
+         .attr("width", (400 / data.length) - barPadding)
+         .attr("transform", function (d, i) {
+            var translate = [(400 / data.length) * i, 0];
+            return "translate("+ translate +")";
+        });
+
+    chart.exit().transition().remove();
+}
+bunchoheights.forEach(function(d,i) {
+    setTimeout(function() {
+    draw(d);
+    }, 5000*i);
 });
 
 </script>
