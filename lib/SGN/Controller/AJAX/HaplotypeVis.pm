@@ -1,4 +1,20 @@
-package SGN::Controller::HaplotypeVis::Database;
+=pod
+
+=head1 NAME
+
+lib/SGN/AJAX/HaplotypeVis/Database.pm
+
+=head1 DESCRIPTION
+
+A component for displaying haplotypes alongside pedigree for accessions
+
+=head1 AUTHOR
+
+Thomas Chan <nm249@cornell.edu>
+
+=cut
+
+package SGN::Controller::AJAX::HaplotypeVis;
 
 use Moose;
 use Data::Dumper;
@@ -13,16 +29,20 @@ __PACKAGE__->config(
     map       => { 'application/json' => 'JSON', 'text/html' => 'JSON' },
    );
 
-sub post_markers : Path('/ajax/haplotype_vis/markers') Args(0) {
+# Retrieve markers modulesgenetic
+# Gets markers from database using accession list
+# and marker fragment
+sub retrieve_markers : Path('/ajax/haplotype_vis/markers') Args(0) {
 
     my $self = shift;
     my $c = shift;
     my $schema = $c->dbic_schema('Bio::Chado::Schema');
     my $dbh = $c->dbc->dbh();
-    my $marker_name = $c->request->param('marker_alias_fragment');
+    my $marker_fragment = $c->request->data->{"marker_alias_fragment"};
     my @accession_list = @{$c->request->data->{"accession_list"}};
     my ($marker_alias, @marker_alias_array);
 
+    # Constructing PostgreSQL query for markers present in every accession
     my $query_start = "select marker_name
                         from (
                             select distinct uniquename as accession_name, jsonb_object_keys(value) as marker_name
@@ -49,8 +69,10 @@ sub post_markers : Path('/ajax/haplotype_vis/markers') Args(0) {
         push @marker_alias_array, $marker_alias;
     }
 
-    print STDERR Dumper (@marker_alias_array);
-    $c->stash->{rest} = { marker_alias_array => \@marker_alias_array};
+    # Searching from markers in every accession using marker alias fragment
+    my @matches = grep { /^$marker_fragment/i } @marker_alias_array;
+
+    $c->stash->{rest} = { matches => \@matches};
 }
 
 1;

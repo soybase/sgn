@@ -14,8 +14,6 @@ Thomas Chan <nm249@cornell.edu>
 
 </%doc>
 
-<& /util/import_css.mas, paths => ['haploytype_vis/index.css'] &>
-
 <& '/util/import_javascript.mas', classes => [ 'jquery', 'jqueryui', 'd3.d3v4Min'] &>
 
 <& /page/page_title.mas, title=>'Haplotype Visualizer' &>
@@ -78,6 +76,11 @@ Thomas Chan <nm249@cornell.edu>
 
 <script>
 
+/*
+ * Dropdown module
+ * Shows/hides second dropdown menu
+ * when first dropdown option is selected
+ */
 $(document).ready(function() {
     $('#sample_select').bind('change', function() {
         var elements = $('div.selected').children().hide(); // hide all the elements
@@ -89,45 +92,73 @@ $(document).ready(function() {
     }).trigger('change');
 });
 
-var svg_container = d3.select("div.graph").append("svg").attr("width", 400).attr("height", 200);
+var fragment_params = {"marker_alias_fragment":"s4", "accession_list":[ "38885", "38886", "38887" ]};
+request_markers(fragment_params);
 
-var bunchoheights = [
-    [1,2,16,20,14,9,21],
-    [3,5,8,25],
-    [3,19,5,5,8,25],
-    [6,4,3],
-    [30,22,8,12,3,4]
-]
+/*
+ * Request marker module
+ * Requests genetic marker list for search of
+ * marker name fragment and accession list
+ */
+function request_markers(data)
+{
+    fetch('/ajax/haplotype_vis/markers', { body: JSON.stringify(data), method: 'POST', headers: {'content-type': 'application/json'}})
+        .then(function(response) {
+    	    return response.json();
+        })
+        .then(function(j) {
+            console.log(j);
+            draw(j);
+        })
+        .catch(error => console.error('Error:', error))
+}
+
+var svg_container = d3.select("div.graph").append("svg").attr("width", 600).attr("height", 600);
 
 function draw(data) {
-    var barPadding = 5;
-    var barWidth = (400 / data.length);
-
-    var chart = svg_container.selectAll("rect")
-                             .data(data);
-
-    var chart_enter = chart.enter().append("rect");
-
-    chart.merge(chart_enter)
-         .transition()
-         .attr("y", function(d) {
-            return 200 - d
-         })
-         .attr("height", function(d) {
-            return d;
-         })
-         .attr("width", (400 / data.length) - barPadding)
-         .attr("transform", function (d, i) {
-            var translate = [(400 / data.length) * i, 0];
-            return "translate("+ translate +")";
-        });
-
-    chart.exit().transition().remove();
+    var box = svg_container.selectAll("rect").data(data).enter().append("rect").attr("width", 30).attr("height", "30").style("fill", "black").append("text").text(data);
 }
-bunchoheights.forEach(function(d,i) {
-    setTimeout(function() {
-    draw(d);
-    }, 5000*i);
-});
+
+
+//
+// var bunchoheights = [
+//     [1,2,16,20,14,9,21],
+//     [3,5,8,25],
+//     [3,19,5,5,8,25],
+//     [6,4,3],
+//     [30,22,8,12,3,4]
+// ]
+//
+//
+// function draw(data) {
+//     var barPadding = 5;
+//     var barWidth = (400 / data.length);
+//
+//     var chart = svg_container.selectAll("rect")
+//                              .data(data);
+//
+//     var chart_enter = chart.enter().append("rect");
+//
+//     chart.merge(chart_enter)
+//          .transition()
+//          .attr("y", function(d) {
+//             return 200 - d
+//          })
+//          .attr("height", function(d) {
+//             return d;
+//          })
+//          .attr("width", (400 / data.length) - barPadding)
+//          .attr("transform", function (d, i) {
+//             var translate = [(400 / data.length) * i, 0];
+//             return "translate("+ translate +")";
+//         });
+//
+//     chart.exit().transition().remove();
+// }
+// bunchoheights.forEach(function(d,i) {
+//     setTimeout(function() {
+//     draw(d);
+//     }, 5000*i);
+// });
 
 </script>

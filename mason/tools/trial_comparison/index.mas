@@ -4,7 +4,7 @@
 
 </%doc>
 
-<%args> 
+<%args>
 
 </%args>
 
@@ -116,9 +116,9 @@
           return "/stock/"+dbId+"/view";
       });
       var sharedVars = scomp.loadData(data);
-      
+
       console.log("vars",sharedVars)
-      
+
       var varOpts = d3.select("#trait_select")
               .selectAll("option:not([disabled])")
               .data(sharedVars);
@@ -127,8 +127,8 @@
               .attr("value",function(d){return d})
               .text(function(d){return d})
               .raise();
-              
-      
+
+
       $("#trait_select").change(function(){
         $("#tc-grid").show();
         $("#tc-histogram").show();
