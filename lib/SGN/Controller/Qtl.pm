@@ -25,6 +25,7 @@ use CXGN::Phenome::Population;
 
 BEGIN { extends 'Catalyst::Controller'}  
 
+
 sub view : Path('/qtl/view') Args(1) {
     my ($self, $c, $id) = @_;
     $c->res->redirect("/qtl/population/$id");
@@ -34,41 +35,37 @@ sub view : Path('/qtl/view') Args(1) {
 
 sub population : Path('/qtl/population') Args(1) {
     my ( $self, $c, $id) = @_;
+
+    $c->stash->{pop_id} = $id;
     
-    if ( $id )
+    if ($id)
     {
         $self->is_qtl_pop($c, $id);
-        if ( $c->stash->{is_qtl_pop} ) 
+	my $qtl_pop = $c->stash->{is_qtl_pop};
+        if ($qtl_pop) 
         {
-       
-            my $pop =  CXGN::Phenome::Population->new($c->dbc->dbh, $id);       
-            my $phenotype_file = $pop->phenotype_file($c);
-            my $genotype_file =  $pop->genotype_file($c);
-
-            my $userid = $c->user->get_object->get_sp_person_id if $c->user;          
+ 	    $c->controller('solGS::solGS')->phenotype_file($c);
+	    $c->controller('solGS::solGS')->genotype_file($c); 	  
+	    $c->controller('solGS::solGS')->project_description($c, $pop_id);
+      
             $c->stash(template     => '/qtl/population/index.mas',                              
-                      pop          => $pop, 
                       referer      => $c->req->path,             
-                      userid       => $userid,
+                      userid       => $c->user->id,
                 );
-            my $size = -s $phenotype_file;
-          
+           
             $self->_link($c);
             $self->_show_data($c);           
-            $self->_list_traits($c);
-            $self->genetic_map($c);                
-           
-            $self->_get_trait_acronyms($c);
-                           
-            } 
-            else 
-            {
-                $c->throw_404("$id is not a QTL population.");
-            }
+            $c->controller('solGS::solGS')->get_all_traits($c);
+            $self->genetic_map($c);                                         
+	} 
+	else 
+	{
+	    $c->throw_404("$id is not a QTL population.");
+	}
     }
     else 
     {
-            $c->throw_404("There is no QTL population for $id");
+	$c->throw_404("There is no QTL population for $id");
     }
 
 }
@@ -179,150 +176,6 @@ sub download_acronym : Path('/qtl/download/acronym') Args(1) {
     }       
 }
 
-
-sub _analyze_correlation  {
-    my ($self, $c)      = @_;    
-    my $pop_id          = $c->stash->{pop}->get_population_id();
-    my $pheno_file      = $c->stash->{pop}->phenotype_file($c);
-    my $base_path       = $c->config->{basepath};
-    my $temp_image_dir  = $c->config->{tempfiles_subdir};
-    my $r_qtl_dir       = $c->config->{solqtl};
-    my $corre_image_dir = catfile($base_path, $temp_image_dir, "correlation");
-    my $corre_temp_dir  = catfile($r_qtl_dir, "cache");
-    
-    if (-s $pheno_file) 
-    {
-        mkpath ([$corre_temp_dir, $corre_image_dir], 0, 0755);  
-    
-        my ($fh_hm, $heatmap_file)     = tempfile( "heatmap_${pop_id}-XXXXXX",
-                                                  DIR      => $corre_temp_dir,
-                                                  SUFFIX   => '.png',
-                                                  UNLINK   => 0,
-                                                );
-        $fh_hm->close;
-        
-        print STDERR "\nheatmap tempfile: $heatmap_file\n";
-       
-        my ($fh_ct, $corre_table_file) = tempfile( "corre_table_${pop_id}-XXXXXX",
-                                                  DIR      => $corre_temp_dir,
-                                                  SUFFIX   => '.txt',
-                                                  UNLINK   => 0,
-                                                );
-        $fh_ct->close;
-        
-        print STDERR "\ncorrelation coefficients tempfile: $corre_table_file\n";
-        
-        CXGN::Tools::Run->temp_base($corre_temp_dir);
-        my ($fh_out, $filename);
-        my ( $corre_commands_temp, $corre_output_temp ) =
-            map
-        {
-            ($fh_out, $filename ) =
-                tempfile(
-                    File::Spec->catfile(
-                        CXGN::Tools::Run->temp_base(),
-                        "corre_pop_${pop_id}-$_-XXXXXX",
-                         ),
-                    UNLINK   => 0,
-                );
-            $filename
-        } qw / in out /;
-
-        $fh_out->close;
-        print STDERR "\ncorrelation r output  tempfile: $corre_output_temp\n";
-        
-        {
-            my $corre_commands_file = $c->path_to('/cgi-bin/phenome/correlation.r');
-            copy( $corre_commands_file, $corre_commands_temp )
-                or die "could not copy '$corre_commands_file' to '$corre_commands_temp'";
-        }
-        try 
-        {
-            print STDERR "\nsubmitting correlation job to the cluster..\n";
-            my $r_process = CXGN::Tools::Run->run_cluster(
-                'R', 'CMD', 'BATCH',
-                '--slave',
-                "--args $heatmap_file $corre_table_file $pheno_file",
-                $corre_commands_temp,
-                $corre_output_temp,
-                {
-                    working_dir => $corre_temp_dir,
-                    max_cluster_jobs => 1_000_000_000,
-                },
-                );
-
-            $r_process->wait;
-            sleep 5;
-            print STDERR "\ndone with correlation analysis..\n";
-       }
-        catch 
-        {  
-            print STDERR "\nsubmitting correlation job to the cluster gone wrong....\n";
-            my $err = $_;
-            $err =~ s/\n at .+//s; #< remove any additional backtrace
-            #     # try to append the R output
-            try{ $err .= "\n=== R output ===\n".file($corre_output_temp)->slurp."\n=== end R output ===\n" };
-            # die with a backtrace
-            Carp::confess $err;
-        };
-        
-        copy($heatmap_file, $corre_image_dir)  
-            or die "could not copy $heatmap_file to $corre_image_dir";
-        copy($corre_table_file, $corre_image_dir) 
-            or die "could not copy $corre_table_file to $corre_image_dir";
-
-        $heatmap_file      = fileparse($heatmap_file);
-        $heatmap_file      = $c->generated_file_uri("correlation",  $heatmap_file);
-        $corre_table_file  = fileparse($corre_table_file);
-        $corre_table_file  = $c->generated_file_uri("correlation", $corre_table_file);
-        
-        print STDERR "\nheatmap tempfile after copying to the apps static dir : $heatmap_file\n";
-        print STDERR "\ncorrelation coefficients after copying to the apps static dir: $corre_table_file\n";
-        
-        $c->stash( heatmap_file     => $heatmap_file, 
-                   corre_table_file => $corre_table_file
-                 );  
-    } 
-}
-
-sub _correlation_output {
-    my ($self, $c)      = @_;
-    my $pop             = $c->{stash}->{pop};
-    my $base_path       = $c->config->{basepath};
-    my $temp_image_dir  = $c->config->{tempfiles_subdir};   
-    my $corre_image_dir = catfile($base_path, $temp_image_dir, "correlation");
-    my $cache           = Cache::File->new( cache_root  => $corre_image_dir);
-    $cache->purge();
-
-    my $key_h           = "heat_" . $pop->get_population_id();
-    my $key_t           = "corr_table_" . $pop->get_population_id();   
-    my $heatmap         = $cache->get($key_h);
-    my $corre_table     = $cache->get($key_t); 
-   
-     print STDERR "\ncached heatmap file: $heatmap\n";
-     print STDERR "\ncached correlation coefficients files: $corre_table\n";
-
-    unless ($heatmap) 
-    {
-        $self->_analyze_correlation($c);
-
-        $heatmap = $c->stash->{heatmap_file};      
-        $corre_table  = $c->stash->{corre_table_file};
-
-        $cache->set($key_h, $heatmap, "30 days");
-        $cache->set($key_t, $corre_table, "30 days");        
-    }
-
-    $heatmap     = undef if -z $c->config->{basepath} . $heatmap;   
-    $corre_table = undef if -z $c->config->{basepath} . $corre_table;
-       
-    $c->stash( heatmap_file     => $heatmap,
-               corre_table_file => $corre_table,
-             );  
- 
-    $self->_get_trait_acronyms($c);
-
-}
 
 sub _list_traits {
     my ($self, $c) = @_;      

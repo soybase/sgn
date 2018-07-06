@@ -24,12 +24,20 @@ foreach my $qtl_pop (@qtl_pops)
         $pop_links  .= qq |<a href="/qtl/population/$pop_id">$pop_name</a> <br /> |;     
       }
   }
-  
+
+my $subtitle = '<a href="/qtl/form">Submit QTL Data</a> |
+                <a href="/qtl/submission/guide">Submission Guide</a> |
+                <a href="/qtl/search/help">Search Help</a>';
 </%perl>
 
 <div class="container-fluid">
 
-<&| /page/info_section.mas, title => 'Search QTLs', collapsible=>1, collapsed=>0, subtitle=>'[<a href="/qtl/form">Submit QTL Data</a>]   [<a href="/qtl/submission/guide">Submission Guide</a>]   [<a href="/qtl/search/help">Search Help</a>]' &>
+  <&| /page/info_section.mas,
+      title     => 'Search QTLs',
+    collapsible => 1,
+    collapsed   => 0,
+    subtitle    => $subtitle
+    &>
 
 <form  action= "/qtl/search/results" method="post">
   <table align=center cellpadding=20px>
