@@ -26,11 +26,8 @@ outputFiles <- scan(grep("output_files", allArgs, value = TRUE),
 inputFiles  <- scan(grep("input_files", allArgs, value = TRUE),
                     what = "character")
 
-
-refererQtl <- grep("qtl", inputFiles, value=TRUE)
-
 phenoDataFile      <- grep("\\/phenotype_data", inputFiles, value=TRUE)
-formattedPhenoFile <- grep("formatted_phenotype_data", inputFiles, fixed = FALSE, value = TRUE)
+formattedPhenoFile <- grep("formatted_phenotype_data", inputFiles, value = TRUE)
 
 correCoefficientsFile     <- grep("corre_coefficients_table", outputFiles, value=TRUE)
 correCoefficientsJsonFile <- grep("corre_coefficients_json", outputFiles, value=TRUE)
@@ -38,40 +35,27 @@ correCoefficientsJsonFile <- grep("corre_coefficients_json", outputFiles, value=
 formattedPhenoData <- c()
 phenoData          <- c()
 
-if ( length(refererQtl) != 0 ) {
-    
-  phenoData <- as.data.frame(fread(phenoDataFile,
-                                   sep=",",
-                                   na.strings=c("NA", "-", " ", ".", "..")
-                                   ))
-} else {
-
-  phenoData <- as.data.frame(fread(phenoDataFile,
-                                   na.strings = c("NA", " ", "--", "-", ".", "..")
-                                   ))
-} 
+phenoData <- fread(phenoDataFile,
+                   na.strings = c("NA", " ", "--", "-", ".", "..")
+                   ))
+phenoData <- data.frame(phenoData)
 
 allTraitNames <- c()
 nonTraitNames <- c()
 naTraitNames  <- c()
 
-if (length(refererQtl) != 0) {
+allNames <- names(phenoData)
 
-  allNames      <- names(phenoData)
-  nonTraitNames <- c("ID")
-  allTraitNames <- allNames[! allNames %in% nonTraitNames]
-
-} else {
-  allNames <- names(phenoData)
-
-  nonTraitNames <- c('studyYear', 'studyDbId', 'studyName', 'studyDesign', 'locationDbId', 'locationName')
-  nonTraitNames <- c(nonTraitNames, 'germplasmDbId', 'germplasmName', 'germplasmSynonyms', 'observationLevel')
-  nonTraitNames <- c(nonTraitNames, 'observationUnitDbId', 'observationUnitName', 'replicate', 'blockNumber', 'plotNumber')
+nonTraitNames <- c('studyYear', 'studyDbId', 'studyName', 'studyDescription', 'studyDesign', 'locationDbId', 'locationName')
+nonTraitNames <- c(nonTraitNames, 'germplasmDbId', 'germplasmName', 'germplasmSynonyms', 'observationLevel')
+nonTraitNames <- c(nonTraitNames, 'observationUnitDbId', 'observationUnitName', 'replicate', 'blockNumber', 'plotNumber')
+nonTraitNames <- c(nonTraitNames, 'programDbId', 'programName', 'programDescription', 'plotWidth', 'plotLength')
+nonTraitNames <- c(nonTraitNames, 'fieldSize', 'fieldTrialIsPlannedToBeGenotyped', 'fieldTrialIsPlannedToCross',  'plantingDate')
+nonTraitNames <- c(nonTraitNames,  'harvestDate', 'rowNumber', 'colNumber', 'entryType', 'plantNumber')
   
-  allTraitNames <- allNames[! allNames %in% nonTraitNames]
-}
+allTraitNames <- allNames[! allNames %in% nonTraitNames]
 
-if (!is.null(phenoData) && length(refererQtl) == 0) {
+if (!is.null(phenoData)) {
   
     for (i in allTraitNames) {
       if (class(phenoData[, i]) != 'numeric') {
@@ -92,29 +76,15 @@ if (!is.null(phenoData) && length(refererQtl) == 0) {
 
 filteredTraits <- allTraitNames[!allTraitNames %in% naTraitNames]
 
-###############################
-if (length(refererQtl) == 0  ) {
+correData <- phenoData %>%
+                      select(germplasmName, allTraitNames) %>%
+                      group_by(germplasmName) %>%
+                      summarise_at(allTraitNames, mean, na.rm=TRUE) %>%
+                      select(-germplasmName) %>%
+                      round(., 2) %>%
+                      data.frame
  
-  formattedPhenoData <- phenoData %>%
-                        select(germplasmName, allTraitNames) %>%
-                        group_by(germplasmName) %>%
-                        summarise_at(allTraitNames, mean, na.rm=TRUE) %>%
-                        select(-germplasmName) %>%
-                        round(., 2) %>%
-                        data.frame
-
-} else {
-  message("qtl stuff")
-  formattedPhenoData <- phenoData %>%
-                        group_by(ID) %>%
-                        summarise_if(is.numeric, mean, na.rm=TRUE) %>%
-                        select(-ID) %>%
-                        round(., 2) %>%
-                        data.frame
-                             
-}
- 
-coefpvalues <- rcor.test(formattedPhenoData,
+coefpvalues <- rcor.test(correData,
                          method="pearson",
                          use="pairwise"
                          )
@@ -177,15 +147,5 @@ fwrite(correlationJson,
        row.names = FALSE,
        qmethod   = "escape"
        )
-
-## if (file.info(formattedPhenoFile)$size == 0 && !is.null(formattedPhenoData) ) {
-##   fwrite(formattedPhenoData,
-##          file      = formattedPhenoFile,
-##          sep       = "\t",
-##          row.names = TRUE,
-##          quote     = FALSE,
-##          )
-## }
-
 
 q(save = "no", runLast = FALSE)
