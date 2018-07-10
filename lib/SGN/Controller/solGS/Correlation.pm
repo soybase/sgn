@@ -57,11 +57,6 @@ sub correlation_phenotype_data :Path('/correlation/phenotype/data/') Args(0) {
         $phenotype_file   = "phenotype_data_${userid}_${pop_id}";
         $phenotype_file   = $c->controller('solGS::Files')->grep_file($phenotype_dir, $phenotype_file);
     }
-    elsif ($referer =~ /qtl/)
-    {    
-        $self->create_correlation_phenodata_file($c);
-        $phenotype_file =  $c->stash->{phenotype_file};
-    }
     else
     {
         my $phenotype_dir = $c->stash->{solgs_cache_dir};
@@ -179,49 +174,16 @@ sub combine_gebvs_of_traits {
 
 sub create_correlation_phenodata_file {
     my ($self, $c)  = @_;
-    
-    my $referer = $c->req->referer;
-
-    my $phenotype_file;
-    
-    if ($referer =~ /qtl/) 
-    {
-        my $pop_id = $c->stash->{pop_id};
-       
-        my $pheno_exp = "phenodata_${pop_id}";
-        my $dir       = catdir($c->config->{solqtl}, 'cache');
-       
-        my $phenotype_file = $c->controller('solGS::Files')->grep_file($dir, $pheno_exp);
-
-        unless ($phenotype_file) 
-	{           
-            my $pop =  CXGN::Phenome::Population->new($c->dbc->dbh, $pop_id);       
-            $phenotype_file =  $pop->phenotype_file($c);
-        }
-          
-    } 
-    else
-    {           
-      $c->controller("solGS::solGS")->phenotype_file($c); 
-      $phenotype_file = $c->stash->{phenotype_file};
-    }
-
+ 	
+    $c->controller("solGS::solGS")->phenotype_file($c); 
+    my $pheno_file = $c->stash->{phenotype_file};
+   
     my $corre_cache_dir = $c->stash->{correlation_cache_dir};
-      
-    copy($phenotype_file, $corre_cache_dir) 
-	or die "could not copy $phenotype_file to $corre_cache_dir";
-
-    my $file = basename($phenotype_file);
+    $c->controller('solGS::Files')->copy_file($pheno_file, $corre_cache_dir);  
+    
+    my $file = basename($pheno_file);
     $c->stash->{phenotype_file} = catfile($corre_cache_dir, $file);
         
-}
-
-
-sub create_correlation_dir {
-    my ($self, $c) = @_;
-    
-    $c->controller('solGS::Files')->get_solgs_dirs($c);
-   
 }
 
 

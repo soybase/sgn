@@ -290,7 +290,9 @@ sub get_solgs_dirs {
     $tmp_dir            = catdir($tmp_dir, $geno_version);
     my $solgs_dir       = catdir($tmp_dir, "solgs");
     my $solgs_cache     = catdir($tmp_dir, 'solgs', 'cache'); 
-    my $solgs_tempfiles = catdir($tmp_dir, 'solgs', 'tempfiles');  
+    my $solgs_tempfiles = catdir($tmp_dir, 'solgs', 'tempfiles');
+    my $solqtl_cache     = catdir($tmp_dir, 'solqtl', 'cache'); 
+    my $solqtl_tempfiles = catdir($tmp_dir, 'solqtl', 'tempfiles');    
     my $solgs_lists     = catdir($tmp_dir, 'solgs', 'tempfiles', 'lists');
     my $histogram_dir   = catdir($tmp_dir, 'histogram', 'cache');
     my $log_dir         = catdir($tmp_dir, 'log', 'cache');
@@ -304,7 +306,7 @@ sub get_solgs_dirs {
 
     mkpath (
 	[
-	 $solgs_dir, $solgs_cache, $solgs_tempfiles, $solgs_lists, 
+	 $solgs_dir, $solgs_cache, $solgs_tempfiles,$solqtl_cache, $solqtl_tempfiles, $solgs_lists, 
 	 $pca_cache, $pca_temp, $histogram_dir, $log_dir, 
 	 $histogram_dir, $log_dir, $anova_cache, $corre_cache, $corre_temp,
 	 $anova_temp,$anova_cache,
@@ -315,6 +317,8 @@ sub get_solgs_dirs {
     $c->stash(solgs_dir                   => $solgs_dir, 
               solgs_cache_dir             => $solgs_cache, 
               solgs_tempfiles_dir         => $solgs_tempfiles,
+	      solqtl_cache_dir            => $solqtl_cache, 
+              solqtl_tempfiles_dir        => $solqtl_tempfiles,
               solgs_lists_dir             => $solgs_lists,
 	      pca_cache_dir               => $pca_cache,
 	      pca_temp_dir                => $pca_temp,
@@ -375,6 +379,14 @@ sub create_tempfile {
     
     return $file;
 
+}
+
+
+sub copy_file {
+    my ($self, $file, $dir) = @_;
+
+    copy($file, $dir) 
+	or die "could not copy $file to $dir";    
 }
 
 
