@@ -192,7 +192,6 @@ sub pheno_correlation_output_files {
      
     my $pop_id = $c->stash->{pop_id};
     
-    $self->create_correlation_dir($c);
     my $corre_cache_dir = $c->stash->{correlation_cache_dir};
     
     my $file_cache  = Cache::File->new(cache_root => $corre_cache_dir);
@@ -356,7 +355,6 @@ sub run_genetic_correlation_analysis {
 sub download_phenotypic_correlation : Path('/download/phenotypic/correlation/population') Args(1) {
     my ($self, $c, $id) = @_;
     
-    $self->create_correlation_dir($c);
     my $corr_dir = $c->stash->{correlation_cache_dir};
     my $corr_file = catfile($corr_dir,  "corre_coefficients_table_${id}");
   
