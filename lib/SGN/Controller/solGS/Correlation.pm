@@ -191,7 +191,6 @@ sub pheno_correlation_output_files {
     my ($self, $c) = @_;
      
     my $pop_id = $c->stash->{pop_id};
-    
     my $corre_cache_dir = $c->stash->{correlation_cache_dir};
     
     my $file_cache  = Cache::File->new(cache_root => $corre_cache_dir);
@@ -243,13 +242,13 @@ sub genetic_correlation_output_files {
 
 sub pheno_correlation_analysis_output :Path('/phenotypic/correlation/analysis/output') Args(0) {
     my ($self, $c) = @_;
-
+   
     my $pop_id = $c->req->param('population_id');
     $c->stash->{pop_id} = $pop_id;
-
+   
     $self->pheno_correlation_output_files($c);
     my $corre_json_file = $c->stash->{corre_coefficients_json_file};
-         
+   
     my $ret->{status} = 'failed';
   
     if (!-s $corre_json_file)
@@ -408,10 +407,10 @@ sub temp_pheno_corre_input_file {
     
     $self->create_correlation_phenodata_file($c);
     my $pheno_file = $c->stash->{phenotype_file};
-    
+   
     $c->controller("solGS::Files")->formatted_phenotype_file($c);
     my $formatted_pheno_file = $c->stash->{formatted_phenotype_file};
-    
+   
     my $files = join ("\t",
 		      $pheno_file,
 		      $formatted_pheno_file,
@@ -422,7 +421,6 @@ sub temp_pheno_corre_input_file {
     my $name = "pheno_corre_input_files_${pop_id}"; 
     my $tempfile =  $c->controller('solGS::Files')->create_tempfile($tmp_dir, $name); 
     write_file($tempfile, $files);
-    
     $c->stash->{temp_pheno_corre_input_file} = $tempfile;
 
 }

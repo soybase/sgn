@@ -309,7 +309,7 @@ sub get_solgs_dirs {
 	 $solgs_dir, $solgs_cache, $solgs_tempfiles,$solqtl_cache, $solqtl_tempfiles, $solgs_lists, 
 	 $pca_cache, $pca_temp, $histogram_dir, $log_dir, 
 	 $histogram_dir, $log_dir, $anova_cache, $corre_cache, $corre_temp,
-	 $anova_temp,$anova_cache,
+	 $anova_temp,$anova_cache, $solqtl_cache, $solqtl_tempfiles,
 	], 
 	0, 0755
 	);
@@ -328,6 +328,9 @@ sub get_solgs_dirs {
 	      analysis_log_dir            => $log_dir,
               anova_cache_dir             => $anova_cache,
 	      anova_temp_dir              => $anova_temp,
+	      solqtl_cache_dir            => $solqtl_cache,
+              solqtl_tempfiles_dir        => $solqtl_tempfiles,
+
         );
 
 }

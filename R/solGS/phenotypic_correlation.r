@@ -38,6 +38,7 @@ phenoData          <- c()
 phenoData <- fread(phenoDataFile,
                    na.strings = c("NA", " ", "--", "-", ".", "..")
                    ))
+
 phenoData <- data.frame(phenoData)
 
 allTraitNames <- c()
