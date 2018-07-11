@@ -33,158 +33,204 @@ sub view : Path('/qtl/view') Args(1) {
 }
 
 
-sub population : Path('/qtl/population') Args(1) {
-    my ( $self, $c, $id) = @_;
+sub population : Path('/qtl/population') Args() {
+    my ( $self, $c, $pop_id, $action) = @_;
 
-    $c->stash->{pop_id} = $id;
-    
-    if ($id)
+    $c->stash->{pop_id} = $pop_id;
+ 
+    if ($pop_id)
     {
-        $self->is_qtl_pop($c, $id);
-	my $qtl_pop = $c->stash->{is_qtl_pop};
+        $self->is_qtl_pop($c, $pop_id);
+	my $qtl_pop = 1;#$c->stash->{is_qtl_pop};
         if ($qtl_pop) 
         {
  	    $c->controller('solGS::solGS')->phenotype_file($c);
-	    $c->controller('solGS::solGS')->genotype_file($c); 	  
-	    $c->controller('solGS::solGS')->project_description($c, $pop_id);
-      
+	    my $pheno_file = $c->stash->{phenotype_file};
+	    
+	    $c->controller('solGS::solGS')->genotype_file($c);
+	    my $geno_file = $c->stash->{genotype_file}; 
+	  
+	    my $qtl_dir = $c->stash->{solqtl_cache_dir};
+	    $c->controller('solGS::Files')->copy_file($pheno_file, $qtl_dir);
+	    $c->controller('solGS::Files')->copy_file($geno_file, $qtl_dir);
+
+	    my $userid = $c->user()->get_object->get_sp_person_id() if $c->user;
+	     print STDERR "\nuser id: $userid\n";
+	  	    
             $c->stash(template     => '/qtl/population/index.mas',                              
                       referer      => $c->req->path,             
-                      userid       => $c->user->id,
+		      userid       => $userid,
                 );
            
-            $self->_link($c);
-            $self->_show_data($c);           
-            $c->controller('solGS::solGS')->get_all_traits($c);
-            $self->genetic_map($c);                                         
+	    $self->_get_links($c);
+            #$self->_show_data($c);           
+            
+	    $self->genetic_map($c);
+
+	    $c->controller('solGS::solGS')->project_description($c, $pop_id);
+
+	    $c->controller('solGS::solGS')->get_project_owners($c, $pop_id);       
+	    $c->stash->{owner} = $c->stash->{project_owners};
+
+	    $c->controller('solGS::solGS')->get_all_traits($c);
+
+	    print STDERR "\n calling _list_traits\n";
+	    $self->_list_traits($c);
+	     print STDERR "\n DONE _list_traits\n";
+	    
+	    if ($action && $action =~ /selecttraits/ ) 
+	    {		
+		$c->stash->{no_traits_selected} = 'none';
+	    }
+	    else 
+	    {
+		$c->stash->{no_traits_selected} = 'some';
+	    }
+
+	    my $acronym = $c->controller('solGS::solGS')->get_acronym_pairs($c);
+	    $c->stash->{acronym} = $acronym;
 	} 
 	else 
 	{
-	    $c->throw_404("$id is not a QTL population.");
+	    $c->stash->{message} = "$pop_id is not a QTL population.";
 	}
     }
     else 
     {
-	$c->throw_404("There is no QTL population for $id");
+	$c->stash->{message} = "There is no QTL population for $pop_id";
     }
 
-}
-
-sub download_phenotype : Path('/qtl/download/phenotype') Args(1) {
-    my ($self, $c, $id) = @_;
-    
-    $c->throw_404("<strong>$id</strong> is not a valid population id") if  $id =~ m/\D/;
-    
-    $self->is_qtl_pop($c, $id);
-    if ($c->stash->{is_qtl_pop})   
+    if ($c->stash->{message})
     {
-        my $pop             = CXGN::Phenome::Population->new($c->dbc->dbh, $id);
-        my $phenotype_file  = $pop->phenotype_file($c);
-    
-        unless (!-e $phenotype_file || -s $phenotype_file <= 1)
-        {        
-            my @pheno_data = map {   s/,/\t/g; [ $_ ]; } read_file($phenotype_file);
-            
-            $c->res->content_type("text/plain");
-            $c->res->body(join "",  map{ $_->[0]} @pheno_data);        
-        }
-    }
-    else
-    {
-        $c->throw_404("<strong>$id</strong> is not a QTL population id");   
-    }       
-}
-
-sub download_genotype : Path('/qtl/download/genotype') Args(1) {
-    my ($self, $c, $id) = @_;
-    
-    $c->throw_404("<strong>$id</strong> is not a valid population id") if  $id =~ m/\D/;
-   
-    $self->is_qtl_pop($c, $id);
-    if ($c->stash->{is_qtl_pop})
-    {
-       
-        my $pop             = CXGN::Phenome::Population->new($c->dbc->dbh, $id);        
-        my $genotype_file   = $pop->genotype_file($c);
-       
-        unless (!-e $genotype_file || -s $genotype_file <= 1)
-        {
-            my @geno_data = map { s/,/\t/g; [ $_ ]; } read_file($genotype_file);
-            
-            $c->res->content_type("text/plain");
-            $c->res->body(join "",  map{ $_->[0]} @geno_data);   
-        }
-    }
-    else
-    {
-        $c->throw_404("<strong>$id</strong> is not a QTL population id");   
-    }       
-}
-
-sub download_correlation : Path('/qtl/download/correlation') Args(1) {
-    my ($self, $c, $id) = @_;
-    
-    $c->throw_404("<strong>$id</strong> is not a valid population id") if $id =~ m/\D/;
-
-    $self->is_qtl_pop($c, $id);
-    if ($c->stash->{is_qtl_pop})
-    {
-    
-        my $corr_file = catfile($c->path_to($c->config->{cluster_shared_tempdir}), 'correlation', 'cache',  "corre_coefficients_table_${id}");
-       
-        unless (!-e $corr_file || -s $corr_file <= 1) 
-        {
-            my @corr_data;
-            my $count=1;
-
-            foreach ( read_file($corr_file) )
-            {
-                if ($count==1) {  $_ = "Traits\t" . $_;}             
-                s/NA//g;               
-                push @corr_data, [ $_ ] ;
-                $count++;
-            }   
-            $c->res->content_type("text/plain");
-            $c->res->body(join "",  map{ $_->[0] } @corr_data);   
-          
-        } 
+	$c->stash->{template} = "/generic_message.mas"; 
     }  
-    else
-    {
-        $c->throw_404("<strong>$id</strong> is not a QTL population id");   
-    }       
 }
 
-sub download_acronym : Path('/qtl/download/acronym') Args(1) {
-    my ($self, $c, $id) = @_;
 
-    $c->throw_404("<strong>$id</strong> is not a valid population id") if  $id =~ m/\D/;
+# sub download_phenotype : Path('/qtl/download/phenotype') Args(1) {
+#     my ($self, $c, $id) = @_;
     
-    $self->is_qtl_pop($c, $id);
-    if ($c->stash->{is_qtl_pop})
-    {
-        my $pop = CXGN::Phenome::Population->new($c->dbc->dbh, $id);    
-        my $acronym = $pop->get_cvterm_acronyms;
-       
-        $c->res->content_type("text/plain");
-        $c->res->body(join "\n",  map{ $_->[1] . "\t" . $_->[0] } @$acronym);
+#     $c->throw_404("<strong>$id</strong> is not a valid population id") if  $id =~ m/\D/;
+    
+#     $self->is_qtl_pop($c, $id);
+#     my $is_qtl_pop = 1;#$c->stash->{is_qtl_pop};
+#     if ($is_qtl_pop)   
+#     {
+#         my $pop             = CXGN::Phenome::Population->new($c->dbc->dbh, $id);
+#         my $phenotype_file  = $pop->phenotype_file($c);
+
+# 	$c->controller('solGS::solGS')->phenotype_file($c);
+# 	my $phenotype_file = $c->stash->{phenotype_file};
+	
+#         unless (!-e $phenotype_file || -s $phenotype_file <= 1)
+#         {        
+#            # my @pheno_data = map {   s/,/\t/g; [ $_ ]; } read_file($phenotype_file);
+# 	    my @pheno_data = read_file($phenotype_file);
+            
+#             $c->res->content_type("text/plain");
+#             $c->res->body(join "",  map{ $_->[0]} @pheno_data);        
+#         }
+#     }
+#     else
+#     {
+#         $c->throw_404("<strong>$id</strong> is not a QTL population id");   
+#     }       
+# }
+
+# sub download_genotype : Path('/qtl/download/genotype') Args(1) {
+#     my ($self, $c, $id) = @_;
+    
+#     $c->throw_404("<strong>$id</strong> is not a valid population id") if  $id =~ m/\D/;
    
-    }
-    else
-    {
-        $c->throw_404("<strong>$id</strong> is not a QTL population id");   
-    }       
-}
+#     $self->is_qtl_pop($c, $id);
+#     if ($c->stash->{is_qtl_pop})
+#     {
+       
+#         my $pop             = CXGN::Phenome::Population->new($c->dbc->dbh, $id);        
+#         my $genotype_file   = $pop->genotype_file($c);
+       
+#         unless (!-e $genotype_file || -s $genotype_file <= 1)
+#         {
+#             my @geno_data = map { s/,/\t/g; [ $_ ]; } read_file($genotype_file);
+            
+#             $c->res->content_type("text/plain");
+#             $c->res->body(join "",  map{ $_->[0]} @geno_data);   
+#         }
+#     }
+#     else
+#     {
+#         $c->throw_404("<strong>$id</strong> is not a QTL population id");   
+#     }       
+# }
+
+
+# sub download_correlation : Path('/qtl/download/correlation') Args(1) {
+#     my ($self, $c, $id) = @_;
+    
+#     $c->throw_404("<strong>$id</strong> is not a valid population id") if $id =~ m/\D/;
+
+#     $self->is_qtl_pop($c, $id);
+#     if ($c->stash->{is_qtl_pop})
+#     {
+    
+#         my $corr_file = catfile($c->path_to($c->config->{cluster_shared_tempdir}), 'correlation', 'cache',  "corre_coefficients_table_${id}");
+       
+#         unless (!-e $corr_file || -s $corr_file <= 1) 
+#         {
+#             my @corr_data;
+#             my $count=1;
+
+#             foreach ( read_file($corr_file) )
+#             {
+#                 if ($count==1) {  $_ = "Traits\t" . $_;}             
+#                 s/NA//g;               
+#                 push @corr_data, [ $_ ] ;
+#                 $count++;
+#             }   
+#             $c->res->content_type("text/plain");
+#             $c->res->body(join "",  map{ $_->[0] } @corr_data);   
+          
+#         } 
+#     }  
+#     else
+#     {
+#         $c->throw_404("<strong>$id</strong> is not a QTL population id");   
+#     }       
+# }
+
+# sub download_acronym : Path('/qtl/download/acronym') Args(1) {
+#     my ($self, $c, $id) = @_;
+
+#     $c->throw_404("<strong>$id</strong> is not a valid population id") if  $id =~ m/\D/;
+    
+#     $self->is_qtl_pop($c, $id);
+#     if ($c->stash->{is_qtl_pop})
+#     {
+#         my $pop = CXGN::Phenome::Population->new($c->dbc->dbh, $id);    
+#         my $acronym = $pop->get_cvterm_acronyms;
+       
+#         $c->res->content_type("text/plain");
+#         $c->res->body(join "\n",  map{ $_->[1] . "\t" . $_->[0] } @$acronym);
+   
+#     }
+#     else
+#     {
+#         $c->throw_404("<strong>$id</strong> is not a QTL population id");   
+#     }       
+# }
 
 
 sub _list_traits {
-    my ($self, $c) = @_;      
-    my $population_id = $c->stash->{pop}->get_population_id();
+    my ($self, $c) = @_;  
+
+    my $pop_id = $c->stash->{pop_id};
+    my $pop =  CXGN::Phenome::Population->new($c->dbc->dbh, $pop_id);
+    
     my @phenotype;  
    
-    if ($c->stash->{pop}->get_web_uploaded()) 
+    if ($pop->get_web_uploaded()) 
     {
-        my @traits = $c->stash->{pop}->get_cvterms();
+        my @traits = $pop->get_cvterms();
        
         foreach my $trait (@traits)  
         {
@@ -192,38 +238,61 @@ sub _list_traits {
             my $trait_name = $trait->get_name();
             my $definition = $trait->get_definition();
             
-            my ($min, $max, $avg, $std, $count) = $c->stash->{pop}->get_pop_data_summary($trait_id);
+            my ($min, $max, $avg, $std, $count) = $pop->get_pop_data_summary($trait_id);
             
             $c->stash( trait_id   => $trait_id,
                        trait_name => $trait_name
                 );
                       
-            $self->_link($c);
+            $self->_get_links($c);
             my $trait_link = $c->stash->{trait_page};
           
             my $qtl_analysis_page = $c->stash->{qtl_analysis_page}; 
-            push  @phenotype,  [ map { $_ } ( $trait_link, $min, $max, $avg, $count, $qtl_analysis_page ) ];               
+            push  @phenotype,  [ map { $_ } ( $trait_id, $trait_link, $min, $max, $avg, $count, $qtl_analysis_page ) ];               
         }
     }
     else 
     {
-        my @cvterms = $c->stash->{pop}->get_cvterms();
-        foreach my $cvterm( @cvterms )
-        {
-            my $cvterm_id = $cvterm->get_cvterm_id();
-            my $cvterm_name = $cvterm->get_cvterm_name();
-            my ($min, $max, $avg, $std, $count)= $c->stash->{pop}->get_pop_data_summary($cvterm_id);
-            
-            $c->stash( trait_name => $cvterm_name,
-                       cvterm_id  => $cvterm_id
-                );
+        my @cvterms = $pop->get_cvterms();
 
-            $self->_link($c);
-            my $qtl_analysis_page = $c->stash->{qtl_analysis_page};
-            my $cvterm_page = $c->stash->{cvterm_page};
-            push  @phenotype,  [ map { $_ } ( $cvterm_page, $min, $max, $avg, $count, $qtl_analysis_page ) ];
+	$c->controller('solGS::solGS')->get_all_traits($c);
+	my $traits_file = $c->stash->{all_traits_file};
+
+	my @traits_details = read_file($traits_file);
+         shift(@traits_details);
+	
+        foreach my $tr_detail ( @traits_details )
+        {
+
+	    my ($trait_id, $trait_name, $acronym) = split('\t', $tr_detail);
+
+	    $c->stash->{trait_name} = $trait_name;
+	    $c->stash->{trait_id} = $trait_id;
+
+	    $self->_get_links($c);
+	    
+	    my $analysis_page = $c->stash->{qtl_analysis_page};
+	    
+	    push  @phenotype,  [$trait_id, $analysis_page];
+	    
+            # my $trait_id = $cvterm->get_cvterm_id();
+            # my $cvterm_name = $cvterm->get_cvterm_name();
+            # my ($min, $max, $avg, $std, $count)= $pop->get_pop_data_summary($trait_id);
+            
+            # $c->stash( trait_name => $cvterm_name,
+            #            trait_id  => $trait_id
+            #     );
+
+            # $self->_get_links($c);
+            # my $qtl_analysis_page = $c->stash->{qtl_analysis_page};
+            # my $cvterm_page = $c->stash->{cvterm_page};
+	    # print STDERR "\n tr id: pid - $pop_id - $trait_id -- $qtl_analysis_page\n";
+            # push  @phenotype,  [ map { $_ } ($trait_id, $cvterm_page, $min, $max, $avg, $count, $qtl_analysis_page ) ];
+	    
+	    
         }
     }
+    
     $c->stash->{traits_list} = \@phenotype;
 }
 
@@ -243,10 +312,12 @@ sub is_qtl_pop {
 }
 
 
-sub _link {
+sub _get_links {
     my ($self, $c) = @_;
-    my $pop_id     = $c->stash->{pop}->get_population_id();
-    
+ 
+    my $pop_id     = $c->stash->{pop_id};
+    #my $pop =  CXGN::Phenome::Population->new($c->dbc->dbh, $id);
+     
     {
         no warnings 'uninitialized';
         my $trait_id   = $c->stash->{trait_id};
@@ -267,22 +338,20 @@ sub _link {
                    genotype_download  => qq |<a href="/qtl/download/genotype/$pop_id">Genotype data</a> |,
                    corre_download     => qq |<a href="/download/phenotypic/correlation/population/$pop_id">Correlation data</a> |,
                    acronym_download   => qq |<a href="/qtl/download/acronym/$pop_id">Trait-acronym key</a> |,
-                   qtl_analysis_page  => qq |<a href="/phenome/qtl_analysis.pl?population_id=$pop_id&amp;cvterm_id=$term_id" onclick="Qtl.waitPage()">$graph_icon</a> |,
+                   qtl_analysis_page  => qq |<a href="/phenome/qtl_analysis.pl?population_id=$pop_id&amp;cvterm_id=$term_id" onclick="Qtl.waitPage()">$trait_name</a> |,
             );
     }
     
 }
 
-sub _get_trait_acronyms {
-    my ($self, $c) = @_;
-  
-    $c->stash(trait_acronym_pairs => $c->stash->{pop}->get_cvterm_acronyms());
-
-}
 
 sub _get_owner_details {
     my ($self, $c) = @_;
-    my $owner_id   = $c->stash->{pop}->get_sp_person_id();
+
+    my $pop_id = $c->stash->{pop_id};
+    my $pop = CXGN::Phenome::Population->new($c->dbc->dbh, $pop_id);
+    
+    my $owner_id   = $pop->get_sp_person_id();
     my $owner      = CXGN::People::Person->new($c->dbc->dbh, $owner_id);
     my $owner_name = $owner->get_first_name()." ".$owner->get_last_name();    
     
@@ -291,6 +360,7 @@ sub _get_owner_details {
         );
     
 }
+
 
 sub _show_data {
     my ($self, $c) = @_;
@@ -407,21 +477,39 @@ sub get_template {
     return $self->templates->{$type};
 }
 
+
 sub submission_guide : PathPart('qtl/submission/guide') Chained Args(0) {
     my ($self, $c) = @_;
     $c->stash(template => '/qtl/submission/guide/index.mas');
 }
 
+
 sub genetic_map {
     my ($self, $c)  = @_;
-    my $mapv_id     = $c->stash->{pop}->mapversion_id();
-    my $map         = CXGN::Map->new( $c->dbc->dbh, { map_version_id => $mapv_id } );
-    my $map_name    = $map->get_long_name();
-    my $map_sh_name = $map->get_short_name();
-  
-    $c->stash( genetic_map => qq | <a href=/cview/map.pl?map_version_id=$mapv_id>$map_name ($map_sh_name)</a> | );
+    
+    my $pop_id = $c->stash->{pop_id};
+   
+    my $pop         = CXGN::Phenome::Population->new($c->dbc->dbh, $pop_id);
+    my $mapv_id     = $pop->mapversion_id();
 
+    my $map         = CXGN::Map->new( $c->dbc->dbh, { map_version_id => $mapv_id } );
+
+    my $map_name;
+    my $map_sh_name;
+    if ($map)
+    {
+	$map_name    = $map->get_long_name();
+	$map_sh_name = $map->get_short_name();
+	
+	$c->stash->{genetic_map} = qq | <a href=/cview/map.pl?map_version_id=$mapv_id>$map_name ($map_sh_name)</a> |;
+    }
+    else
+    {
+	$c->stash->{genetic_map} = 'There is no genetic map for this QTL population.';
+    }
+  
 }
+
 
 sub search_help : PathPart('qtl/search/help') Chained Args(0) {
     my ($self, $c) = @_;
@@ -595,6 +683,14 @@ sub map_qtl_traits {
     }
    
     return \@traits_urls;
+}
+
+
+sub begin : Private {
+    my ($self, $c) = @_;
+
+    $c->controller('solGS::Files')->get_solgs_dirs($c);
+  
 }
 
 __PACKAGE__->meta->make_immutable;

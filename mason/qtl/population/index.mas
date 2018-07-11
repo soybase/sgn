@@ -1,26 +1,38 @@
 <%args>
 
-$pop
-$guideline
+
+$guideline => undef
 $referer
-$userid
-$heatmap_file => ''
-$corre_table_file => ''
-$traits_list
-$trait_acronym_pairs
-$owner_page
-$show_data
-$phenotype_download
-$genotype_download
-$corre_download
-$acronym_download
+$userid => undef
+
+$owner_page => undef
+$show_data => 1
+$phenotype_download => undef
+$genotype_download => undef
+$corre_download => undef
+$acronym_download => undef
+
+$project_name
+$project_desc
+$stocks_no
+$traits_no
+$owner
+$markers_no
+$protocol
+$traits_form => undef
+$all_traits_file
+$no_traits_selected
+$list_reference => undef
+$pop_id
+$acronym
 $genetic_map
+$traits_list
 
 </%args>
 
 <%perl>
 
-my $title = $pop->get_name();
+my $title; #= $pop->get_name();
 my $submit_new = qq | <a href="/qtl/form">Submit QTL population</a> |;
 
 </%perl>
@@ -30,18 +42,25 @@ my $submit_new = qq | <a href="/qtl/form">Submit QTL population</a> |;
 &>
 
 <&| /page/info_section.mas, 
-  collapsible => 1, 
-  collapsed   => 0, 
-  title       => "Population summary",
-  subtitle    => $submit_new
-  &>
- 
-  <& summary.mas,
-     pop        => $pop,
-     owner_page => $owner_page,
+    collapsible => 1, 
+    collapsed   => 0, 
+    title       => "Training population summary",
   &>
 
+ <& /solgs/population/summary.mas,
+    project_id   => $pop_id,
+    project_name => $project_name,
+    project_desc => $project_desc,
+    stocks_no    => $stocks_no,
+    markers_no   => $markers_no,
+    traits_no    => $traits_no,
+    owner        => $owner,
+    protocol     => $protocol,
+    list_reference => $list_reference
+ &>
+
 </&>
+
 
 % if ($show_data) 
 %{
@@ -49,57 +68,52 @@ my $submit_new = qq | <a href="/qtl/form">Submit QTL population</a> |;
     collapsible => 1, 
     collapsed   => 0, 
     title       => "Set statistical parameters"
-  &>   
+    &>
+    
   <& stat_tools.mas, 
-    pop_id     => $pop->get_population_id(), 
+    pop_id     => $pop_id,
     guideline  => $guideline, 
     referer    => $referer, 
     userid     => $userid
- &>
+    &>
+    
  </&>
 
- <& traits_list.mas, 
-   traits_list => $traits_list 
- &>
 
- <& correlation.mas, 
-   pop                 => $pop, 
-   trait_acronym_pairs => $trait_acronym_pairs
+<&| /page/info_section.mas, 
+      collapsible => 1, 
+      collapsed   => 0, 
+      title       => "Select one or more traits to run QTL analysis"
+&> 
+  
+<& /solqtl/population/select_traits.mas, 
+   pop_id            => $pop_id,
+  traits_form        => $traits_form,
+  all_traits_file    => $all_traits_file,
+  no_traits_selected => $no_traits_selected,
+  list_reference     => $list_reference,
+  traits_list        => $traits_list
+&>
+
+</&>
+
+<& /solgs/population/correlation.mas, 
+   pop_id               => $pop_id
  &>
 
 <& genetic_map.mas, 
    genetic_map => $genetic_map
 &>
-
-<& download.mas, 
-   phenotype_download => $phenotype_download,
-   genotype_download  => $genotype_download,
-   corre_download     => $corre_download,
-   acronym_download   => $acronym_download,
-&>
-
-<&| /page/info_section.mas, 
-    collapsible => 1, 
-    collapsed   => 1, 
-    title       => "Trait acronyms"
-  &>   
- 
-  <& /page/columnar_table.mas,
-     headings     => ["Trait name", "Acronym"],
-     data         => $trait_acronym_pairs,
-     __alt_freq   => 2,
-     __alt_width  => 1,
-     __alt_offset => 3,
-     __align      => 'l'
-    &>
-
-</&>
-
+  
 %}
 % else
 %{
  <& data_access.mas, 
-    pop        => $pop, 
+    pop        => $pop_id, 
     owner_page => $owner_page
  &>
 %}
+
+<& /solgs/population/acronym.mas,
+   acronym => $acronym,
+&>
