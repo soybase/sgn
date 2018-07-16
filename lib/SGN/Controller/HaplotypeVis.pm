@@ -30,7 +30,7 @@ sub haplotype_vis_input :Path('/haplotype_visualizer') Args(0) {
 	$c->res->redirect(uri( path => '/user/login', query => { goto_url => $c->req->uri->path_query } ) );
 	return;
     }
-    $c->stash->{template} = '/haplotype_vis/index.mas';
+    $c->stash->{template} = '/haplotype_vis.mas';
 }
 
 1;

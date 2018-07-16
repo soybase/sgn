@@ -1,0 +1,315 @@
+<%doc>
+
+=head1 NAME
+
+/haploytype_vis/index.mas
+
+=head1 DESCRIPTION
+
+A component for displaying haplotypes alongside pedigree for accessions
+
+=head1 AUTHOR
+
+Thomas Chan <nm249@cornell.edu>
+
+</%doc>
+
+<& '/util/import_javascript.mas', classes => [ 'brapi.HaplotypeVisualizer', 'brapi.BrAPI', 'CXGN.List', 'd3.d3v4Min', 'd3.d3-pedigree-tree', 'jquery', 'jqueryui'] &>
+
+<& /page/page_title.mas, title=>'Haplotype Visualizer' &>
+
+<style>
+#pdgv-wrap>svg{
+    width: 100%;
+}
+
+input.marker_name {
+    width: 92%;
+}
+
+</style>
+
+<div class="row">
+    <div class="col-sm-7">
+        <div class="brapp-container" style="position:relative;">
+          <div value="brapp-wrapper" style="display:inline-block; border:solid 1px #ccc;border-radius:4px;">
+            <div class="brapp-body" style="background-color:#fff;border-top-left-radius:4px;border-top-right-radius:4px;">
+              <div style="padding:0.25em;text-align:center;border-bottom:solid 1px #ccc;">
+                <span style="white-space:nowrap;"><span class="glyphicon glyphicon-move" aria-hidden="true"></span> Drag to Pan</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> Scroll to Zoom</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-minus" style="color:red;" aria-hidden="true"></span> Female Parent</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-minus" style="color:blue;" aria-hidden="true"></span> Male Parent</span> &nbsp;&nbsp;
+              </div>
+              <div id="pdgv-wrap" style="width: 600px; height: 600px"></div>
+              <div style="clear:both"></div>
+            </div>
+            <div class="brapp-footer" style="background-color:#ddd;border-top:solid 1px #ccc;font-family:Arial;color:#555;font-size:11px;padding:0.3em;border-bottom-left-radius:4px;border-bottom-right-radius:4px;">
+              <div style="min-height:14px;text-align:right;">
+                <a href="https://github.com/solgenomics/BrAPI-Pedigree-Viewer" style="color:inherit;white-space:nowrap;text-decoration:underline;">Pedigree Viewer</a> developed at the <a href="https://btiscience.org/" style="color:inherit;white-space:nowrap;text-decoration:underline;">Boyce Thompson Institute</a>
+              </div>
+            </div>
+          </div>
+        </div>
+    </div>
+    <div class="col-sm-5">
+        <form class="tc-form">
+            <h3>Sample</h3>
+            <label>Choose sample setting:</label>
+            <div class="form-group">
+                <div class="sample_select_container">
+                    <select class="form-control input-sm" id="sample_select">
+                        <option selected="selected" disabled="disabled">-- Select Option --</option>
+                        <option value="accessions">Accession</option>
+                        <option value="populations">Population</option>
+                    </select>
+                </div>
+                <br>
+                <div id="accessions" style="display: none">
+                    <div id="select_div_id" type="text"></div>
+                </div>
+                <div id="populations" style="display: none">
+                    <input class="form-control input-sm" placeholder="Search populations..." type="text" id="population_name">
+                </div>
+            </div>
+
+            <h3>Haplotype</h3>
+            <label>Choose markers:</label>
+            <div class="form-group" id="marker_form_group">
+                <div class="marker_select_container">
+                    <button type="button" class="btn btn-sm btn-square btn-primary button pull-right clone" disabled>&plus;</button>
+                    <input class="form-control input-sm marker_name" placeholder="Search markers..." type="text" disabled>
+                    <br>
+                </div>
+            </div>
+
+        </form>
+        <button class="btn btn-primary btn-md" id="generate">Generate</button>
+    </div>
+</div>
+
+<script>
+
+/*
+ * Accession List Dropdown Module:
+ * Displays accession lists given name fragment
+ */
+var list_obj = new CXGN.List();
+var list_html = list_obj.listSelect('select_div_id', ['accessions'], "Select an accession list...");
+jQuery('#select_div_id').html(list_html);
+
+/*
+ * Population Search Module:
+ * Searches populations given name fragment
+ */
+jQuery('#population_name').autocomplete({
+    source: '/ajax/stock/population_autocomplete',
+});
+
+/*
+ * Accession List Retrieval
+ * Is given the type (population or accession list)
+ * and recieves the accessions in the form of an array
+ */
+function retrieve_accession_list(form, callback) {
+    var accession_list;
+    if (form == "accessions") {
+        var accessions = document.getElementById("select_div_id_list_select");
+        var list_id = accessions.options[accessions.selectedIndex].value;
+        var list_obj = new CXGN.List();
+        accession_list = list_obj.transform2Ids(list_id);
+        callback(accession_list);
+    } else {
+        var population = document.getElementById("population_name").value;
+        var population_id;
+        $.ajax({
+            url: '/ajax/haplotype_vis/population_id',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify({"population": population}),
+            success: function (data) {
+                $.ajax({
+                    url: '/ajax/manage_accessions/population_members/'+data.population_id,
+                    type: 'GET',
+                    dataType: 'json',
+                    success: function (data) {
+                        accession_list = data.data.map( function(obj) {
+                            return obj.stock_id;
+                        });
+                        callback(accession_list);
+                    }
+                });
+            }
+        });
+    }
+}
+
+/*
+ * Marker Display Module:
+ * Displays genetic marker list for search of
+ * marker name fragment and accession list
+ */
+function retrieve_markers(form) {
+    retrieve_accession_list(form, function(accession_list) {
+        $('.marker_name').autocomplete({
+            min_length: 1,
+            delay: 300,
+            source: function(request, callback){
+               $.ajax({
+                    url: '/ajax/haplotype_vis/markers',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    dataType:'json',
+                    data: JSON.stringify({"marker_alias_fragment": request.term, "accession_list": accession_list}),
+                    success: function (data){
+                        callback(data.matches);
+                    }
+                });
+            }
+        });
+    });
+}
+
+/*
+ * Duplicate Marker Search Module:
+ * Creates another search box when
+ * previous marker is selected
+ */
+ jQuery(document).on('click', '.clone', function(event) {
+    var form = document.getElementById("sample_select").value;
+    var clone = $('.marker_select_container:last').clone();
+    clone.find("span").remove();
+    clone.find(".marker_name").val("");
+    clone.find(".close").show();
+    if($('.button').length == 6) {
+        clone.find(".button")[0].classList.remove('clone');
+        clone.find(".button")[0].classList.remove('btn-primary');
+        clone.find(".button")[0].classList.add('remove');
+        clone.find(".button")[0].classList.add('btn-danger');
+        clone.find(".button")[0].innerHTML = "&minus;";
+    }
+    clone.appendTo('#marker_form_group').val("");
+    event.target.classList.remove('clone');
+    event.target.classList.remove('btn-primary');
+    event.target.classList.add('remove');
+    event.target.classList.add('btn-danger');
+    event.target.innerHTML = "&minus;";
+    if (form == "accessions") {
+        retrieve_markers("accessions");
+    } else {
+        retrieve_markers("populations");
+    }
+});
+
+/*
+ * Close Duplicate Marker Search Module:
+ * Closes duplicate marker search
+ * when button is clicked
+ */
+jQuery(document).on('click', '.remove', function() {
+    $(this).parent().remove();
+    if ($('.button').length < 7) {
+        var last_button = $('.button:last')[0];
+        console.log(last_button);
+        last_button.classList.remove('remove');
+        last_button.classList.remove('btn-danger');
+        last_button.classList.add('clone');
+        last_button.classList.add('btn-primary');
+        last_button.innerHTML = "&plus;";
+    }
+});
+
+/*
+ * Dropdown Module:
+ * Displays second dropdown menu
+ * when first dropdown option is selected
+ */
+jQuery('#sample_select').change(function() {
+    var form = document.getElementById("sample_select");
+    var value = form.options[form.selectedIndex].value;
+
+    if (value == "accessions") {
+        document.getElementById("accessions").style.display = "block";
+        document.getElementById("populations").style.display = "none";
+        $('.marker_name').val("");
+    } else {
+        document.getElementById("accessions").style.display = "none";
+        document.getElementById("populations").style.display = "block";
+        $('.marker_name').val("");
+    }
+});
+
+/*
+ * Enable Marker Search Module:
+ * Allows marker search to be used when first
+ * and second dropdown option are selected
+ */
+jQuery('#sample_select, #accessions, #populations').change(function() {
+    var form = document.getElementById("sample_select").value;
+    var accessions = document.getElementById("select_div_id_list_select").value;
+    var populations = document.getElementById("population_name").value;
+    var marker_search = document.getElementsByClassName("marker_name");
+    var button = document.getElementsByClassName("button");
+
+    if (form == "accessions" && accessions != "") {
+        for (var i = 0; i < marker_search.length; i++) {
+            marker_search[i].disabled = false;
+            button[i].disabled = false;
+        }
+        retrieve_markers("accessions");
+    } else if(form == "populations" && populations != "") {
+        for (var i = 0; i < marker_search.length; i++) {
+            marker_search[i].disabled = false;
+            button[i].disabled = false;
+        }
+        retrieve_markers("populations");
+    } else {
+        for (var i = 0; i < marker_search.length; i++) {
+            marker_search[i].disabled = true;
+            button[i].disabled = true;
+        }
+    }
+
+    $('.marker_name').val("");
+    $('.close:visible').parent().remove();
+});
+
+/*
+ * Generate Viewer Module:
+ * Retrieves data and builds
+ * haplo-pedigree viewer
+ */
+jQuery(document).on('click', '#generate', function(){
+    var form = document.getElementById("sample_select").value;
+    var accessions;
+    var markers = [];
+    retrieve_accession_list(form, function(accession_list) {
+        accessions = accession_list;
+
+        $('.marker_name').each(function() {
+            var value = $(this).val();
+            if (value != "") {
+                markers.push(value);
+            }
+        });
+    });
+});
+
+/*
+ * Haplotype Viewer Module:
+ * Builds haplo-pedigree viewer
+ */
+var server = "/brapi/v1", //REQUIRED, brapi root url, NO trailing slash.
+    sgn_url = function(germplasmDbId){ //OPTIONAL a function which returns a link to a germplasm information page, returning null will create a node without a link.
+        return "/stock/"+germplasmDbId+"/view"; //FIX URL
+    };
+
+var pdg = PedigreeViewer(server, undefined, sgn_url);
+
+var germplasms = ['38881', '38882', '38884', '38885', '38886', '38887', '38888', '38889'], //REQUIRED single germplasmDbId which should be displayed on start
+    dom_parent_selector = "div#pdgv-wrap", //REQUIRED selector for the parent node of the new viewer SVG element.
+    width = 600, //OPTIONAL width of viewer
+    height = 600; //OPTIONAL height of viewer
+pdg.newTree(germplasms, function(){
+    // this callback is called once the new tree has been initialized.
+    pdg.drawViewer(dom_parent_selector, width, height); // only draw the tree once the new tree has been initialized!
+});
+
+</script>

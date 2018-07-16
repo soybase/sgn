@@ -12,9 +12,9 @@ function PedigreeViewer(server,auth,urlFunc){
         var loaded_nodes = {};
         var myTree = null;
         var locationSelector = null;
-        
+
         urlFunc = urlFunc!=undefined?urlFunc:function(){return null};
-                
+
         pdgv.newTree = function(stock_id,callback){
             root = stock_id;
             loaded_nodes = {};
@@ -41,13 +41,13 @@ function PedigreeViewer(server,auth,urlFunc){
                 });
             }
         };
-        
+
         pdgv.drawViewer = function(loc,draw_width,draw_height){
             locationSelector = loc;
             drawTree(undefined,draw_width,draw_height);
         };
-        
-        function createNewTree(start_nodes) {  
+
+        function createNewTree(start_nodes) {
             myTree = d3.pedigreeTree()
               .levelWidth(200)
               .levelMidpoint(50)
@@ -67,7 +67,7 @@ function PedigreeViewer(server,auth,urlFunc){
               .data(start_nodes)
               .excludeFromGrouping([root]);
         }
-        
+
         function load_nodes(stock_ids,callback){
             var germplasm = brapijs.data(stock_ids);
             var pedigrees = germplasm.germplasm_pedigree(function(d){return {'germplasmDbId':d}});
@@ -79,7 +79,7 @@ function PedigreeViewer(server,auth,urlFunc){
                 }
                 return true;
             }).map(function(ped_pro_germId){
-                var mother = null, 
+                var mother = null,
                     father = null;
                 if(ped_pro_germId[0].parent1Type=="FEMALE"){
                     mother = ped_pro_germId[0].parent1DbId;
@@ -106,14 +106,14 @@ function PedigreeViewer(server,auth,urlFunc){
                 loaded_nodes[node.id] = node;
             }).all(callback);
         }
-        
+
         function drawTree(trans,draw_width,draw_height){
-            
+
             var layout = myTree();
-            
+
             //set default change-transtion to no duration
             trans = trans || d3.transition().duration(0);
-            
+
             //make wrapper(pdg)
             var wrap = d3.select(locationSelector);
             var canv = wrap.select("svg.pedigreeViewer");
@@ -124,13 +124,13 @@ function PedigreeViewer(server,auth,urlFunc){
                     .attr("viewbox","0 0 "+draw_width+" "+draw_height);
             }
             var cbbox = canv.node().getBoundingClientRect();
-            var canvw = cbbox.width, 
+            var canvw = cbbox.width,
                 canvh = cbbox.height;
             var pdg = canv.select('.pedigreeTree');
             if (pdg.empty()){
               pdg = canv.append('g').classed('pedigreeTree',true);
             }
-          
+
             //make background
             var bg = pdg.select('.pdg-bg');
             if (bg.empty()){
@@ -144,7 +144,7 @@ function PedigreeViewer(server,auth,urlFunc){
                 .attr('opacity',"0.00001")
                 .attr('stroke','none');
             }
-            
+
             //make scaled content/zoom groups
             var padding = 50;
             var pdgtree_width = d3.max([500,layout.x[1]-layout.x[0]]);
@@ -154,12 +154,12 @@ function PedigreeViewer(server,auth,urlFunc){
             var scale = get_fit_scale(canvw,canvh,pdgtree_width,pdgtree_height,padding);
             var offsetx = (canvw-(pdgtree_width)*scale)/2 + centeringx*scale;
             var offsety = (canvh-(pdgtree_height)*scale)/2 + centeringy*scale;
-            
+
             var content = pdg.select('.pdg-content');
             if (content.empty()){
               var zoom = d3.zoom();
               var zoom_group = pdg.append('g').classed('pdg-zoom',true).data([zoom]);
-              
+
               content = zoom_group.append('g').classed('pdg-content',true);
               content.datum({'zoom':zoom});
               zoom.on("zoom",function(){
@@ -170,7 +170,7 @@ function PedigreeViewer(server,auth,urlFunc){
                 zoom.transform(bg.transition(),d3.zoomIdentity);
                 return false;
               });
-              
+
               content.attr('transform',
                   d3.zoomIdentity
                     .translate(offsetx,offsety)
@@ -184,8 +184,8 @@ function PedigreeViewer(server,auth,urlFunc){
                   .translate(offsetx,offsety)
                   .scale(scale)
               );
-            
-            
+
+
             //set up draw layers
             var linkLayer = content.select('.link-layer');
             if(linkLayer.empty()){
@@ -195,7 +195,7 @@ function PedigreeViewer(server,auth,urlFunc){
             if(nodeLayer.empty()){
                 nodeLayer = content.append('g').classed('node-layer',true);
             }
-            
+
             //link curve generators
             var stepline = d3.line().curve(d3.curveStepAfter);
             var curveline = d3.line().curve(d3.curveBasis);
@@ -203,7 +203,7 @@ function PedigreeViewer(server,auth,urlFunc){
               if (d.type=="parent->mid") return curveline(d.path);
               if (d.type=="mid->child") return stepline(d.path);
             };
-            
+
             //draw nodes
             var nodes = nodeLayer.selectAll('.node')
               .data(layout.nodes,function(d){return d.id;});
@@ -396,25 +396,25 @@ function PedigreeViewer(server,auth,urlFunc){
             });
             var oldNodes = nodes.exit().remove();
 
-            
+
             //link colors
             var link_color = function(d){
               if (d.type=="mid->child") return 'purple';
               if (d.type=="parent->mid"){
                 //if its the first parent, red. Otherwise, blue.
                 var representative = d.sinks[0].type=="node-group"?
-                        d.sinks[0].value[0].value 
+                        d.sinks[0].value[0].value
                         : d.sinks[0].value;
                 if (representative.mother_id == d.source.id){
                     return "red";
-                } 
+                }
                 else {
                     return "blue";
                 }
               }
               return 'gray';
             };
-            
+
             //make links
             var links = linkLayer.selectAll('.link')
               .data(layout.links,function(d){return d.id;});
@@ -439,10 +439,10 @@ function PedigreeViewer(server,auth,urlFunc){
             allLinks.transition(trans).select('path').attr('d',build_curve);
             var oldNodes = links.exit().remove();
         }
-        
+
         return pdgv;
     }
-    
+
     function load_blink(node){
         var stop = false;
         var original_fill = d3.select(node).style("fill");
@@ -464,10 +464,10 @@ function PedigreeViewer(server,auth,urlFunc){
             stop = true;
         }
     }
-      
+
     function get_fit_scale(w1,h1,w2,h2,pad){
         w1 -= pad*2;
-        h1 -= pad*2;  
+        h1 -= pad*2;
         if (w1/w2<h1/h2){
             return w1/w2;
         } else {
