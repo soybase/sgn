@@ -172,47 +172,41 @@ function retrieve_markers(form) {
  * Creates another search box when
  * previous marker is selected
  */
- jQuery(document).on('click', '.clone', function(event) {
-    var form = document.getElementById("sample_select").value;
-    var clone = $('.marker_select_container:last').clone();
-    clone.find("span").remove();
-    clone.find(".marker_name").val("");
-    clone.find(".close").show();
-    if($('.button').length == 6) {
-        clone.find(".button")[0].classList.remove('clone');
-        clone.find(".button")[0].classList.remove('btn-primary');
-        clone.find(".button")[0].classList.add('remove');
-        clone.find(".button")[0].classList.add('btn-danger');
-        clone.find(".button")[0].innerHTML = "&minus;";
-    }
-    clone.appendTo('#marker_form_group').val("");
-    event.target.classList.remove('clone');
-    event.target.classList.remove('btn-primary');
-    event.target.classList.add('remove');
-    event.target.classList.add('btn-danger');
-    event.target.innerHTML = "&minus;";
-    if (form == "accessions") {
-        retrieve_markers("accessions");
-    } else {
-        retrieve_markers("populations");
-    }
-});
+jQuery(document).on('click', '.clone, .remove', function(event) {
 
-/*
- * Close Duplicate Marker Search Module:
- * Closes duplicate marker search
- * when button is clicked
- */
-jQuery(document).on('click', '.remove', function() {
-    $(this).parent().remove();
-    if ($('.button').length < 7) {
+    if ($(event.target).hasClass('clone')) {
+        var form = document.getElementById("sample_select").value;
+        var clone = $('.marker_select_container:last').clone();
+        clone.find("span").remove();
+        clone.find(".marker_name").val("");
+        clone.find(".close").show();
+        clone.appendTo('#marker_form_group').val("");
+        event.target.classList.remove('clone');
+        event.target.classList.remove('btn-primary');
+        event.target.classList.add('remove');
+        event.target.classList.add('btn-danger');
+        event.target.innerHTML = "&minus;";
+        if (form == "accessions") {
+            retrieve_markers("accessions");
+        } else {
+            retrieve_markers("populations");
+        }
+    } else {
+        $(this).parent().remove();
         var last_button = $('.button:last')[0];
-        console.log(last_button);
         last_button.classList.remove('remove');
         last_button.classList.remove('btn-danger');
         last_button.classList.add('clone');
         last_button.classList.add('btn-primary');
         last_button.innerHTML = "&plus;";
+    }
+
+    if($('.button').length > 6) {
+        $('.button').last()[0].classList.remove('clone');
+        $('.button').last()[0].classList.remove('btn-primary');
+        $('.button').last()[0].classList.add('remove');
+        $('.button').last()[0].classList.add('btn-danger');
+        $('.button').last()[0].innerHTML = "&minus;";
     }
 });
 
