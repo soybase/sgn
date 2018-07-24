@@ -35,7 +35,7 @@ input.marker_name {
           <div value="brapp-wrapper" style="display:inline-block; border:solid 1px #ccc;border-radius:4px;">
             <div class="brapp-body" style="background-color:#fff;border-top-left-radius:4px;border-top-right-radius:4px;">
               <div style="padding:0.25em;text-align:center;border-bottom:solid 1px #ccc;">
-                <span style="white-space:nowrap;"><span class="glyphicon glyphicon-move" aria-hidden="true"></span> Drag to Pan</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> Scroll to Zoom</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-minus" style="color:red;" aria-hidden="true"></span> Female Parent</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-minus" style="color:blue;" aria-hidden="true"></span> Male Parent</span> &nbsp;&nbsp;
+                <span style="white-space:nowrap;"><span class="glyphicon glyphicon-move" aria-hidden="true"></span> Drag to Pan</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> Scroll to Zoom</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-minus" style="color: #F01E20;" aria-hidden="true"></span> Female Parent</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-minus" style="color: #4155DC;" aria-hidden="true"></span> Male Parent</span> &nbsp;&nbsp;
               </div>
               <div id="pdgv-wrap" style="width: 600px; height: 600px"></div>
               <div style="clear:both"></div>
@@ -297,10 +297,13 @@ var server = "/brapi/v1", //REQUIRED, brapi root url, NO trailing slash.
 
 var pdg = PedigreeViewer(server, undefined, sgn_url);
 
-var germplasms = ['38881', '38882', '38884', '38885', '38886', '38887', '38888', '38889'], //REQUIRED single germplasmDbId which should be displayed on start
+var germplasms = ['38881', '38882', '38885', '38886', '38887', '38888', '38889'], //REQUIRED single germplasmDbId which should be displayed on start
+    marker_ids = ['S5_36739', 'S7292_69', 'S6629_92'],
     dom_parent_selector = "div#pdgv-wrap", //REQUIRED selector for the parent node of the new viewer SVG element.
     width = 600, //OPTIONAL width of viewer
     height = 600; //OPTIONAL height of viewer
+
+//FIGURE OUT DIMENSIONS
 pdg.newTree(germplasms, function(){
     // this callback is called once the new tree has been initialized.
     pdg.drawViewer(dom_parent_selector, width, height); // only draw the tree once the new tree has been initialized!
