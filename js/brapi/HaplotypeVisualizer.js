@@ -18,7 +18,7 @@
             return null
         };
 
-        pdgv.newTree = function(stock_ids, callback) {
+        pdgv.newTree = function(stock_ids, marker_ids, callback) {
             root = stock_ids[0];
             loaded_nodes = {};
             var all_nodes = [];
@@ -44,15 +44,24 @@
                     contentType: 'application/json',
                     dataType: 'json',
                     data: JSON.stringify({
-                        "marker_list": ['S5_36739', 'S7292_69', 'S13_92567'],
-                        "accession_list": ['38881', '38882', '38885', '38886', '38887', '38888', '38889']
+                        "marker_list": marker_ids,
+                        "accession_list": stock_ids
                     }),
                     success: function(data) {
                         for (var i = 0; i < all_nodes.length; i++) {
-                            all_nodes[i].markers = d3.entries(JSON.parse(data.marker_values[i]));
+                            all_nodes[i].markers = marker_ids.reduce(function(result, element) {
+                                if (data.marker_values[i][element] != null) {
+                                    var obj = {};
+                                    obj.key = element;
+                                    obj.value = data.marker_values[i][element];
+                                    result.push(obj);
+                                }
+                                return result;
+                            }, []);
                         }
 
-                        createNewTree(all_nodes);
+
+                        createNewTree(all_nodes, marker_ids);
                         callback.call(pdgv);
                     }
                 });
@@ -66,9 +75,9 @@
             drawTree(undefined, draw_width, draw_height);
         };
 
-        function createNewTree(start_nodes) {
+        function createNewTree(start_nodes, marker_ids) {
             myTree = d3.pedigreeTree()
-                .levelWidth(340) //ADJUST
+                .levelWidth(280 + 20 * marker_ids.length)
                 .levelMidpoint(50)
                 .nodePadding(340) //WIDTH
                 .nodeWidth(20)
@@ -173,10 +182,10 @@
             }
 
             // Make scaled content/zoom groups
-            var padding = 50;
+            var padding = 100;
             var pdgtree_width = d3.max([500, layout.x[1] - layout.x[0]]);
             var pdgtree_height = d3.max([500, layout.y[1] - layout.y[0]]);
-            var centeringx = d3.max([0, (500 - (layout.x[1] - layout.x[0])) / 2]);
+            var centeringx = d3.max([-80, (500 - (layout.x[1] - layout.x[0])) / 2]);
             var centeringy = d3.max([0, (500 - (layout.y[1] - layout.y[0])) / 2]);
             var scale = get_fit_scale(canvw, canvh, pdgtree_width, pdgtree_height, padding);
             var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale;
@@ -261,68 +270,7 @@
                 .attr("ry", 10)
                 .attr("x", -100);
 
-            // Draw markers
-            var markerNodes = nodeNodes.selectAll('.markers')
-                .data(function(d) {
-                    return d.value.markers;
-                })
-                .enter().append("g")
-                .classed('markers', true);
-
-            markerNodes.append('rect')
-                .classed('.marker-name-wrapper', true)
-                .attr('fill', "white")
-                .attr('stroke', function(d) {
-                    if (d.value == '0') {
-                        return d3.color("#664cbe");
-                    } else if (d.value == '1') {
-                        return d3.color("#1eb8d0");
-                    } else {
-                        return d3.color("#9cf257");
-                    }
-                })
-                .attr('stroke-width', 2)
-                .attr('fill', function(d) {
-                    if (d.value == '0') {
-                        return d3.color("#664cbe");
-                    } else if (d.value == '1') {
-                        return d3.color("#1eb8d0");
-                    } else {
-                        return d3.color("#9cf257");
-                    }
-                })
-                .style("opacity", .4)
-                .attr("width", 110)
-                .attr("height", 20)
-                .attr("y", function(d, i) {
-                    return 22 * i;
-                })
-                .attr("rx", 10)
-                .attr("ry", 10)
-                .attr("x", 70);
-
-            markerNodes.append('text')
-                .classed('marker-names', true)
-                .attr("y", function(d, i) {
-                    return 22 * i + 15;
-                })
-                .attr("x", 80)
-                .text(function(d, i) {
-                    return d.key + ': ' + d.value;
-                })
-                .attr('fill', 'black');
-
-            // Set node width to text width
-            markerNodes.each(function(d) {
-                var nn = d3.select(this);
-                var ctl = nn.select('.marker-names').node().getComputedTextLength();
-                var w = ctl + 20;
-                nn.select('.marker-name-wrapper')
-                    .attr("width", w)
-                    .attr("x", -w / 2);
-            });
-
-            // Draw links
+            // Draw node links
             var nodeUrlLinks = nodeNodes.filter(function(d) {
                     var url = urlFunc(d.id);
                     if (url !== null) {
@@ -354,7 +302,7 @@
                 })
                 .attr('fill', "black");
 
-            // Set marker width to text width
+            // Set node width to text width
             nodeNodes.each(function(d) {
                 var nn = d3.select(this);
                 var ctl = nn.select('.node-name-text').node().getComputedTextLength();
@@ -364,6 +312,101 @@
                     .attr("x", -w / 2);
             });
 
+            // Draw node-marker connection
+            nodeNodes.append('line').classed("node-marker-link", true)
+                .style("stroke-dasharray", ("2, 2"))
+                .attr('fill', 'none')
+                .attr('stroke', "#A9A9A9")
+                .attr('stroke-width', 5)
+                .attr("y1", 10)
+                .attr("y2", 10)
+                .attr("x1", 45)
+                .attr("x2", 70);
+
+            // Draw markers
+            var markerNodes = nodeNodes.selectAll('.marker')
+                .data(function(d) {
+                    return d.value.markers;
+                })
+                .enter().append("g")
+                .classed('markers', true);
+
+            markerNodes.append('rect').classed('marker-name-wrapper', true)
+                .attr('fill', "white")
+                .attr('stroke', function(d) {
+                    if (d.value == '0') {
+                        return "#664cbe";
+                    } else if (d.value == '1') {
+                        return "#1eb8d0";
+                    } else {
+                        return "#9cf257";
+                    }
+                })
+                .attr('stroke-width', 2)
+                .attr('fill', function(d) {
+                    if (d.value == '0') {
+                        return "#664cbe";
+                    } else if (d.value == '1') {
+                        return "#1eb8d0";
+                    } else {
+                        return "#9cf257";
+                    }
+                })
+                .style("opacity", .3)
+                .attr("width", 110)
+                .attr("height", 20)
+                .attr("y", function(d, i) {
+                    return 22 * i;
+                })
+                .attr("rx", 10)
+                .attr("ry", 10)
+                .attr("x", 70);
+
+            markerNodes.on("mouseover", function(d_selected) {
+                    markerNodes.each(function(d_marker){
+                        console.log("mouseover!");
+                        if (d_selected.key != d_marker.key) {
+                            var mn = d3.select(this);
+                            mn.style('opacity', .3);
+                        }
+                    });
+                })
+                .on("mouseout", function() {
+                    markerNodes.each(function(){
+                            console.log("mouseout!");
+                            var mn = d3.select(this);
+                            mn.style('opacity', 1);
+                    });
+                });
+
+            markerNodes.append('text')
+                .classed('marker-name-text', true)
+                .attr("y", function(d, i) {
+                    return 22 * i + 15;
+                })
+                .attr("x", 80)
+                .attr('text-anchor', "left")
+                .text(function(d, i) {
+                    return d.key + ': ' + d.value;
+                })
+                .attr('fill', 'black');
+
+            // Set marker width to text width
+            var max = 0;
+            markerNodes.each(function(d) {
+                var mn = d3.select(this);
+                var ctl = mn.select('.marker-name-text').node().getComputedTextLength();
+                if (max < ctl) {
+                    max = ctl;
+                }
+            });
+            markerNodes.each(function(d) {
+                var mn = d3.select(this);
+                var w = max + 20;
+                mn.select('.marker-name-wrapper')
+                    .attr("width", w)
+                    .attr("x", 70);
+            });
 
             // Link colors
             var link_color = function(d) {

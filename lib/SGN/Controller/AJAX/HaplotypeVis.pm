@@ -19,6 +19,7 @@ package SGN::Controller::AJAX::HaplotypeVis;
 use Moose;
 use Bio::Chado::Schema;
 use Data::Dumper;
+use JSON;
 use SGN::Model::Cvterm;
 
 
@@ -136,9 +137,11 @@ sub retrieve_marker_values : Path('/ajax/haplotype_vis/marker_values') Args(0) {
     my $query = $dbh->prepare($query_start);
     $query->execute(@marker_list, @accession_list);
 
+    my $json = JSON->new();
     while (my ($stock_id, $markers) = $query->fetchrow_array()) {
         push @stock_ids, $stock_id;
-        push @marker_values, $markers;
+
+        push @marker_values, $json->decode($markers);
     }
 
     $c->stash->{rest} = { stock_ids => \@stock_ids, marker_values => \@marker_values};
