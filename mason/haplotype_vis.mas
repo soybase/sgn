@@ -18,17 +18,6 @@ Thomas Chan <nm249@cornell.edu>
 
 <& /page/page_title.mas, title=>'Haplotype Visualizer' &>
 
-<style>
-#pdgv-wrap>svg{
-    width: 100%;
-}
-
-input.marker_name {
-    width: 92%;
-}
-
-</style>
-
 <div class="row">
     <div class="col-sm-7">
         <div class="brapp-container" style="position:relative;">
@@ -37,7 +26,7 @@ input.marker_name {
               <div style="padding:0.25em;text-align:center;border-bottom:solid 1px #ccc;">
                 <span style="white-space:nowrap;"><span class="glyphicon glyphicon-move" aria-hidden="true"></span> Drag to Pan</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> Scroll to Zoom</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-minus" style="color: #F01E20;" aria-hidden="true"></span> Female Parent</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-minus" style="color: #4155DC;" aria-hidden="true"></span> Male Parent</span> &nbsp;&nbsp;
               </div>
-              <div id="pdgv-wrap" style="width: 600px; height: 600px"></div>
+              <div id="pdgv-wrap"></div>
               <div style="clear:both"></div>
             </div>
             <div class="brapp-footer" style="background-color:#ddd;border-top:solid 1px #ccc;font-family:Arial;color:#555;font-size:11px;padding:0.3em;border-bottom-left-radius:4px;border-bottom-right-radius:4px;">
@@ -55,17 +44,23 @@ input.marker_name {
             <div class="form-group">
                 <div class="sample_select_container">
                     <select class="form-control input-sm" id="sample_select">
-                        <option selected="selected" disabled="disabled">-- Select Option --</option>
-                        <option value="accessions">Accession</option>
+                        <option disabled>-- Select Option --</option>
+                        <option selected="selected" value="accessions">Accession</option>
                         <option value="populations">Population</option>
                     </select>
                 </div>
                 <br>
-                <div id="accessions" style="display: none">
+                <div id="accessions">
                     <div id="select_div_id" type="text"></div>
                 </div>
                 <div id="populations" style="display: none">
                     <input class="form-control input-sm" placeholder="Search populations..." type="text" id="population_name">
+                </div>
+                <br>
+                <label>Choose a protocol:</label>
+                <div id="protocol">
+                    <select class="form-control input-sm" id="protocol_select" disabled>
+                    </select>
                 </div>
             </div>
 
@@ -73,14 +68,14 @@ input.marker_name {
             <label>Choose markers:</label>
             <div class="form-group" id="marker_form_group">
                 <div class="marker_select_container">
-                    <button type="button" class="btn btn-sm btn-square btn-primary button pull-right clone" disabled>&plus;</button>
-                    <input class="form-control input-sm marker_name" placeholder="Search markers..." type="text" disabled>
+                    <button type="button" class="btn btn-sm btn-square btn-primary button clone pull-right" disabled>&plus;</button>
+                    <input class="form-control input-sm marker_name" placeholder="Search markers..." type="text" style="width: 88%" onchange="enableGenerator()" disabled>
                     <br>
                 </div>
             </div>
 
         </form>
-        <button class="btn btn-primary btn-md" id="generate">Generate</button>
+        <button class="btn btn-primary btn-md" id="generate" disabled>Generate</button>
     </div>
 </div>
 
@@ -107,9 +102,9 @@ jQuery('#population_name').autocomplete({
  * Is given the type (population or accession list)
  * and recieves the accessions in the form of an array
  */
-function retrieve_accession_list(form, callback) {
+function retrieve_accession_list(sample_select, callback) {
     var accession_list;
-    if (form == "accessions") {
+    if (sample_select == "accessions") {
         var accessions = document.getElementById("select_div_id_list_select");
         var list_id = accessions.options[accessions.selectedIndex].value;
         var list_obj = new CXGN.List();
@@ -124,18 +119,29 @@ function retrieve_accession_list(form, callback) {
             contentType: 'application/json',
             dataType: 'json',
             data: JSON.stringify({"population": population}),
+            beforeSend: function() {
+                jQuery('#working_modal').modal('show');
+            },
             success: function (data) {
                 $.ajax({
                     url: '/ajax/manage_accessions/population_members/'+data.population_id,
                     type: 'GET',
                     dataType: 'json',
-                    success: function (data) {
+                    success: function(data) {
                         accession_list = data.data.map( function(obj) {
                             return obj.stock_id;
                         });
                         callback(accession_list);
                     }
                 });
+            },
+            complete: function() {
+                setTimeout(function() {
+                    jQuery('#working_modal').modal('hide');
+                }, 100);
+            },
+            error: function() {
+                alert("Accession list retrieval failed. Choose different accession/population list.");
             }
         });
     }
@@ -146,8 +152,10 @@ function retrieve_accession_list(form, callback) {
  * Displays genetic marker list for search of
  * marker name fragment and accession list
  */
-function retrieve_markers(form) {
-    retrieve_accession_list(form, function(accession_list) {
+function retrieve_markers(sample_select) {
+    var protocol_select = document.getElementById("protocol_select");
+    var protocol_id = protocol_select.options[protocol_select.selectedIndex].value;
+    retrieve_accession_list(sample_select, function(accession_list) {
         $('.marker_name').autocomplete({
             min_length: 1,
             delay: 300,
@@ -157,11 +165,14 @@ function retrieve_markers(form) {
                     type: 'POST',
                     contentType: 'application/json',
                     dataType:'json',
-                    data: JSON.stringify({"marker_alias_fragment": request.term, "accession_list": accession_list}),
+                    data: JSON.stringify({"marker_alias_fragment": request.term, "accession_list": accession_list, "protocol": protocol_id}),
                     success: function (data){
                         callback(data.matches);
                     }
                 });
+            },
+            error: function() {
+                alert("Marker retrieval failed. Choose different accession/population list or protocol.");
             }
         });
     });
@@ -175,18 +186,17 @@ function retrieve_markers(form) {
 jQuery(document).on('click', '.clone, .remove', function(event) {
 
     if ($(event.target).hasClass('clone')) {
-        var form = document.getElementById("sample_select").value;
+        var sample_select = document.getElementById("sample_select").value;
         var clone = $('.marker_select_container:last').clone();
         clone.find("span").remove();
         clone.find(".marker_name").val("");
-        clone.find(".close").show();
         clone.appendTo('#marker_form_group').val("");
         event.target.classList.remove('clone');
         event.target.classList.remove('btn-primary');
         event.target.classList.add('remove');
         event.target.classList.add('btn-danger');
         event.target.innerHTML = "&minus;";
-        if (form == "accessions") {
+        if (sample_select == "accessions") {
             retrieve_markers("accessions");
         } else {
             retrieve_markers("populations");
@@ -211,13 +221,13 @@ jQuery(document).on('click', '.clone, .remove', function(event) {
 });
 
 /*
- * Dropdown Module:
- * Displays second dropdown menu
+ * Accession/Population Dropdown Module:
+ * Displays the second dropdown menu
  * when first dropdown option is selected
  */
 jQuery('#sample_select').change(function() {
-    var form = document.getElementById("sample_select");
-    var value = form.options[form.selectedIndex].value;
+    var sample_select = document.getElementById("sample_select");
+    var value = sample_select.options[sample_select.selectedIndex].value;
 
     if (value == "accessions") {
         document.getElementById("accessions").style.display = "block";
@@ -228,27 +238,89 @@ jQuery('#sample_select').change(function() {
         document.getElementById("populations").style.display = "block";
         $('.marker_name').val("");
     }
+    enableGenerator();
+});
+
+/*
+ * Enable Protocol Select Module:
+ * Allows protocol select to be used when first
+ * and second dropdown option are selected
+ */
+jQuery('#sample_select, #accessions, #populations').change(function() {
+    var sample_select = document.getElementById("sample_select").value;
+    var accessions = document.getElementById("select_div_id_list_select").value;
+    var populations = document.getElementById("population_name").value;
+    var protocol_select = document.getElementById("protocol_select");
+
+    if ((sample_select == "accessions" && accessions != "") || (sample_select == "populations" && populations != "")) {
+        protocol_select.disabled = false;
+        while (protocol_select.firstChild) {
+                protocol_select.removeChild(protocol_select.firstChild);
+        }
+        retrieve_accession_list(sample_select, function(accession_list) {
+            accessions = accession_list;
+            $.ajax({
+                url: '/ajax/haplotype_vis/protocols',
+                type: 'POST',
+                contentType: 'application/json',
+                dataType:'json',
+                data: JSON.stringify({"accession_list": accessions}),
+                beforeSend: function() {
+                    jQuery('#working_modal').modal('show');
+                },
+                success: function(data) {
+                    var element = document.createElement("option");
+                    element.disabled = "true";
+                    element.selected = "true";
+                    element.text = "-- Select Option --";
+                    protocol_select.add(element);
+                    for(var i = 0; i < data.protocol_array.length; i++) {
+                        element = document.createElement("option");
+                        element.text =  data.protocol_array[i];
+                        element.value =  data.protocol_id_array[i];
+                        protocol_select.add(element);
+                    }
+                },
+                complete: function(){
+                    setTimeout(function() {
+                        jQuery('#working_modal').modal('hide');
+                    }, 100);
+                },
+                error: function() {
+                    alert("Protocol retrieval failed.");
+                }
+            });
+        });
+    } else {
+        protocol_select.disabled = true;
+        protocol_select.selected = "";
+        while (protocol_select.firstChild) {
+            protocol_select.removeChild(protocol_select.firstChild);
+        }
+    }
+    enableGenerator();
 });
 
 /*
  * Enable Marker Search Module:
- * Allows marker search to be used when first
- * and second dropdown option are selected
+ * Allows marker search to be used when first,
+ * second, and third dropdown option are selected
  */
-jQuery('#sample_select, #accessions, #populations').change(function() {
-    var form = document.getElementById("sample_select").value;
+jQuery('#sample_select, #accessions, #populations, #protocol_select').change(function() {
+    var sample_select = document.getElementById("sample_select").value;
     var accessions = document.getElementById("select_div_id_list_select").value;
     var populations = document.getElementById("population_name").value;
+    var protocol_select = document.getElementById("protocol_select");
     var marker_search = document.getElementsByClassName("marker_name");
     var button = document.getElementsByClassName("button");
 
-    if (form == "accessions" && accessions != "") {
+    if (sample_select == "accessions" && accessions != "" && protocol_select.selectedIndex != "-1") {
         for (var i = 0; i < marker_search.length; i++) {
             marker_search[i].disabled = false;
             button[i].disabled = false;
         }
         retrieve_markers("accessions");
-    } else if(form == "populations" && populations != "") {
+    } else if(sample_select == "populations" && populations != "" && protocol_select.selectedIndex != "-1") {
         for (var i = 0; i < marker_search.length; i++) {
             marker_search[i].disabled = false;
             button[i].disabled = false;
@@ -260,10 +332,30 @@ jQuery('#sample_select, #accessions, #populations').change(function() {
             button[i].disabled = true;
         }
     }
-
-    $('.marker_name').val("");
-    $('.close:visible').parent().remove();
+    for (var i = 0; i < marker_search.length; i++) {
+        marker_search[i].value = "";
+    }
+    enableGenerator();
 });
+
+/*
+ * Enable Generate Module:
+ * Allows generate to be used when all
+ * dropdown options are selected
+ */
+function enableGenerator() {
+    var count = 0;
+    $('.marker_name').each(function() {
+        if ($(this).val() != "") {
+            count++;
+        }
+    });
+    if (count > 0) {
+        document.getElementById('generate').disabled = false;
+    } else {
+        document.getElementById('generate').disabled = true;
+    }
+}
 
 /*
  * Generate Viewer Module:
@@ -277,45 +369,43 @@ var server = "/brapi/v1",
 
 var pdg = PedigreeViewer(server, undefined, sgn_url);
 
-// var germplasms = ['38881', '38882', '38885', '38886', '38887', '38888', '38889'],
-//     marker_ids = ['S5_36739', 'S7292_69', 'S6629_92'],
-//     dom_parent_selector = "div#pdgv-wrap",
-//     width = 600,
-//     height = 600;
-//
-// pdg.newTree(germplasms, marker_ids, function(){
-//     pdg.drawViewer(dom_parent_selector, width, height);
-// });
-
 jQuery(document).on('click', '#generate', function(){
+    jQuery('#working_modal').modal('show');
+    try {
+        if ($('.pedigreeViewer').length) {
+            $('.pedigreeViewer').remove()
+        }
 
-    if ($('.pedigreeViewer').length) {
-        $('.pedigreeViewer').remove()
+        var sample_select = document.getElementById("sample_select").value;
+        var accessions;
+        var markers = [];
+        retrieve_accession_list(sample_select, function(accession_list) {
+            accessions = accession_list;
+
+            $('.marker_name').each(function() {
+                var value = $(this).val();
+                if (value != "") {
+                    markers.push(value);
+                }
+            });
+
+            var germplasms = accessions,
+                marker_ids = markers,
+                protocol = protocol,
+                dom_parent_selector = "div#pdgv-wrap",
+                width = 600,
+                height = 600;
+
+            var protocol_select = document.getElementById("protocol_select");
+            var protocol = protocol_select.options[protocol_select.selectedIndex].value;
+            pdg.newTree(germplasms, marker_ids, protocol, function(){
+                pdg.drawViewer(dom_parent_selector, width, height);
+                jQuery('#working_modal').modal('hide');
+            });
+        });
     }
-
-    var form = document.getElementById("sample_select").value;
-    var accessions;
-    var markers = [];
-    retrieve_accession_list(form, function(accession_list) {
-        accessions = accession_list;
-
-        $('.marker_name').each(function() {
-            var value = $(this).val();
-            if (value != "") {
-                markers.push(value);
-            }
-        });
-
-        var germplasms = accessions,
-            marker_ids = markers,
-            dom_parent_selector = "div#pdgv-wrap",
-            width = 600,
-            height = 600;
-
-        pdg.newTree(germplasms, marker_ids, function(){
-            pdg.drawViewer(dom_parent_selector, width, height);
-        });
-    });
+    catch(err) {
+        jQuery('#working_modal').modal('hide');
+    }
 });
-
 </script>

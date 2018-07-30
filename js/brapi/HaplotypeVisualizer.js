@@ -18,7 +18,7 @@
             return null
         };
 
-        pdgv.newTree = function(stock_ids, marker_ids, callback) {
+        pdgv.newTree = function(stock_ids, marker_ids, protocol, callback) {
             root = stock_ids[0];
             loaded_nodes = {};
             var all_nodes = [];
@@ -45,7 +45,8 @@
                     dataType: 'json',
                     data: JSON.stringify({
                         "marker_list": marker_ids,
-                        "accession_list": stock_ids
+                        "accession_list": stock_ids,
+                        "protocol": protocol
                     }),
                     success: function(data) {
                         for (var i = 0; i < all_nodes.length; i++) {
@@ -63,7 +64,7 @@
 
                         createNewTree(all_nodes, marker_ids);
                         callback.call(pdgv);
-                    }
+                    },
                 });
             });
 
@@ -76,10 +77,19 @@
         };
 
         function createNewTree(start_nodes, marker_ids) {
+            // Calculating maximum marker width
+            var width = 0;
+            for (var i = 0; i < marker_ids.length; i++) {
+                if (width < marker_ids[i].length) {
+                    width = marker_ids[i].length;
+                }
+            }
+            width += 340;
+
             myTree = d3.pedigreeTree()
                 .levelWidth(280 + 20 * marker_ids.length)
                 .levelMidpoint(50)
-                .nodePadding(340) //WIDTH
+                .nodePadding(width)
                 .nodeWidth(20)
                 .linkPadding(20)
                 .vertical(true)
@@ -155,7 +165,7 @@
             var canv = wrap.select("svg.pedigreeViewer");
             if (canv.empty()) {
                 canv = wrap.append("svg").classed("pedigreeViewer", true)
-                    .attr("width", draw_width)
+                    .attr("width", "100%")
                     .attr("height", draw_height)
                     .attr("viewbox", "0 0 " + draw_width + " " + draw_height);
             }
@@ -291,6 +301,7 @@
                     return d.value.name;
                 })
                 .attr('fill', "black");
+
             nodeNodes.filter(function(d) {
                     return d.url === undefined;
                 })
@@ -313,15 +324,20 @@
             });
 
             // Draw node-marker connection
-            nodeNodes.append('line').classed("node-marker-link", true)
-                .style("stroke-dasharray", ("2, 2"))
-                .attr('fill', 'none')
-                .attr('stroke', "#A9A9A9")
-                .attr('stroke-width', 5)
-                .attr("y1", 10)
-                .attr("y2", 10)
-                .attr("x1", 45)
-                .attr("x2", 70);
+            nodeNodes.each(function(d) {
+                var nn = d3.select(this);
+                var ctl = nn.select('.node-name-text').node().getComputedTextLength();
+                var w = ctl + 20;
+                nn.append('line').classed("node-marker-link", true)
+                    .style("stroke-dasharray", ("2, 2"))
+                    .attr('fill', 'none')
+                    .attr('stroke', "#A9A9A9")
+                    .attr('stroke-width', 5)
+                    .attr("y1", 10)
+                    .attr("y2", 10)
+                    .attr("x1", w / 2)
+                    .attr("x2", w / 2 + 27);
+            });
 
             // Draw markers
             var markerNodes = nodeNodes.selectAll('.marker')
@@ -331,40 +347,43 @@
                 .enter().append("g")
                 .classed('markers', true);
 
-            markerNodes.append('rect').classed('marker-name-wrapper', true)
-                .attr('fill', "white")
-                .attr('stroke', function(d) {
-                    if (d.value == '0') {
-                        return "#664cbe";
-                    } else if (d.value == '1') {
-                        return "#1eb8d0";
-                    } else {
-                        return "#9cf257";
-                    }
-                })
-                .attr('stroke-width', 2)
-                .attr('fill', function(d) {
-                    if (d.value == '0') {
-                        return "#664cbe";
-                    } else if (d.value == '1') {
-                        return "#1eb8d0";
-                    } else {
-                        return "#9cf257";
-                    }
-                })
-                .style("opacity", .3)
-                .attr("width", 110)
-                .attr("height", 20)
-                .attr("y", function(d, i) {
-                    return 22 * i;
-                })
-                .attr("rx", 10)
-                .attr("ry", 10)
-                .attr("x", 70);
+            nodeNodes.each(function(){
+                var nn = d3.select(this);
+                var ctl = nn.select('.node-name-text').node().getComputedTextLength();
+                var w = ctl + 20;
+                markerNodes.append('rect').classed('marker-name-wrapper', true)
+                    .attr('fill', "white")
+                    .attr('stroke', function(d) {
+                        if (d.value == '0') {
+                            return "#664cbe";
+                        } else if (d.value == '1') {
+                            return "#1eb8d0";
+                        } else {
+                            return "#9cf257";
+                        }
+                    })
+                    .attr('stroke-width', 2)
+                    .attr('fill', function(d) {
+                        if (d.value == '0') {
+                            return "#664cbe";
+                        } else if (d.value == '1') {
+                            return "#1eb8d0";
+                        } else {
+                            return "#9cf257";
+                        }
+                    })
+                    .style("opacity", .3)
+                    .attr("height", 20)
+                    .attr("y", function(d, i) {
+                        return 22 * i;
+                    })
+                    .attr("rx", 10)
+                    .attr("ry", 10)
+                    .attr("x", w / 2 + 27);
+            });
 
             markerNodes.on("mouseover", function(d_selected) {
                     markerNodes.each(function(d_marker){
-                        console.log("mouseover!");
                         if (d_selected.key != d_marker.key) {
                             var mn = d3.select(this);
                             mn.style('opacity', .3);
@@ -373,39 +392,49 @@
                 })
                 .on("mouseout", function() {
                     markerNodes.each(function(){
-                            console.log("mouseout!");
                             var mn = d3.select(this);
                             mn.style('opacity', 1);
                     });
                 });
 
-            markerNodes.append('text')
-                .classed('marker-name-text', true)
-                .attr("y", function(d, i) {
-                    return 22 * i + 15;
-                })
-                .attr("x", 80)
-                .attr('text-anchor', "left")
-                .text(function(d, i) {
-                    return d.key + ': ' + d.value;
-                })
-                .attr('fill', 'black');
+            nodeNodes.each(function(){
+                var nn = d3.select(this);
+                var ctl = nn.select('.node-name-text').node().getComputedTextLength();
+                var w = ctl + 20;
+                markerNodes.append('text')
+                    .classed('marker-name-text', true)
+                    .attr("y", function(d, i) {
+                        return 22 * i + 15;
+                    })
+                    .attr("x", w/2+40)
+                    .attr('text-anchor', "left")
+                    .text(function(d, i) {
+                        return d.key + ': ' + d.value;
+                    })
+                    .attr('fill', 'black')
+                    .attr('opacity', .3);
+            });
 
             // Set marker width to text width
             var max = 0;
             markerNodes.each(function(d) {
                 var mn = d3.select(this);
-                var ctl = mn.select('.marker-name-text').node().getComputedTextLength();
-                if (max < ctl) {
-                    max = ctl;
+                var width = mn.select('.marker-name-text').node().getComputedTextLength();
+                if (max < width) {
+                    max = width;
                 }
             });
-            markerNodes.each(function(d) {
-                var mn = d3.select(this);
-                var w = max + 20;
-                mn.select('.marker-name-wrapper')
-                    .attr("width", w)
-                    .attr("x", 70);
+            nodeNodes.each(function(){
+                var nn = d3.select(this);
+                var ctl = nn.select('.node-name-text').node().getComputedTextLength();
+                var w_node = ctl + 20;
+                markerNodes.each(function(d) {
+                    var mn = d3.select(this);
+                    var w_marker = max + 25;
+                    mn.select('.marker-name-wrapper')
+                        .attr("width", w_marker)
+                        .attr("x", w_node / 2 + 27);
+                });
             });
 
             // Link colors
