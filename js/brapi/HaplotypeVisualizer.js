@@ -51,20 +51,19 @@
                     success: function(data) {
                         for (var i = 0; i < all_nodes.length; i++) {
                             all_nodes[i].markers = marker_ids.reduce(function(result, element) {
-                                if (data.marker_values[i][element] != null) {
+                                if (data.marker_values[all_nodes[0].id][element].DS != null) {
                                     var obj = {};
                                     obj.key = element;
-                                    obj.value = data.marker_values[i][element];
+                                    obj.value = data.marker_values[all_nodes[0].id][element].DS;
                                     result.push(obj);
                                 }
                                 return result;
                             }, []);
                         }
 
-
                         createNewTree(all_nodes, marker_ids);
                         callback.call(pdgv);
-                    },
+                    }
                 });
             });
 
@@ -84,7 +83,7 @@
                     width = marker_ids[i].length;
                 }
             }
-            width += 340;
+            width += 360;
 
             myTree = d3.pedigreeTree()
                 .levelWidth(280 + 20 * marker_ids.length)
@@ -195,12 +194,11 @@
             var padding = 100;
             var pdgtree_width = d3.max([500, layout.x[1] - layout.x[0]]);
             var pdgtree_height = d3.max([500, layout.y[1] - layout.y[0]]);
-            var centeringx = d3.max([-80, (500 - (layout.x[1] - layout.x[0])) / 2]);
+            var centeringx = d3.max([0, (500 - (layout.x[1] - layout.x[0])) / 2]);
             var centeringy = d3.max([0, (500 - (layout.y[1] - layout.y[0])) / 2]);
             var scale = get_fit_scale(canvw, canvh, pdgtree_width, pdgtree_height, padding);
             var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale;
             var offsety = (canvh - (pdgtree_height) * scale) / 2 + centeringy * scale;
-
             var content = pdg.select('.pdg-content');
             if (content.empty()) {
                 var zoom = d3.zoom();

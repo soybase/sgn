@@ -61,27 +61,14 @@ sub retrieve_protocols : Path('/ajax/haplotype_vis/protocols') Args(0) {
     my @accession_list = @{$c->request->data->{"accession_list"}};
     my ($protocol_name, $protocol_id, @protocol_array, @protocol_id_array);
 
-    my $query_start =
-        "select distinct nd_protocol.name, nd_protocol_id
-        from stock
-        join nd_experiment_stock
-        using (stock_id)
-        join nd_experiment_protocol
-        using (nd_experiment_id)
-        join nd_protocol
-        using (nd_protocol_id)
-        where stock_id in (?";
-    for (my $i = 1; $i < scalar @accession_list; $i++) {
-        $query_start .= ", ?";
-    }
-    $query_start .= ");";
-
-    my $query = $dbh->prepare($query_start);
-    $query->execute(@accession_list);
-
-    while (my ($protocol_name, $protocol_id) = $query->fetchrow_array()) {
-        push @protocol_array, $protocol_name;
-        push @protocol_id_array, $protocol_id;
+    my $protocols = CXGN::Genotype::Protocol::list(
+        $schema,
+        undef,
+        \@accession_list
+    );
+    foreach (@$protocols){
+        push @protocol_array, $_->{protocol_name};
+        push @protocol_id_array, $_->{protocol_id};
     }
 
     $c->stash->{rest} = { protocol_array => \@protocol_array, protocol_id_array => \@protocol_id_array};
@@ -101,40 +88,14 @@ sub retrieve_markers : Path('/ajax/haplotype_vis/markers') Args(0) {
     $marker_fragment =~ s/\s+/ /g;
     my @accession_list = @{$c->request->data->{"accession_list"}};
     my $protocol = $c->request->data->{"protocol"};
-    my ($marker_alias, @marker_alias_array);
 
-    # Constructing PostgreSQL query for markers present in every accession
-    my $query_start =
-        "select marker_name
-        from (
-            select distinct uniquename as accession_name, jsonb_object_keys(value) as marker_name
-            from stock
-            join nd_experiment_stock
-            using (stock_id)
-            join nd_experiment_protocol
-            using (nd_experiment_id)
-            join nd_protocol
-            using (nd_protocol_id)
-            join nd_experiment_genotype
-            using (nd_experiment_id)
-            join genotypeprop
-            using (genotype_id)
-            where stock_id in (?";
-    for (my $i = 1; $i < scalar @accession_list; $i++) {
-        $query_start .= ', ?';
-    }
-    $query_start .=
-            ")
-            and nd_protocol_id = ?) as data
-        group by marker_name
-        having count(marker_name) = ".scalar @accession_list."
-        order by marker_name;";
-    my $query = $dbh->prepare($query_start);
-    $query->execute(@accession_list, $protocol);
-
-    while (my ($marker_alias) = $query->fetchrow_array()) {
-        push @marker_alias_array, $marker_alias;
-    }
+    my $protocols = CXGN::Genotype::Protocol::list(
+        $schema,
+        [$protocol],
+        \@accession_list
+    );
+    my $selected_protocol = $protocols->[0];
+    my @marker_alias_array = @{$selected_protocol->{marker_names}};
 
     # Searching from markers in every accession using marker alias fragment
     my @matches = grep { /^$marker_fragment/i } @marker_alias_array;
@@ -153,52 +114,30 @@ sub retrieve_marker_values : Path('/ajax/haplotype_vis/marker_values') Args(0) {
     my $schema = $c->dbic_schema('Bio::Chado::Schema');
     my $dbh = $c->dbc->dbh();
 
-    my @marker_list = @{$c->request->data->{"marker_list"}};
     my @accession_list = @{$c->request->data->{"accession_list"}};
     my $protocol = $c->request->data->{"protocol"};
     my ($markers, @marker_values);
 
-    # Constructing PostgreSQL query for marker values of given markers for each accession
-    my $query_start =
-        "select jsonb_object_agg(data.key, data.value) as markers
-        from stock
-        join nd_experiment_stock
-        using (stock_id)
-        join nd_experiment_protocol
-        using (nd_experiment_id)
-        join nd_protocol
-        using (nd_protocol_id)
-        join nd_experiment_genotype
-        using (nd_experiment_id)
-        join genotypeprop
-        using (genotype_id)
-        join jsonb_each(value) data on true
-        where data.key in (?";
-    for (my $i = 1; $i < scalar @marker_list; $i++) {
-        $query_start .= ", ?";
-    }
-    $query_start .=
-        ")
-        and stock_id in (".'?';
-    for (my $i = 1; $i < scalar @accession_list; $i++) {
-        $query_start .=
-        ", ?";
-    }
-    $query_start .=
-        ")
-        and nd_protocol_id = ?
-        group by stock_id
-        order by stock_id;";
+    my $genotype_search = CXGN::Genotype::Search->new({
+        bcs_schema => $schema,
+        accession_list => \@accession_list,
+        protocol_id_list => [$protocol]
+    });
+    my ($total_count, $results) = $genotype_search->get_genotype_info();
 
-    my $query = $dbh->prepare($query_start);
-    $query->execute(@marker_list, @accession_list, $protocol);
+    my %marker_results;
+    foreach (@$results){
+        my $accession_id = $_->{germplasmDbId};
+        my $genotype_results = $_->{full_genotype_hash};
+        while (my($marker_name, $value) = each %$genotype_results){
+            # push @{$marker_results{$accession_id}}, {$marker_name => $value};
+            $marker_results{$accession_id}{$marker_name} =  $value;
 
-    my $json = JSON->new();
-    while (my ($markers) = $query->fetchrow_array()) {
-        push @marker_values, $json->decode($markers);
+        }
     }
 
-    $c->stash->{rest} = { marker_values => \@marker_values};
+    print STDERR Dumper \%marker_results;
+    $c->stash->{rest} = { marker_values => \%marker_results};
 }
 
 1;
