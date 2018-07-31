@@ -399,7 +399,7 @@ jQuery(document).on('click', '#generate', function(){
             var protocol_select = document.getElementById("protocol_select");
             var protocol = protocol_select.options[protocol_select.selectedIndex].value;
             pdg.newTree(germplasms, marker_ids, protocol, function(){
-                pdg.drawViewer(dom_parent_selector, width, height);
+                pdg.drawViewer(dom_parent_selector, width, height, marker_ids);
                 jQuery('#working_modal').modal('hide');
             });
         });

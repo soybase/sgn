@@ -131,11 +131,9 @@ sub retrieve_marker_values : Path('/ajax/haplotype_vis/marker_values') Args(0) {
         my $genotype_results = $_->{full_genotype_hash};
         while (my($marker_name, $value) = each %$genotype_results){
             $marker_results{$accession_id}{$marker_name} =  $value;
-
         }
     }
 
-    print STDERR Dumper \%marker_results;
     $c->stash->{rest} = { marker_values => \%marker_results};
 }
 

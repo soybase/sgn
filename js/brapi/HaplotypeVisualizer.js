@@ -70,9 +70,9 @@
 
         };
 
-        pdgv.drawViewer = function(loc, draw_width, draw_height) {
+        pdgv.drawViewer = function(loc, draw_width, draw_height, marker_ids) {
             locationSelector = loc;
-            drawTree(undefined, draw_width, draw_height);
+            drawTree(undefined, draw_width, draw_height, marker_ids);
         };
 
         function createNewTree(start_nodes, marker_ids) {
@@ -152,7 +152,7 @@
             }).all(callback);
         }
 
-        function drawTree(trans, draw_width, draw_height) {
+        function drawTree(trans, draw_width, draw_height, marker_ids) {
 
             var layout = myTree();
 
@@ -190,6 +190,13 @@
                     .attr('stroke', 'none');
             }
 
+
+            var width = 0;
+            for (var i = 0; i < marker_ids.length; i++) {
+                if (width < marker_ids[i].length) {
+                    width = marker_ids[i].length;
+                }
+            }
             // Make scaled content/zoom groups
             var padding = 100;
             var pdgtree_width = d3.max([500, layout.x[1] - layout.x[0]]);
@@ -197,7 +204,9 @@
             var centeringx = d3.max([0, (500 - (layout.x[1] - layout.x[0])) / 2]);
             var centeringy = d3.max([0, (500 - (layout.y[1] - layout.y[0])) / 2]);
             var scale = get_fit_scale(canvw, canvh, pdgtree_width, pdgtree_height, padding);
-            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale;
+
+            // 15 characters to account for dosage value width
+            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale - (width + 15);
             var offsety = (canvh - (pdgtree_height) * scale) / 2 + centeringy * scale;
             var content = pdg.select('.pdg-content');
             if (content.empty()) {
@@ -352,23 +361,11 @@
                 markerNodes.append('rect').classed('marker-name-wrapper', true)
                     .attr('fill', "white")
                     .attr('stroke', function(d) {
-                        if (d.value == '0') {
-                            return "#664cbe";
-                        } else if (d.value == '1') {
-                            return "#1eb8d0";
-                        } else {
-                            return "#9cf257";
-                        }
+                        return d3.interpolateViridis(d.value / 2);
                     })
                     .attr('stroke-width', 2)
                     .attr('fill', function(d) {
-                        if (d.value == '0') {
-                            return "#664cbe";
-                        } else if (d.value == '1') {
-                            return "#1eb8d0";
-                        } else {
-                            return "#9cf257";
-                        }
+                        return d3.interpolateViridis(d.value / 2);
                     })
                     .style("opacity", .3)
                     .attr("height", 20)
