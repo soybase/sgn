@@ -26,7 +26,7 @@ Thomas Chan <nm249@cornell.edu>
               <div style="padding:0.25em;text-align:center;border-bottom:solid 1px #ccc;">
                 <span style="white-space:nowrap;"><span class="glyphicon glyphicon-move" aria-hidden="true"></span> Drag to Pan</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-zoom-in" aria-hidden="true"></span> Scroll to Zoom</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-minus" style="color: #F01E20;" aria-hidden="true"></span> Female Parent</span> &nbsp;&nbsp; <span style="white-space:nowrap;"><span class="glyphicon glyphicon-minus" style="color: #4155DC;" aria-hidden="true"></span> Male Parent</span> &nbsp;&nbsp;
               </div>
-              <div id="pdgv-wrap"></div>
+              <div id="pdgv-wrap"><svg class="pedigreeViewer" width="100%" height="600" viewbox="0 0 600 600"></svg></div>
               <div style="clear:both"></div>
             </div>
             <div class="brapp-footer" style="background-color:#ddd;border-top:solid 1px #ccc;font-family:Arial;color:#555;font-size:11px;padding:0.3em;border-bottom-left-radius:4px;border-bottom-right-radius:4px;">
@@ -372,10 +372,6 @@ var pdg = PedigreeViewer(server, undefined, sgn_url);
 jQuery(document).on('click', '#generate', function(){
     jQuery('#working_modal').modal('show');
     try {
-        if ($('.pedigreeViewer').length) {
-            $('.pedigreeViewer').remove()
-        }
-
         var sample_select = document.getElementById("sample_select").value;
         var accessions;
         var markers = [];
@@ -399,6 +395,9 @@ jQuery(document).on('click', '#generate', function(){
             var protocol_select = document.getElementById("protocol_select");
             var protocol = protocol_select.options[protocol_select.selectedIndex].value;
             pdg.newTree(germplasms, marker_ids, protocol, function(){
+                if ($('.pedigreeViewer').length) {
+                    $('.pedigreeViewer').remove()
+                }
                 pdg.drawViewer(dom_parent_selector, width, height, marker_ids);
                 jQuery('#working_modal').modal('hide');
             });
