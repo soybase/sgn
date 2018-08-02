@@ -126,7 +126,7 @@
             });
             var progenies = germplasm.germplasm_progeny(function(d) {
                 return {
-                    'germplasmDbId': d
+                    'germplasmDbId': d,
                     'pageSize': 999
                 }
             }, "map");
