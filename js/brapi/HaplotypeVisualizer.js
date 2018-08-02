@@ -51,14 +51,26 @@
                     success: function(data) {
                         for (var i = 0; i < all_nodes.length; i++) {
                             all_nodes[i].markers = marker_ids.reduce(function(result, element) {
-                                if (data.marker_values[all_nodes[0].id][element].DS != null) {
+                                var genotype = data.marker_values[all_nodes[i].id][element].GT;
+                                if (genotype != null) {
                                     var obj = {};
                                     obj.key = element;
-                                    obj.value = data.marker_values[all_nodes[0].id][element].DS;
+                                    if(genotype[0] == '.') {
+                                        obj.value1 = data.marker_values[all_nodes[i].id][element].REF;
+                                    } else {
+                                        obj.value1 = data.marker_values[all_nodes[i].id][element].ALT;
+                                    }
+
+                                    if(genotype[2] == '.') {
+                                        obj.value2 = data.marker_values[all_nodes[i].id][element].REF;
+                                    } else {
+                                        obj.value2 = data.marker_values[all_nodes[i].id][element].ALT;
+                                    }
                                     result.push(obj);
                                 }
                                 return result;
                             }, []);
+                            console.log(all_nodes[i].markers);
                         }
 
                         createNewTree(all_nodes, marker_ids);
@@ -83,7 +95,7 @@
                     width = marker_ids[i].length;
                 }
             }
-            width += 360;
+            width += 340;
 
             myTree = d3.pedigreeTree()
                 .levelWidth(280 + 20 * marker_ids.length)
@@ -115,6 +127,7 @@
             var progenies = germplasm.germplasm_progeny(function(d) {
                 return {
                     'germplasmDbId': d
+                    'pageSize': 999
                 }
             }, "map");
             pedigrees.join(progenies, germplasm).filter(function(ped_pro_germId) {
@@ -205,8 +218,8 @@
             var centeringy = d3.max([0, (500 - (layout.y[1] - layout.y[0])) / 2]);
             var scale = get_fit_scale(canvw, canvh, pdgtree_width, pdgtree_height, padding);
 
-            // 15 characters to account for dosage value width
-            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale - (width + 15);
+            // 50 characters to account for dosage value width
+            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale - (width + 50);
             var offsety = (canvh - (pdgtree_height) * scale) / 2 + centeringy * scale;
             var content = pdg.select('.pdg-content');
             if (content.empty()) {
@@ -359,14 +372,9 @@
                 var ctl = nn.select('.node-name-text').node().getComputedTextLength();
                 var w = ctl + 20;
                 markerNodes.append('rect').classed('marker-name-wrapper', true)
-                    .attr('fill', "white")
-                    .attr('stroke', function(d) {
-                        return d3.interpolateViridis(d.value / 2);
-                    })
+                    .attr('fill', "#C8C8C8")
+                    .attr('stroke', "black")
                     .attr('stroke-width', 2)
-                    .attr('fill', function(d) {
-                        return d3.interpolateViridis(d.value / 2);
-                    })
                     .style("opacity", .3)
                     .attr("height", 20)
                     .attr("y", function(d, i) {
@@ -404,7 +412,27 @@
                     .attr("x", w/2+40)
                     .attr('text-anchor', "left")
                     .text(function(d, i) {
-                        return d.key + ': ' + d.value;
+                        return d.key + ': ';
+                    })
+                    .attr('fill', 'black')
+                    .attr('opacity', .3);
+            });
+
+            nodeNodes.each(function(){
+                var nn = d3.select(this);
+                var ctl = nn.select('.node-name-text').node().getComputedTextLength();
+                var w = ctl + 20;
+                markerNodes.append('text')
+                    .classed('first-allele-text', true)
+                    .attr("y", function(d, i) {
+                        return 22 * i + 15;
+                    })
+                    .attr("x", function(d) {
+                        return w/2+40 + + d.key.length * 10;
+                    })
+                    .attr('text-anchor', "left")
+                    .text(function(d, i) {
+                        return d.value1;
                     })
                     .attr('fill', 'black')
                     .attr('opacity', .3);
@@ -425,7 +453,7 @@
                 var w_node = ctl + 20;
                 markerNodes.each(function(d) {
                     var mn = d3.select(this);
-                    var w_marker = max + 25;
+                    var w_marker = max + 60;
                     mn.select('.marker-name-wrapper')
                         .attr("width", w_marker)
                         .attr("x", w_node / 2 + 27);

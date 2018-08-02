@@ -130,7 +130,15 @@ sub retrieve_marker_values : Path('/ajax/haplotype_vis/marker_values') Args(0) {
         my $accession_id = $_->{germplasmDbId};
         my $genotype_results = $_->{full_genotype_hash};
         while (my($marker_name, $value) = each %$genotype_results){
-            $marker_results{$accession_id}{$marker_name} =  $value;
+            $marker_results{$accession_id}{$marker_name}{DS} =  $value->{DS};
+            $marker_results{$accession_id}{$marker_name}{GT} =  $value->{GT};
+        }
+
+        my $protocol_results = $_->{full_protocol_hash}->{markers};
+
+        while (my($marker_name, $value) = each %$protocol_results){
+            $marker_results{$accession_id}{$marker_name}{REF} =  $value->{ref};
+            $marker_results{$accession_id}{$marker_name}{ALT} =  $value->{alt};
         }
     }
 
