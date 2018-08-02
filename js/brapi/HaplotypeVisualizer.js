@@ -70,7 +70,6 @@
                                 }
                                 return result;
                             }, []);
-                            console.log(all_nodes[i].markers);
                         }
 
                         createNewTree(all_nodes, marker_ids);
@@ -218,8 +217,8 @@
             var centeringy = d3.max([0, (500 - (layout.y[1] - layout.y[0])) / 2]);
             var scale = get_fit_scale(canvw, canvh, pdgtree_width, pdgtree_height, padding);
 
-            // 50 characters to account for dosage value width
-            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale - (width + 50);
+            // 20 characters to account for dosage value width
+            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale - (width + 20);
             var offsety = (canvh - (pdgtree_height) * scale) / 2 + centeringy * scale;
             var content = pdg.select('.pdg-content');
             if (content.empty()) {
@@ -360,7 +359,7 @@
             });
 
             // Draw markers
-            var markerNodes = nodeNodes.selectAll('.marker')
+            var markerNodes = nodeNodes.selectAll('.markers')
                 .data(function(d) {
                     return d.value.markers;
                 })
@@ -371,7 +370,7 @@
                 var nn = d3.select(this);
                 var ctl = nn.select('.node-name-text').node().getComputedTextLength();
                 var w = ctl + 20;
-                markerNodes.append('rect').classed('marker-name-wrapper', true)
+                nn.selectAll('.markers').append('rect').classed('marker-name-wrapper', true)
                     .attr('fill', "#C8C8C8")
                     .attr('stroke', "black")
                     .attr('stroke-width', 2)
@@ -383,6 +382,24 @@
                     .attr("rx", 10)
                     .attr("ry", 10)
                     .attr("x", w / 2 + 27);
+            });
+
+            nodeNodes.each(function(){
+                var nn = d3.select(this);
+                var ctl = nn.select('.node-name-text').node().getComputedTextLength();
+                var w = ctl + 20;
+                nn.selectAll('.markers').append('text')
+                    .classed('marker-name-text', true)
+                    .attr("y", function(d, i) {
+                        return 22 * i + 15;
+                    })
+                    .attr("x", w/2+40)
+                    .attr('text-anchor', "left")
+                    .text(function(d, i) {
+                        return d.key + ': ';
+                    })
+                    .attr('fill', 'black')
+                    .attr('opacity', .7);
             });
 
             markerNodes.on("mouseover", function(d_selected) {
@@ -400,43 +417,108 @@
                     });
                 });
 
-            nodeNodes.each(function(){
-                var nn = d3.select(this);
-                var ctl = nn.select('.node-name-text').node().getComputedTextLength();
-                var w = ctl + 20;
-                markerNodes.append('text')
-                    .classed('marker-name-text', true)
-                    .attr("y", function(d, i) {
-                        return 22 * i + 15;
-                    })
-                    .attr("x", w/2+40)
-                    .attr('text-anchor', "left")
-                    .text(function(d, i) {
-                        return d.key + ': ';
-                    })
-                    .attr('fill', 'black')
-                    .attr('opacity', .3);
+            // Draw alleles
+            var max = 0;
+            markerNodes.each(function(d) {
+                var mn = d3.select(this);
+                var width = mn.select('.marker-name-text').node().getComputedTextLength();
+                if (max < width) {
+                    max = width;
+                }
             });
 
-            nodeNodes.each(function(){
-                var nn = d3.select(this);
-                var ctl = nn.select('.node-name-text').node().getComputedTextLength();
-                var w = ctl + 20;
-                markerNodes.append('text')
+            // First allele
+            markerNodes.each(function(_,i){
+                var mn = d3.select(this);
+                var w = max + parseFloat(mn.select('.marker-name-text').attr("x")) + 4;
+                mn.append ('rect')
+                    .classed('first-allele-wrapper', true)
+                    .attr('fill', function(d) {
+                        if (d.value1 == "A") {
+                            return "red";
+                        } else if (d.value1 == "T") {
+                            return "green";
+                        } else if (d.value1 == "G") {
+                            return "yellow";
+                        } else if (d.value1 == "C"){
+                                return "blue";
+                        } else {
+                            return "white";
+                        }
+                    })
+                    .attr('stroke-width', 1)
+                    .style('opacity', .4)
+                    .attr("height", 20)
+                    .attr("width", 15)
+                    .attr("y", function() {
+                        return 22 * i;
+                    })
+                    .attr("x", w);
+            });
+            markerNodes.each(function(_, i){
+                var mn = d3.select(this);
+                var w = max + parseFloat(mn.select('.marker-name-text').attr("x")) + 6;
+                mn.append('text')
                     .classed('first-allele-text', true)
-                    .attr("y", function(d, i) {
+                    .attr("y", function() {
                         return 22 * i + 15;
                     })
-                    .attr("x", function(d) {
-                        return w/2+40 + + d.key.length * 10;
+                    .attr("x", function() {
+                        return w;
                     })
-                    .attr('text-anchor', "left")
-                    .text(function(d, i) {
+                    .text(function(d) {
                         return d.value1;
                     })
                     .attr('fill', 'black')
-                    .attr('opacity', .3);
+                    .attr('opacity', .7);
             });
+
+            // Second allele
+            markerNodes.each(function(_,i){
+                var mn = d3.select(this);
+                var w = parseFloat(mn.select('.first-allele-text').attr("x")) + 13;
+                mn.append ('rect')
+                    .classed('first-allele-wrapper', true)
+                    .attr('fill', function(d) {
+                        if (d.value2 == "A") {
+                            return "red";
+                        } else if (d.value2 == "T") {
+                            return "green";
+                        } else if (d.value2 == "G") {
+                            return "yellow";
+                        } else if (d.value2 == "C"){
+                                return "blue";
+                        } else {
+                            return "white";
+                        }
+                    })
+                    .attr('stroke-width', 1)
+                    .style('opacity', .4)
+                    .attr("height", 20)
+                    .attr("width", 15)
+                    .attr("y", function() {
+                        return 22 * i;
+                    })
+                    .attr("x", w);
+            });
+            markerNodes.each(function(_, i){
+                var mn = d3.select(this);
+                var w = parseFloat(mn.select('.first-allele-text').attr("x")) + 15;
+                mn.append('text')
+                    .classed('second-allele-text', true)
+                    .attr("y", function() {
+                        return 22 * i + 15;
+                    })
+                    .attr("x", function() {
+                        return w;
+                    })
+                    .text(function(d) {
+                        return d.value2;
+                    })
+                    .attr('fill', 'black')
+                    .attr('opacity', .7);
+            });
+
 
             // Set marker width to text width
             var max = 0;
