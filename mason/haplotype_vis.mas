@@ -105,11 +105,16 @@ jQuery('#population_name').autocomplete({
 function retrieve_accession_list(sample_select, callback) {
     var accession_list;
     if (sample_select == "accessions") {
-        var accessions = document.getElementById("select_div_id_list_select");
-        var list_id = accessions.options[accessions.selectedIndex].value;
-        var list_obj = new CXGN.List();
-        accession_list = list_obj.transform2Ids(list_id);
-        callback(accession_list);
+
+        try {
+            var accessions = document.getElementById("select_div_id_list_select");
+            var list_id = accessions.options[accessions.selectedIndex].value;
+            var list_obj = new CXGN.List();
+            accession_list = list_obj.transform2Ids(list_id);
+            callback(accession_list);
+        } catch {
+            jQuery('#working_modal').modal('hide');
+        }
     } else {
         var population = document.getElementById("population_name").value;
         var population_id;
@@ -367,7 +372,9 @@ var server = "/brapi/v1",
         return "/stock/"+germplasmDbId+"/view";
     };
 
-var pdg = PedigreeViewer(server, undefined, sgn_url);
+var pdg = PedigreeViewer(server, undefined, sgn_url, function() {
+    jQuery('#working_modal').modal('hide');
+});
 
 jQuery(document).on('click', '#generate', function(){
     jQuery('#working_modal').modal('show');
@@ -406,24 +413,6 @@ jQuery(document).on('click', '#generate', function(){
         jQuery('#working_modal').modal('hide');
     }
 });
-//
-// var server = "/brapi/v1",
-//     sgn_url = function(germplasmDbId) {
-//         return "/stock/"+germplasmDbId+"/view";
-//     };
-//
-// var pdg = PedigreeViewer(server, undefined, sgn_url);
-//
-//
-// var germplasms = ['41796', '41797', '41798', '41799'],
-//     marker_ids = ['S1_21594', 'S1_21597', 'S1_26576', 'S1_26624', 'S1_26646'],
-//     protocol = 2,
-//     dom_parent_selector = "div#pdgv-wrap",
-//     width = 600,
-//     height = 600;
-//
-// pdg.newTree(germplasms, marker_ids, protocol, function(){
-//     pdg.drawViewer(dom_parent_selector, width, height, marker_ids);
-// });
+
 
 </script>

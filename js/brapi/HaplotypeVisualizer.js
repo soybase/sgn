@@ -5,7 +5,7 @@
 }(this, (function() {
     'use strict';
 
-    function PedigreeViewer(server, auth, urlFunc) {
+    function PedigreeViewer(server, auth, urlFunc, errFunc) {
         var pdgv = {};
         var brapijs = BrAPI(server, auth);
         var root = null;
@@ -22,7 +22,6 @@
             root = stock_ids[0];
             loaded_nodes = {};
             var all_nodes = [];
-
             load_nodes(stock_ids, function(nodes) {
                 [].push.apply(all_nodes, nodes);
                 var mothers = nodes.map(function(d) {
@@ -51,7 +50,7 @@
                     success: function(data) {
                         for (var i = 0; i < all_nodes.length; i++) {
                             all_nodes[i].markers = marker_ids.reduce(function(result, element) {
-                                var genotype = data.marker_values[all_nodes[i].id][element].GT;                
+                                var genotype = data.marker_values[all_nodes[i].id][element].GT;
                                 if (genotype != null) {
                                     var obj = {};
                                     obj.key = element;
@@ -76,16 +75,14 @@
                             }, []);
                         }
 
-                        console.log(data);
-
-
                         createNewTree(all_nodes, marker_ids);
                         callback.call(pdgv);
+                    },
+                    error: function() {
+                        errFunc();
                     }
                 });
             });
-
-
         };
 
         pdgv.drawViewer = function(loc, draw_width, draw_height, marker_ids) {
@@ -101,7 +98,7 @@
                     width = marker_ids[i].length;
                 }
             }
-            width += 340;
+            width = width * 40;
 
             myTree = d3.pedigreeTree()
                 .levelWidth(280 + 20 * marker_ids.length)
@@ -124,15 +121,17 @@
         }
 
         function load_nodes(stock_ids, callback) {
-            var germplasm = brapijs.data(stock_ids);
+            var germplasm = unfiltered_germplasm.germplasm_search({
+                'germplasmDbId':[stock_ids]
+            });
             var pedigrees = germplasm.germplasm_pedigree(function(d) {
                 return {
-                    'germplasmDbId': d
+                    'germplasmDbId': d.germplasmDbId
                 }
             });
             var progenies = germplasm.germplasm_progeny(function(d) {
                 return {
-                    'germplasmDbId': d,
+                    'germplasmDbId': d.germplasmDbId,
                     'pageSize': 999
                 }
             }, "map");
@@ -168,7 +167,10 @@
                 };
             }).each(function(node) {
                 loaded_nodes[node.id] = node;
-            }).all(callback);
+            }).all(callback)
+            .catch(function(){
+                errFunc();
+            });
         }
 
         function drawTree(trans, draw_width, draw_height, marker_ids) {
@@ -216,6 +218,7 @@
                     width = marker_ids[i].length;
                 }
             }
+            
             // Make scaled content/zoom groups
             var padding = 100;
             var pdgtree_width = d3.max([500, layout.x[1] - layout.x[0]]);
@@ -223,7 +226,7 @@
             var centeringx = d3.max([0, (500 - (layout.x[1] - layout.x[0])) / 2]);
             var centeringy = d3.max([0, (500 - (layout.y[1] - layout.y[0])) / 2]);
             var scale = get_fit_scale(canvw, canvh, pdgtree_width, pdgtree_height, padding);
-            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale - (width + 15);
+            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale - (width + 35);
 
             var offsety = (canvh - (pdgtree_height) * scale) / 2 + centeringy * scale;
             var content = pdg.select('.pdg-content');
