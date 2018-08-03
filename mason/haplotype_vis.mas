@@ -362,51 +362,6 @@ function enableGenerator() {
  * Retrieves data and builds
  * haplo-pedigree viewer
  */
-// var server = "/brapi/v1",
-//     sgn_url = function(germplasmDbId) {
-//         return "/stock/"+germplasmDbId+"/view";
-//     };
-//
-// var pdg = PedigreeViewer(server, undefined, sgn_url);
-//
-// jQuery(document).on('click', '#generate', function(){
-//     jQuery('#working_modal').modal('show');
-//     try {
-//         var sample_select = document.getElementById("sample_select").value;
-//         var accessions;
-//         var markers = [];
-//         retrieve_accession_list(sample_select, function(accession_list) {
-//             accessions = accession_list;
-//
-//             $('.marker_name').each(function() {
-//                 var value = $(this).val();
-//                 if (value != "") {
-//                     markers.push(value);
-//                 }
-//             });
-//
-//             var germplasms = ['41791231231', '41797', '41798', '41799'],
-//                 marker_ids = markers,
-//                 protocol = protocol,
-//                 dom_parent_selector = "div#pdgv-wrap",
-//                 width = 600,
-//                 height = 600;
-//
-//             var protocol_select = document.getElementById("protocol_select");
-//             var protocol = protocol_select.options[protocol_select.selectedIndex].value;
-//             pdg.newTree(germplasms, marker_ids, protocol, function(){
-//                 if ($('.pedigreeViewer').length) {
-//                     $('.pedigreeViewer').remove()
-//                 }
-//                 pdg.drawViewer(dom_parent_selector, width, height, marker_ids);
-//                 jQuery('#working_modal').modal('hide');
-//             });
-//         });
-//     } catch(err) {
-//         jQuery('#working_modal').modal('hide');
-//     }
-// });
-
 var server = "/brapi/v1",
     sgn_url = function(germplasmDbId) {
         return "/stock/"+germplasmDbId+"/view";
@@ -414,16 +369,61 @@ var server = "/brapi/v1",
 
 var pdg = PedigreeViewer(server, undefined, sgn_url);
 
+jQuery(document).on('click', '#generate', function(){
+    jQuery('#working_modal').modal('show');
+    try {
+        var sample_select = document.getElementById("sample_select").value;
+        var accessions;
+        var markers = [];
+        retrieve_accession_list(sample_select, function(accession_list) {
+            accessions = accession_list;
 
-var germplasms = ['41796', '41797', '41798', '41799'],
-    marker_ids = ['S1_21594', 'S1_21597', 'S1_26576', 'S1_26624', 'S1_26646'],
-    protocol = 2,
-    dom_parent_selector = "div#pdgv-wrap",
-    width = 600,
-    height = 600;
+            $('.marker_name').each(function() {
+                var value = $(this).val();
+                if (value != "") {
+                    markers.push(value);
+                }
+            });
 
-pdg.newTree(germplasms, marker_ids, protocol, function(){
-    pdg.drawViewer(dom_parent_selector, width, height, marker_ids);
+            var germplasms = ['41791231231', '41797', '41798', '41799'],
+                marker_ids = markers,
+                protocol = protocol,
+                dom_parent_selector = "div#pdgv-wrap",
+                width = 600,
+                height = 600;
+
+            var protocol_select = document.getElementById("protocol_select");
+            var protocol = protocol_select.options[protocol_select.selectedIndex].value;
+            pdg.newTree(germplasms, marker_ids, protocol, function(){
+                if ($('.pedigreeViewer').length) {
+                    $('.pedigreeViewer').remove()
+                }
+                pdg.drawViewer(dom_parent_selector, width, height, marker_ids);
+                jQuery('#working_modal').modal('hide');
+            });
+        });
+    } catch(err) {
+        jQuery('#working_modal').modal('hide');
+    }
 });
+//
+// var server = "/brapi/v1",
+//     sgn_url = function(germplasmDbId) {
+//         return "/stock/"+germplasmDbId+"/view";
+//     };
+//
+// var pdg = PedigreeViewer(server, undefined, sgn_url);
+//
+//
+// var germplasms = ['41796', '41797', '41798', '41799'],
+//     marker_ids = ['S1_21594', 'S1_21597', 'S1_26576', 'S1_26624', 'S1_26646'],
+//     protocol = 2,
+//     dom_parent_selector = "div#pdgv-wrap",
+//     width = 600,
+//     height = 600;
+//
+// pdg.newTree(germplasms, marker_ids, protocol, function(){
+//     pdg.drawViewer(dom_parent_selector, width, height, marker_ids);
+// });
 
 </script>
