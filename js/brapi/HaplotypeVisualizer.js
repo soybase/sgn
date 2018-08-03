@@ -55,16 +55,19 @@
                                 if (genotype != null) {
                                     var obj = {};
                                     obj.key = element;
-                                    if(genotype[0] == '.') {
+                                    if(genotype[0] == '0') {
                                         obj.value1 = data.marker_values[all_nodes[i].id][element].REF;
-                                    } else {
+                                    } else if(genotype[2] == '1') {
                                         obj.value1 = data.marker_values[all_nodes[i].id][element].ALT;
-                                    }
-
-                                    if(genotype[2] == '.') {
-                                        obj.value2 = data.marker_values[all_nodes[i].id][element].REF;
                                     } else {
+                                        obj.value1 = '?';
+                                    }
+                                    if(genotype[0] == '0') {
+                                        obj.value2 = data.marker_values[all_nodes[i].id][element].REF;
+                                    } else if(genotype[2] == '1') {
                                         obj.value2 = data.marker_values[all_nodes[i].id][element].ALT;
+                                    } else {
+                                        obj.value2 = '?';
                                     }
                                     result.push(obj);
                                 }
@@ -216,9 +219,8 @@
             var centeringx = d3.max([0, (500 - (layout.x[1] - layout.x[0])) / 2]);
             var centeringy = d3.max([0, (500 - (layout.y[1] - layout.y[0])) / 2]);
             var scale = get_fit_scale(canvw, canvh, pdgtree_width, pdgtree_height, padding);
+            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale - (width + 15);
 
-            // 20 characters to account for dosage value width
-            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale - (width + 20);
             var offsety = (canvh - (pdgtree_height) * scale) / 2 + centeringy * scale;
             var content = pdg.select('.pdg-content');
             if (content.empty()) {
@@ -371,7 +373,7 @@
                 var ctl = nn.select('.node-name-text').node().getComputedTextLength();
                 var w = ctl + 20;
                 nn.selectAll('.markers').append('rect').classed('marker-name-wrapper', true)
-                    .attr('fill', "#C8C8C8")
+                    .attr('fill', "#D3D3D3")
                     .attr('stroke', "black")
                     .attr('stroke-width', 2)
                     .style("opacity", .3)
@@ -399,7 +401,7 @@
                         return d.key + ': ';
                     })
                     .attr('fill', 'black')
-                    .attr('opacity', .7);
+                    .attr('opacity', 1);
             });
 
             markerNodes.on("mouseover", function(d_selected) {
@@ -437,9 +439,9 @@
                         if (d.value1 == "A") {
                             return "red";
                         } else if (d.value1 == "T") {
-                            return "green";
-                        } else if (d.value1 == "G") {
                             return "yellow";
+                        } else if (d.value1 == "G") {
+                            return "green";
                         } else if (d.value1 == "C"){
                                 return "blue";
                         } else {
@@ -447,7 +449,7 @@
                         }
                     })
                     .attr('stroke-width', 1)
-                    .style('opacity', .4)
+                    .style('opacity', .3)
                     .attr("height", 20)
                     .attr("width", 15)
                     .attr("y", function() {
@@ -470,7 +472,7 @@
                         return d.value1;
                     })
                     .attr('fill', 'black')
-                    .attr('opacity', .7);
+                    .attr('opacity', 1);
             });
 
             // Second allele
@@ -478,14 +480,14 @@
                 var mn = d3.select(this);
                 var w = parseFloat(mn.select('.first-allele-text').attr("x")) + 13;
                 mn.append ('rect')
-                    .classed('first-allele-wrapper', true)
+                    .classed('second-allele-wrapper', true)
                     .attr('fill', function(d) {
                         if (d.value2 == "A") {
                             return "red";
                         } else if (d.value2 == "T") {
-                            return "green";
-                        } else if (d.value2 == "G") {
                             return "yellow";
+                        } else if (d.value2 == "G") {
+                            return "green";
                         } else if (d.value2 == "C"){
                                 return "blue";
                         } else {
@@ -493,7 +495,7 @@
                         }
                     })
                     .attr('stroke-width', 1)
-                    .style('opacity', .4)
+                    .style('opacity', .3)
                     .attr("height", 20)
                     .attr("width", 15)
                     .attr("y", function() {
@@ -516,7 +518,7 @@
                         return d.value2;
                     })
                     .attr('fill', 'black')
-                    .attr('opacity', .7);
+                    .attr('opacity', 1);
             });
 
 
