@@ -385,7 +385,7 @@ jQuery(document).on('click', '#generate', function(){
                 }
             });
 
-            var germplasms = ['41791231231', '41797', '41798', '41799'],
+            var germplasms = accessions,
                 marker_ids = markers,
                 protocol = protocol,
                 dom_parent_selector = "div#pdgv-wrap",
