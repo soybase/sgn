@@ -51,18 +51,19 @@
                     success: function(data) {
                         for (var i = 0; i < all_nodes.length; i++) {
                             all_nodes[i].markers = marker_ids.reduce(function(result, element) {
-                                var genotype = data.marker_values[all_nodes[i].id][element].GT;
+                                var genotype = data.marker_values[all_nodes[i].id][element].GT;                
                                 if (genotype != null) {
                                     var obj = {};
                                     obj.key = element;
                                     if(genotype[0] == '0') {
                                         obj.value1 = data.marker_values[all_nodes[i].id][element].REF;
-                                    } else if(genotype[2] == '1') {
+                                    } else if(genotype[0] == '1') {
                                         obj.value1 = data.marker_values[all_nodes[i].id][element].ALT;
                                     } else {
                                         obj.value1 = '?';
                                     }
-                                    if(genotype[0] == '0') {
+                                    console.log(obj.value1);
+                                    if(genotype[2] == '0') {
                                         obj.value2 = data.marker_values[all_nodes[i].id][element].REF;
                                     } else if(genotype[2] == '1') {
                                         obj.value2 = data.marker_values[all_nodes[i].id][element].ALT;
@@ -74,6 +75,9 @@
                                 return result;
                             }, []);
                         }
+
+                        console.log(data);
+
 
                         createNewTree(all_nodes, marker_ids);
                         callback.call(pdgv);
@@ -443,7 +447,7 @@
                         } else if (d.value1 == "G") {
                             return "green";
                         } else if (d.value1 == "C"){
-                                return "blue";
+                            return "blue";
                         } else {
                             return "white";
                         }
@@ -489,7 +493,7 @@
                         } else if (d.value2 == "G") {
                             return "green";
                         } else if (d.value2 == "C"){
-                                return "blue";
+                            return "blue";
                         } else {
                             return "white";
                         }
