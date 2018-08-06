@@ -391,10 +391,8 @@ jQuery(document).on('click', '#generate', function(){
                     markers.push(value);
                 }
             });
-
             var germplasms = accessions,
                 marker_ids = markers,
-                protocol = protocol,
                 dom_parent_selector = "div#pdgv-wrap",
                 width = 600,
                 height = 600;
@@ -413,6 +411,5 @@ jQuery(document).on('click', '#generate', function(){
         jQuery('#working_modal').modal('hide');
     }
 });
-
 
 </script>

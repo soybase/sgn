@@ -61,7 +61,6 @@
                                     } else {
                                         obj.value1 = '?';
                                     }
-                                    console.log(obj.value1);
                                     if(genotype[2] == '0') {
                                         obj.value2 = data.marker_values[all_nodes[i].id][element].REF;
                                     } else if(genotype[2] == '1') {
@@ -98,7 +97,7 @@
                     width = marker_ids[i].length;
                 }
             }
-            width = width * 40;
+            width = width * 50;
 
             myTree = d3.pedigreeTree()
                 .levelWidth(280 + 20 * marker_ids.length)
@@ -121,8 +120,8 @@
         }
 
         function load_nodes(stock_ids, callback) {
-            var germplasm = unfiltered_germplasm.germplasm_search({
-                'germplasmDbId':[stock_ids]
+            var germplasm = brapijs.germplasm_search({
+                'germplasmDbIds': stock_ids
             });
             var pedigrees = germplasm.germplasm_pedigree(function(d) {
                 return {
@@ -157,7 +156,7 @@
                     father = ped_pro_germId[0].parent2DbId;
                 }
                 return {
-                    'id': ped_pro_germId[2],
+                    'id': ped_pro_germId[2].germplasmDbId,
                     'mother_id': mother,
                     'father_id': father,
                     'name': ped_pro_germId[1].defaultDisplayName,
@@ -218,7 +217,7 @@
                     width = marker_ids[i].length;
                 }
             }
-            
+
             // Make scaled content/zoom groups
             var padding = 100;
             var pdgtree_width = d3.max([500, layout.x[1] - layout.x[0]]);
@@ -226,7 +225,7 @@
             var centeringx = d3.max([0, (500 - (layout.x[1] - layout.x[0])) / 2]);
             var centeringy = d3.max([0, (500 - (layout.y[1] - layout.y[0])) / 2]);
             var scale = get_fit_scale(canvw, canvh, pdgtree_width, pdgtree_height, padding);
-            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale - (width + 35);
+            var offsetx = (canvw - (pdgtree_width) * scale) / 2 + centeringx * scale - (width + 20);
 
             var offsety = (canvh - (pdgtree_height) * scale) / 2 + centeringy * scale;
             var content = pdg.select('.pdg-content');
@@ -539,15 +538,11 @@
                 }
             });
             nodeNodes.each(function(){
-                var nn = d3.select(this);
-                var ctl = nn.select('.node-name-text').node().getComputedTextLength();
-                var w_node = ctl + 20;
                 markerNodes.each(function(d) {
                     var mn = d3.select(this);
                     var w_marker = max + 60;
                     mn.select('.marker-name-wrapper')
                         .attr("width", w_marker)
-                        .attr("x", w_node / 2 + 27);
                 });
             });
 
