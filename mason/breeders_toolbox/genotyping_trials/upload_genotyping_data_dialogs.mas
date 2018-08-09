@@ -40,6 +40,7 @@
                                             <th>Breeding program</th>
                                             <th>Year</th>
                                             <th>Location</th>
+                                            <th>Genotyping Facility</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -227,6 +228,9 @@
                                             </select>
                                         </div>
                                     </div>
+                                </div>
+
+                                <div id="upload_genotypes_errors_div">
                                 </div>
 
                                 <div id="upload_genotypes_warnings_div" style="display:none">
