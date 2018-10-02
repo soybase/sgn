@@ -1,0 +1,87 @@
+<%doc>
+
+=head1 NAME
+ 
+/solqtl/population/select_traits.mas - lists traits to select for QTL analysis
+
+=AUTHOR
+
+Isaak Y Tecle (iyt2@cornell.edu)
+
+=cut
+
+</%doc>
+
+<%args>
+
+
+$traits_form => ''
+$pop_id
+$all_traits_file
+$no_traits_selected
+$traits_list
+
+</%args>
+
+<%perl>
+
+ my $trait_rows;
+
+ foreach my $trait  (@$traits_list) {
+
+ my $row          = <<ROW;
+ <tr>
+   <td>
+     <input type  = "checkbox"
+       class      = "trait_id"
+       name       = "trait_id"
+       value      = $trait->[0] > $trait->[1]
+   </td>
+ </tr>
+ROW
+
+    $trait_rows .=  $row;
+
+}
+
+my $message;
+if ($no_traits_selected eq 'none')
+{
+   $message = qq | <p style="color:red">Please select one or more traits to analyze.</p> |;
+}
+
+
+</%perl>
+
+
+<& /util/import_css.mas, paths => ['/static/css/solgs/solgs.css'] &>
+
+ <% $message %>
+
+% if ($trait_rows) {
+ <div id="traits_selection_div">
+
+  <table id="population_traits_list">
+   <% $trait_rows %>
+     <tr>
+       <td>
+         <input class   = "button"
+                type    = "submit"
+		id      = "runQTL"
+                value   = "Run QTL"
+                name    = "runQTL"               
+                > 
+       </td> 
+     </tr>
+   </table> 
+
+</div>
+%} else {
+
+<div id="traits_list_message"  style="font-weight:bold;text-align:center;text-transform:uppercase;color:#A7C942">
+<p>There are no phenotyped traits for this population.</p>
+</div>
+
+%}
+
+<input type="hidden" id="population_id" value="<% $pop_id %>" />
