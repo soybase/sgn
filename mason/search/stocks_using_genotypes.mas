@@ -43,6 +43,12 @@
                                 <button class="btn btn-info" id="search_genotypes_accessions"><i class="glyphicon glyphicon-search"></i> Accessions</button>
                             </div>
                     </div>
+                    <div class="form-group">
+                        <label class="control-label col-sm-4"></label>
+                            <div class="col-sm-8" >
+                                <button class="btn btn-info" id="search_markers_genotypes"><i class="glyphicon glyphicon-search"></i> Genotypes</button>
+                            </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -84,6 +90,35 @@ jQuery(document).ready(function (){
                     'markerset_id': markerset_id,
                     'marker_name': marker_name,
                     'allele_dosage': allele_dosage,
+                }
+            },
+            columns: [
+                {
+                    title: "Accessions",
+                    data: null,
+                    render: function(data, type, row){return "<a href='/stock/"+row.stock_id+"/view'>"+row.stock_name+"</a>";}},
+                {
+                    title: "Genotypes",
+                    data: "genotypes",
+                    render: function(data, type,row){
+                        var newFormat = data.split(",").join("&nbsp &nbsp &nbsp &nbsp &nbsp");
+                        return newFormat;
+                    }
+                },
+            ],
+        });
+    });
+
+    jQuery("#search_markers_genotypes").click(function(){
+
+        var dataset_id = jQuery('#selected_dataset').val();
+        var markerset_id = jQuery('#selected_markerset').val();
+        var table = jQuery('#genotype_search_results').DataTable({
+            'destroy' : true,
+            'ajax': { 'url':'/ajax/search/get_markers_genotypes',
+                'data':{
+                    'dataset_id': dataset_id,
+                    'markerset_id': markerset_id,
                 }
             },
             columns: [
