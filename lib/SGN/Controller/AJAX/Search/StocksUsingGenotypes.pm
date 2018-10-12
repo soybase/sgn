@@ -24,8 +24,8 @@ sub get_selected_accessions :Path('/ajax/search/get_selected_accessions') :Args(
     my $c = shift;
     my $dataset_id = $c->req->param("dataset_id");
     my $markerset_id = $c->req->param("markerset_id");
-    my $marker_name = $c->req->param("marker_name");
-    my $allele_dosage = $c->req->param("allele_dosage");
+#    my $marker_name = $c->req->param("marker_name");
+#    my $allele_dosage = $c->req->param("allele_dosage");
     my $schema = $c->dbic_schema("Bio::Chado::Schema", "sgn_chado");
 
     my $dataset = CXGN::Dataset->new(
@@ -40,11 +40,11 @@ sub get_selected_accessions :Path('/ajax/search/get_selected_accessions') :Args(
     my %data = %{$dataset_ref};
 
     my $genotype_accessions_ref = $data{'categories'}{'accessions'};
-    my $genotype_protocol_ref = $data{'categories'}{'genotyping_protocols'};
+#    my $genotype_protocol_ref = $data{'categories'}{'genotyping_protocols'};
 
     my @genotype_accessions = @{$genotype_accessions_ref};
 
-    my $protocol_id = $genotype_protocol_ref-> [0];
+#    my $protocol_id = $genotype_protocol_ref-> [0];
 
     my $markerset = CXGN::List->new({dbh => $schema->storage->dbh, list_id => $markerset_id});
     my $markerset_items_ref = $markerset->retrieve_elements_with_ids($markerset_id);
@@ -59,7 +59,7 @@ sub get_selected_accessions :Path('/ajax/search/get_selected_accessions') :Args(
     my $genotypes_accessions_search = CXGN::Genotype::SearchStocks->new({
         bcs_schema=>$schema,
         stock_list=>\@genotype_accessions,
-        protocol_id=>$protocol_id,
+#        protocol_id=>$protocol_id,
         filtering_parameters=>\@parameters,
     });
 
@@ -100,11 +100,11 @@ sub get_markers_genotypes :Path('/ajax/search/get_markers_genotypes') :Args(0){
     my %data = %{$dataset_ref};
 
     my $genotype_accessions_ref = $data{'categories'}{'accessions'};
-    my $genotype_protocol_ref = $data{'categories'}{'genotyping_protocols'};
+#    my $genotype_protocol_ref = $data{'categories'}{'genotyping_protocols'};
 
     my @genotype_accessions = @{$genotype_accessions_ref};
 
-    my $protocol_id = $genotype_protocol_ref-> [0];
+#    my $protocol_id = $genotype_protocol_ref-> [0];
 
     my $markerset = CXGN::List->new({dbh => $schema->storage->dbh, list_id => $markerset_id});
     my $markerset_items_ref = $markerset->retrieve_elements_with_ids($markerset_id);
@@ -119,7 +119,7 @@ sub get_markers_genotypes :Path('/ajax/search/get_markers_genotypes') :Args(0){
     my $markers_genotypes_search = CXGN::Genotype::SearchStocks->new({
         bcs_schema=>$schema,
         stock_list=>\@genotype_accessions,
-        protocol_id=>$protocol_id,
+#        protocol_id=>$protocol_id,
         filtering_parameters=>\@parameters,
     });
 

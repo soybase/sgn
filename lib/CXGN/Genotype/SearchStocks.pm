@@ -28,20 +28,20 @@ has 'bcs_schema' => ( isa => 'Bio::Chado::Schema',
     required => 1,
 );
 
-has 'protocol_id' => (
-    isa => 'Int',
-    is => 'rw',
-);
+#has 'protocol_id' => (
+#    isa => 'Int',
+#    is => 'rw',
+#);
 
-has 'marker_name' => (
-    isa => 'Str',
-    is => 'rw',
-);
+#has 'marker_name' => (
+#    isa => 'Str',
+#    is => 'rw',
+#);
 
-has 'allele_dosage' => (
-    isa => 'Str',
-    is => 'rw',
-);
+#has 'allele_dosage' => (
+#    isa => 'Str',
+#    is => 'rw',
+#);
 
 has 'filtering_parameters' => (
     isa => 'ArrayRef[Str]',
