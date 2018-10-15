@@ -19,7 +19,6 @@ library(methods)
 
 allArgs <- commandArgs()
 
-
 outputFiles <- scan(grep("output_files", allArgs, value = TRUE),
                     what = "character")
 
@@ -27,7 +26,7 @@ inputFiles  <- scan(grep("input_files", allArgs, value = TRUE),
                     what = "character")
 
 phenoDataFile      <- grep("\\/phenotype_data", inputFiles, value=TRUE)
-
+referer            <- grep("qtl", inputFiles, value=TRUE)
 formattedPhenoFile <- grep("formatted_phenotype_data", inputFiles, fixed = FALSE, value = TRUE)
 metadataFile       <-  grep("metadata", inputFiles, value=TRUE)
 
@@ -37,22 +36,9 @@ correCoefficientsJsonFile <- grep("corre_coefficients_json", outputFiles, value=
 formattedPhenoData <- c()
 phenoData          <- c()
 
-
-
-if ( length(refererQtl) != 0 ) {
-   phenoDataFile      <- grep("\\/phenodata", inputFiles, value=TRUE)    
-
-   phenoData <- read.table(phenoDataFile,
-				header=TRUE,
-                                   sep=",",
-                                   na.strings=c("NA", "-", " ", ".", "..")
-                                   )
-} else {
-
-  phenoData <- as.data.frame(fread(phenoDataFile, sep="\t",
+phenoData <- as.data.frame(fread(phenoDataFile, sep="\t",
                                    na.strings = c("NA", " ", "--", "-", ".", "..")
                                    ))
-}
 
 metaData <- scan(metadataFile, what="character")
 
@@ -60,62 +46,36 @@ allTraitNames <- c()
 nonTraitNames <- c()
 naTraitNames  <- c()
 
-if (length(refererQtl) != 0) {
+allNames <- names(phenoData)
+nonTraitNames <- metaData
+allTraitNames <- allNames[! allNames %in% nonTraitNames]
 
-  allNames      <- names(phenoData)
-  nonTraitNames <- c("ID")
-  allTraitNames <- allNames[! allNames %in% nonTraitNames]
+for (i in allTraitNames) {
+    if (class(phenoData[, i]) != 'numeric') {
+        phenoData[, i] <- as.numeric(as.character(phenoData[, i]))
+    }
 
-} else {
-  allNames <- names(phenoData)
-  nonTraitNames <- metaData
-  allTraitNames <- allNames[! allNames %in% nonTraitNames]
-}
+    if (all(is.nan(phenoData[, i]))) {
+        phenoData[, i] <- sapply(phenoData[, i], function(x) ifelse(is.numeric(x), x, NA))        
+    }
 
-
-if (!is.null(phenoData) && length(refererQtl) == 0) {
-
-    for (i in allTraitNames) {
-      if (class(phenoData[, i]) != 'numeric') {
-          phenoData[, i] <- as.numeric(as.character(phenoData[, i]))
-      }
-
-      if (all(is.nan(phenoData[, i]))) {
-          phenoData[, i] <- sapply(phenoData[, i], function(x) ifelse(is.numeric(x), x, NA))        
-      }
-
-      if (sum(is.na(phenoData[,i])) > (0.5 * nrow(phenoData))) { 
-          phenoData$i <- NULL
-          naTraitNames <- c(naTraitNames, i)
-          message('dropped trait ', i, ' no of missing values: ', sum(is.na(phenoData[,i])))
-      }
-  }
+    if (sum(is.na(phenoData[,i])) > (0.5 * nrow(phenoData))) { 
+        phenoData$i <- NULL
+        naTraitNames <- c(naTraitNames, i)
+        message('dropped trait ', i, ' no of missing values: ', sum(is.na(phenoData[,i])))
+    }
 }
 
 filteredTraits <- allTraitNames[!allTraitNames %in% naTraitNames]
 
-
-###############################
-if (length(refererQtl) == 0  ) {
  
-  formattedPhenoData <- phenoData %>%
-                        select(germplasmName, allTraitNames) %>%
-                        group_by(germplasmName) %>%
-                        summarise_at(allTraitNames, mean, na.rm=TRUE) %>%
-                        select(-germplasmName) %>%
-                        round(., 2) %>%
-                        data.frame
-
-} else {
-  message("qtl stuff")
-  formattedPhenoData <- phenoData %>%
-                        group_by(ID) %>%
-                        summarise_if(is.numeric, mean, na.rm=TRUE) %>%
-                        select(-ID) %>%
-                        round(., 2) %>%
-                        data.frame
-                             
-}
+formattedPhenoData <- phenoData %>%
+                      select(germplasmName, allTraitNames) %>%
+                      group_by(germplasmName) %>%
+                      summarise_at(allTraitNames, mean, na.rm=TRUE) %>%
+                      select(-germplasmName) %>%
+                      round(., 2) %>%
+                      data.frame
 
 coefpvalues <- rcor.test(formattedPhenoData,
                          method="pearson",
@@ -124,8 +84,6 @@ coefpvalues <- rcor.test(formattedPhenoData,
 
 coefficients <- coefpvalues$cor.mat
 allcordata   <- coefpvalues$cor.mat
-
-print(allcordata)
 
 allcordata[lower.tri(allcordata)] <- coefpvalues$p.values[, 3]
 diag(allcordata) <- 1.00
