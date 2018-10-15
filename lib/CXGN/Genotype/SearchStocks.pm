@@ -106,5 +106,59 @@ sub get_selected_accessions {
 
 }
 
+sub get_markers_genotypes {
+    my $self = shift;
+    my $schema = $self->bcs_schema;
+    my $accession_list = $self->stock_list;
+    my $filtering_parameters = $self->filtering_parameters;
+    my @accessions = @{$accession_list};
+    my @parameters = @{$filtering_parameters};
+
+    my $genotyping_experiment_cvterm_id = SGN::Model::Cvterm->get_cvterm_row($self->bcs_schema, 'genotyping_experiment', 'experiment_type')->cvterm_id();
+
+    my @selected_accessions = ();
+    my %vcf_params;
+    my @marker_params;
+    my $protocol_id;
+
+    foreach my $param (@parameters){
+        my $param_ref = decode_json$param;
+        my %params = %{$param_ref};
+
+        if (exists $params{marker_name}){
+            my $marker_name = $params{marker_name};
+            push @marker_params, $marker_name;
+        }
+
+        my $genotyping_protocol_id = $params{genotyping_protocol_id};
+
+        if ($genotyping_protocol_id){
+            $protocol_id = $genotyping_protocol_id
+        }
+    }
+
+    my $markers_string = join(",", @marker_params);
+
+    print STDERR "MARKER LIST=" .Dumper($markers_string). "\n";
+#    print STDERR "PROTOCOL_ID=" .Dumper($protocol_id). "\n";
+
+    my $q = "SELECT DISTINCT stock.stock_id, stock.uniquename FROM stock JOIN nd_experiment_stock ON (stock.stock_id = nd_experiment_stock.stock_id)
+        JOIN nd_experiment_protocol ON (nd_experiment_stock.nd_experiment_id = nd_experiment_protocol.nd_experiment_id) AND nd_experiment_stock.type_id = ? AND nd_experiment_protocol.nd_protocol_id =?
+        JOIN nd_experiment_genotype on (nd_experiment_genotype.nd_experiment_id = nd_experiment_stock.nd_experiment_id)
+        JOIN genotypeprop on (nd_experiment_genotype.genotype_id = genotypeprop.genotype_id)
+        WHERE genotypeprop.value @> ?
+        AND stock.stock_id IN (" . join(', ', ('?') x @accessions) . ")";
+
+    my $h = $schema->storage->dbh()->prepare($q);
+    $h->execute($genotyping_experiment_cvterm_id, $protocol_id, $markers_string, @accessions);
+
+    while (my ($selected_id, $selected_uniquename) = $h->fetchrow_array()){
+        push @selected_accessions, [$selected_id, $selected_uniquename, $markers_string]
+    }
+
+    return \@selected_accessions;
+
+}
+
 
 1;
