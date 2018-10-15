@@ -27,7 +27,9 @@ inputFiles  <- scan(grep("input_files", allArgs, value = TRUE),
                     what = "character")
 
 phenoDataFile      <- grep("\\/phenotype_data", inputFiles, value=TRUE)
-formattedPhenoFile <- grep("formatted_phenotype_data", inputFiles, value = TRUE)
+
+formattedPhenoFile <- grep("formatted_phenotype_data", inputFiles, fixed = FALSE, value = TRUE)
+metadataFile       <-  grep("metadata", inputFiles, value=TRUE)
 
 correCoefficientsFile     <- grep("corre_coefficients_table", outputFiles, value=TRUE)
 correCoefficientsJsonFile <- grep("corre_coefficients_json", outputFiles, value=TRUE)
@@ -35,29 +37,44 @@ correCoefficientsJsonFile <- grep("corre_coefficients_json", outputFiles, value=
 formattedPhenoData <- c()
 phenoData          <- c()
 
-phenoData <- fread(phenoDataFile,
-                   na.strings = c("NA", " ", "--", "-", ".", "..")
-                   ))
 
-phenoData <- data.frame(phenoData)
+
+if ( length(refererQtl) != 0 ) {
+   phenoDataFile      <- grep("\\/phenodata", inputFiles, value=TRUE)    
+
+   phenoData <- read.table(phenoDataFile,
+				header=TRUE,
+                                   sep=",",
+                                   na.strings=c("NA", "-", " ", ".", "..")
+                                   )
+} else {
+
+  phenoData <- as.data.frame(fread(phenoDataFile, sep="\t",
+                                   na.strings = c("NA", " ", "--", "-", ".", "..")
+                                   ))
+}
+
+metaData <- scan(metadataFile, what="character")
 
 allTraitNames <- c()
 nonTraitNames <- c()
 naTraitNames  <- c()
 
-allNames <- names(phenoData)
+if (length(refererQtl) != 0) {
 
-nonTraitNames <- c('studyYear', 'studyDbId', 'studyName', 'studyDescription', 'studyDesign', 'locationDbId', 'locationName')
-nonTraitNames <- c(nonTraitNames, 'germplasmDbId', 'germplasmName', 'germplasmSynonyms', 'observationLevel')
-nonTraitNames <- c(nonTraitNames, 'observationUnitDbId', 'observationUnitName', 'replicate', 'blockNumber', 'plotNumber')
-nonTraitNames <- c(nonTraitNames, 'programDbId', 'programName', 'programDescription', 'plotWidth', 'plotLength')
-nonTraitNames <- c(nonTraitNames, 'fieldSize', 'fieldTrialIsPlannedToBeGenotyped', 'fieldTrialIsPlannedToCross',  'plantingDate')
-nonTraitNames <- c(nonTraitNames,  'harvestDate', 'rowNumber', 'colNumber', 'entryType', 'plantNumber')
-  
-allTraitNames <- allNames[! allNames %in% nonTraitNames]
+  allNames      <- names(phenoData)
+  nonTraitNames <- c("ID")
+  allTraitNames <- allNames[! allNames %in% nonTraitNames]
 
-if (!is.null(phenoData)) {
-  
+} else {
+  allNames <- names(phenoData)
+  nonTraitNames <- metaData
+  allTraitNames <- allNames[! allNames %in% nonTraitNames]
+}
+
+
+if (!is.null(phenoData) && length(refererQtl) == 0) {
+
     for (i in allTraitNames) {
       if (class(phenoData[, i]) != 'numeric') {
           phenoData[, i] <- as.numeric(as.character(phenoData[, i]))
@@ -77,21 +94,38 @@ if (!is.null(phenoData)) {
 
 filteredTraits <- allTraitNames[!allTraitNames %in% naTraitNames]
 
-correData <- phenoData %>%
-                      select(germplasmName, allTraitNames) %>%
-                      group_by(germplasmName) %>%
-                      summarise_at(allTraitNames, mean, na.rm=TRUE) %>%
-                      select(-germplasmName) %>%
-                      round(., 2) %>%
-                      data.frame
+
+###############################
+if (length(refererQtl) == 0  ) {
  
-coefpvalues <- rcor.test(correData,
+  formattedPhenoData <- phenoData %>%
+                        select(germplasmName, allTraitNames) %>%
+                        group_by(germplasmName) %>%
+                        summarise_at(allTraitNames, mean, na.rm=TRUE) %>%
+                        select(-germplasmName) %>%
+                        round(., 2) %>%
+                        data.frame
+
+} else {
+  message("qtl stuff")
+  formattedPhenoData <- phenoData %>%
+                        group_by(ID) %>%
+                        summarise_if(is.numeric, mean, na.rm=TRUE) %>%
+                        select(-ID) %>%
+                        round(., 2) %>%
+                        data.frame
+                             
+}
+
+coefpvalues <- rcor.test(formattedPhenoData,
                          method="pearson",
                          use="pairwise"
                          )
 
 coefficients <- coefpvalues$cor.mat
 allcordata   <- coefpvalues$cor.mat
+
+print(allcordata)
 
 allcordata[lower.tri(allcordata)] <- coefpvalues$p.values[, 3]
 diag(allcordata) <- 1.00

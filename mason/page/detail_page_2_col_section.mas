@@ -140,7 +140,7 @@ $sample_observation_unit_type_name => undef
                                 &>
 
 % if ($hidap_enabled) {
-                                <& /hidap/hidap_trial_link.mas, trial_id => $trial_id &>
+                                <& /hidap/hidap_trial_link.mas, main_production_site_url=>$main_production_site_url, program => $breeding_program_name, folder => $folder_name, trial => $trial_name &>
 % }
 % } #End trial_analysis_tools
 % if ($info_section_id eq 'trial_weather_data'){
@@ -252,6 +252,9 @@ $sample_observation_unit_type_name => undef
 % if ($info_section_id eq 'genotyping_data_project_data'){
                                 <& /breeders_toolbox/genotyping_data_project/genotype_data.mas, trial_id=>$trial_id &>
 % } #End genotyping_data_project_data
+% if ($info_section_id eq 'identifier_generation_list'){
+                                <& /breeders_toolbox/identifier_generation/list_identifier_generation.mas &>
+% } #End identifier_generation_list
 % if ($info_section_id eq 'management_factor_details'){
                                 <table class="table table-hover table-bordered" >
                                     <tr>
