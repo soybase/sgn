@@ -48,21 +48,22 @@ my $qtl_prob = tooltipped_text('QTL genotype probablity method:',
    subtitle => $guide 
 &> 
 %}
-
   <form action="/phenome/qtl_load.pl" method="POST" enctype="MULTIPART/FORM-DATA">  
-    <table cellspacing=20>
+    <table class="table">
+      <tbody>
       <tr>
         <td>QTL model: 
         </td>
 	<td>
-          <select name="stat_qtl_model">
+	  
+          <select class="form-control" name="stat_qtl_model">
 	    <option>
             <option>Single-QTL Scan	    
           </select>
 	</td>
         <td>QTL mapping method:</td>
 	<td>
-          <select name="stat_qtl_method">	         
+          <select class="form-control"  name="stat_qtl_method">	         
 	    <option>
             <option>Marker Regression
             <option>Maximum Likelihood 
@@ -75,7 +76,7 @@ my $qtl_prob = tooltipped_text('QTL genotype probablity method:',
         <td><% $qtl_prob %>
         </td>
         <td>
-          <select name="stat_prob_method">
+          <select class="form-control"  name="stat_prob_method">
             <option>
 	    <option>Calculate
             <option>Simulate
@@ -84,7 +85,7 @@ my $qtl_prob = tooltipped_text('QTL genotype probablity method:',
         <td>QTL genotype probability significance level:
         </td>
         <td>
-          <select name="stat_prob_level">
+          <select class="form-control" name="stat_prob_level">
 	    <option>
             <option>0.001
             <option>0.05
@@ -96,7 +97,7 @@ my $qtl_prob = tooltipped_text('QTL genotype probablity method:',
         <td><% $genome_scan %>
         </td>
         <td>
-          <select name="stat_step_size">
+          <select class="form-control" name="stat_step_size">
             <option>
 	    <option>zero
 	    <option>1
@@ -108,7 +109,7 @@ my $qtl_prob = tooltipped_text('QTL genotype probablity method:',
         <td><% $no_draws %>
         </td>
 	<td>
-          <select name="stat_no_draws">
+          <select class="form-control" name="stat_no_draws">
 	    <option>
 	    <option>5
             <option>10
@@ -121,7 +122,7 @@ my $qtl_prob = tooltipped_text('QTL genotype probablity method:',
         <td>No. of permutations:
         </td>
         <td>
-          <select name="stat_permu_test">
+          <select class="form-control" name="stat_permu_test">
 	    <option>
             <option>None
             <option>100
@@ -131,7 +132,7 @@ my $qtl_prob = tooltipped_text('QTL genotype probablity method:',
         <td><% $permu_level %>
         </td>
         <td> 
-          <select name="stat_permu_level">
+          <select class="form-control" name="stat_permu_level">
 	    <option>
             <option>0.05
             <option>0.001
@@ -151,14 +152,15 @@ my $qtl_prob = tooltipped_text('QTL genotype probablity method:',
         <td>
         </td>
         <td>
-          <input type="submit" value="Submit"> 
+          <input class="button" type="submit" value="Submit"> 
         </td>
         <td>
         </td> 
         <td> 
-          <input type="reset"  value="Reset">
+          <input class="button" type="reset"  value="Reset">
         </td>      
       </tr>
+      </tbody>
     </table>
   </form>
 
