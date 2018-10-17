@@ -14,7 +14,7 @@ use File::Temp qw / tempfile /;
 use File::Path qw / mkpath  /;
 use File::Copy;
 use File::Basename;
-use File::Slurp;
+use File::Slurp qw /write_file read_file/;
 use Try::Tiny;
 use URI::FromHash 'uri';
 use Cache::File;
