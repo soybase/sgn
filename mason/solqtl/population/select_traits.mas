@@ -30,13 +30,13 @@ $traits_list
  foreach my $trait  (@$traits_list) {
 
  my $row          = <<ROW;
- <tr>
+<tr>
    <td>
      <input type  = "checkbox"
        class      = "trait_id"
        name       = "trait_id"
        value      = $trait->[0] > $trait->[1]
-   </td>
+</td>
  </tr>
 ROW
 
@@ -60,8 +60,8 @@ if ($no_traits_selected eq 'none')
 
 % if ($trait_rows) {
  <div id="traits_selection_div">
-
-  <table id="population_traits_list">
+   <table class="table" id="population_traits_list">
+     <tbody>
    <% $trait_rows %>
      <tr>
        <td>
@@ -73,6 +73,7 @@ if ($no_traits_selected eq 'none')
                 > 
        </td> 
      </tr>
+     </tbody>
    </table> 
 
 </div>
