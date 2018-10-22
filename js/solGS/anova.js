@@ -169,7 +169,7 @@ function runAnovaAnalysis(traits) {
 			    
 			    anovaFile = "<a href=\"" + anovaFile +  "\" download=" + fileNameAnova + ">[Anova table]</a>";
 			    modelFile = "<a href=\"" + modelFile +  "\" download=" + fileNameModel + ">[Model summary]</a>";
-			    meansFile = "<a href=\"" + meansFile +  "\" download=" + fileNameMeans + ">[Adjusted means]</a>";
+			    meansFile = "<a href=\"" + meansFile +  "\" download=" + fileNameMeans + ">[Adjusted means (BLUEs)]</a>";
 			    
 			    diagnosticsFile = "<a href=\"" + diagnosticsFile
 				+  "\" download=" + fileNameDiagnostics + ">[Model diagnostics]</a>";
