@@ -95,35 +95,36 @@ sub delete_trial_data_GET : Chained('trial') PathPart('delete') Args(1) {
     my $datatype = shift;
 
     if ($self->privileges_denied($c)) {
-	$c->stash->{rest} = { error => "You have insufficient access privileges to delete trial data." };
-	return;
+        $c->stash->{rest} = { error => "You have insufficient access privileges to delete trial data." };
+        return;
     }
 
     my $error = "";
 
     if ($datatype eq 'phenotypes') {
-	$error = $c->stash->{trial}->delete_phenotype_metadata($c->dbic_schema("CXGN::Metadata::Schema"), $c->dbic_schema("CXGN::Phenome::Schema"));
-	$error .= $c->stash->{trial}->delete_phenotype_data();
+        $error = $c->stash->{trial}->delete_phenotype_metadata($c->dbic_schema("CXGN::Metadata::Schema"), $c->dbic_schema("CXGN::Phenome::Schema"));
+        $error .= $c->stash->{trial}->delete_phenotype_data();
     }
 
     elsif ($datatype eq 'layout') {
         $error = $c->stash->{trial}->delete_metadata();
-        $error = $c->stash->{trial}->delete_field_layout();
+        $error .= $c->stash->{trial}->delete_field_layout();
+        $error .= $c->stash->{trial}->delete_project_entry();
 
         my $dbh = $c->dbc->dbh();
         my $bs = CXGN::BreederSearch->new( { dbh=>$dbh, dbname=>$c->config->{dbname}, } );
         my $refresh = $bs->refresh_matviews($c->config->{dbhost}, $c->config->{dbname}, $c->config->{dbuser}, $c->config->{dbpass}, 'stockprop', 'concurrent', $c->config->{basepath});
     }
     elsif ($datatype eq 'entry') {
-	$error = $c->stash->{trial}->delete_project_entry();
+        $error = $c->stash->{trial}->delete_project_entry();
     }
     else {
-	$c->stash->{rest} = { error => "unknown delete action for $datatype" };
-	return;
+        $c->stash->{rest} = { error => "unknown delete action for $datatype" };
+        return;
     }
     if ($error) {
-	$c->stash->{rest} = { error => $error };
-	return;
+        $c->stash->{rest} = { error => $error };
+        return;
     }
     $c->stash->{rest} = { message => "Successfully deleted trial data.", success => 1 };
 }
@@ -232,6 +233,13 @@ sub trial_details_POST  {
       if ($details->{plan_to_genotype}) { $trial->set_field_trial_is_planned_to_be_genotyped($details->{plan_to_genotype}); }
       if ($details->{plan_to_cross}) { $trial->set_field_trial_is_planned_to_cross($details->{plan_to_cross}); }
     };
+
+    if ($details->{plate_format}) { $trial->set_genotyping_plate_format($details->{plate_format}); }
+    if ($details->{plate_sample_type}) { $trial->set_genotyping_plate_sample_type($details->{plate_sample_type}); }
+    if ($details->{facility}) { $trial->set_genotyping_facility($details->{facility}); }
+    if ($details->{facility_submitted}) { $trial->set_genotyping_facility_submitted($details->{facility_submitted}); }
+    if ($details->{facility_status}) { $trial->set_genotyping_facility_status($details->{set_genotyping_facility_status}); }
+    if ($details->{raw_data_link}) { $trial->set_raw_data_link($details->{raw_data_link}); }
 
     if ($@) {
 	    $c->stash->{rest} = { error => "An error occurred setting the new trial details: $@" };
@@ -1535,7 +1543,7 @@ sub replace_plot_accession : Chained('trial') PathPart('replace_plot_accessions'
      }
 
   print "Calling Replace Function...............\n";
-  my $replace_return_error = $replace_plot_accession_fieldmap->replace_plot_accession_fieldMap(); 
+  my $replace_return_error = $replace_plot_accession_fieldmap->replace_plot_accession_fieldMap();
   if ($replace_return_error) {
     $c->stash->{rest} = { error => $replace_return_error };
     return;

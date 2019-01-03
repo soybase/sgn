@@ -43,28 +43,10 @@ function delete_layout_data_by_trial_id(trial_id) {
                     alert(response.error);
                 }
                 else {
-                    jQuery.ajax({
-                        url: '/ajax/breeders/trial/'+trial_id+'/delete/entry',
-                        beforeSend: function(){
-                            jQuery('#working_msg').html("Deleting trial entry...<br />");
-                        },
-                        success: function(response) {
-                            jQuery('#working_modal').modal('hide');
-                            jQuery('#working_msg').html('');
-                            if (response.error) {
-                                alert(response.error);
-                            }
-                            else {
-                                alert('The project entry has been deleted.'); // to do: give some idea how many items were deleted.
-                                window.location.href="/breeders/trial/"+trial_id;
-                            }
-                        },
-                        error: function(response) {
-                            jQuery('#working_modal').modal('hide');
-                            jQuery('#working_msg').html('');
-                            alert("An error occurred.");
-                        }
-                    });
+                    jQuery('#working_modal').modal('hide');
+                    jQuery('#working_msg').html('');
+                    alert('The field trial has been deleted.'); // to do: give some idea how many items were deleted.
+                    window.location.href="/breeders/trial/"+trial_id;
                 }
             },
             error: function(response) {
@@ -560,7 +542,8 @@ function highlight_changed_details(element) { // compare changed value to defaul
   var id = element.attr('id');
   var current_value = element.val();
   var default_value = document.getElementById(id).defaultValue;
-  if (element.attr('title').match(/date/)) { default_value = moment(document.getElementById(id).defaultValue, 'YYYY-MMMM-DD').format('MM/DD/YYYY');}
+  var title = element.attr('title');
+  if (title && title.match(/date/)) { default_value = moment(document.getElementById(id).defaultValue, 'YYYY-MMMM-DD').format('MM/DD/YYYY');}
   if (!default_value) { default_value = element.data("originalValue");}
   if ((current_value || default_value) && current_value !== default_value) {
     element.parent().siblings('#change_indicator').remove();

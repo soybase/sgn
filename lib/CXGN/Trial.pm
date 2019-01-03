@@ -194,9 +194,10 @@ sub set_description {
 
 sub get_nd_experiment_id {
     my $self = shift;
-    my $nd_experiment_type_id = SGN::Model::Cvterm->get_cvterm_row($self->bcs_schema, 'field_layout', 'experiment_type')->cvterm_id();
+    my $nd_experiment_field_layout_type_id = SGN::Model::Cvterm->get_cvterm_row($self->bcs_schema, 'field_layout', 'experiment_type')->cvterm_id();
+    my $nd_experiment_genotyping_layout_type_id = SGN::Model::Cvterm->get_cvterm_row($self->bcs_schema, 'genotyping_layout', 'experiment_type')->cvterm_id();
     my $nd_experiment_rs = $self->bcs_schema->resultset('NaturalDiversity::NdExperiment')->search(
-        { 'me.type_id' => $nd_experiment_type_id, 'project.project_id' => $self->get_trial_id },
+        { 'me.type_id' => [$nd_experiment_field_layout_type_id, $nd_experiment_genotyping_layout_type_id], 'project.project_id' => $self->get_trial_id },
         { 'join' => {'nd_experiment_projects'=>'project'}}
     );
     if ($nd_experiment_rs->count > 1){
@@ -618,11 +619,11 @@ sub set_crossing_trials_from_field_trial {
 sub get_crossing_trials_from_field_trial {
     my $self = shift;
     my $schema = $self->bcs_schema;
-    my $genotyping_trial_from_field_trial_cvterm_id = SGN::Model::Cvterm->get_cvterm_row($schema, 'crossing_trial_from_field_trial', 'project_relationship')->cvterm_id();
+    my $crossing_trial_from_field_trial_cvterm_id = SGN::Model::Cvterm->get_cvterm_row($schema, 'crossing_trial_from_field_trial', 'project_relationship')->cvterm_id();
 
     my $trial_rs= $self->bcs_schema->resultset('Project::ProjectRelationship')->search({
         'me.subject_project_id' => $self->get_trial_id(),
-        'me.type_id' => $genotyping_trial_from_field_trial_cvterm_id
+        'me.type_id' => $crossing_trial_from_field_trial_cvterm_id
     }, {
         join => 'object_project', '+select' => ['object_project.name'], '+as' => ['source_trial_name']
     });
@@ -637,7 +638,7 @@ sub get_crossing_trials_from_field_trial {
 =head2 function get_field_trials_source_of_crossing_trial()
 
  Usage:
- Desc:         return associated crossing trials for athe current field trial
+ Desc:         return associated field trials for the current crossing trial
  Ret:          returns an arrayref [ id, name ] of arrayrefs
  Args:
  Side Effects:
@@ -648,11 +649,11 @@ sub get_crossing_trials_from_field_trial {
 sub get_field_trials_source_of_crossing_trial {
     my $self = shift;
     my $schema = $self->bcs_schema;
-    my $genotyping_trial_from_field_trial_cvterm_id = SGN::Model::Cvterm->get_cvterm_row($schema, 'crossing_trial_from_field_trial', 'project_relationship')->cvterm_id();
+    my $crossing_trial_from_field_trial_cvterm_id = SGN::Model::Cvterm->get_cvterm_row($schema, 'crossing_trial_from_field_trial', 'project_relationship')->cvterm_id();
 
     my $trial_rs= $self->bcs_schema->resultset('Project::ProjectRelationship')->search({
         'me.object_project_id' => $self->get_trial_id(),
-        'me.type_id' => $genotyping_trial_from_field_trial_cvterm_id
+        'me.type_id' => $crossing_trial_from_field_trial_cvterm_id
     }, {
         join => 'subject_project', '+select' => ['subject_project.name'], '+as' => ['source_trial_name']
     });
@@ -1065,6 +1066,28 @@ sub set_phenotypes_fully_uploaded {
     $self->_set_projectprop('phenotypes_fully_uploaded', $value);
 }
 
+=head2 accessors get_raw_data_link(), set_raw_data_link()
+
+ Usage: For genotyping plates, a genotyping facility can be set as a projectprop value e.g. 'igd'
+ Desc:
+ Ret:
+ Args:
+ Side Effects:
+ Example:
+
+=cut
+
+sub get_raw_data_link {
+    my $self = shift;
+    return $self->_get_projectprop('raw_data_link');
+}
+
+sub set_raw_data_link {
+    my $self = shift;
+    my $value = shift;
+    $self->_set_projectprop('raw_data_link', $value);
+}
+
 
 =head2 accessors get_genotyping_facility(), set_genotyping_facility()
 
@@ -1388,6 +1411,19 @@ sub delete_field_layout {
 
     my $trial_id = $self->get_trial_id();
 
+    if (scalar(@{$self->get_genotyping_trials_from_field_trial}) > 0) {
+        return 'This field trial has been linked to genotyping trials already, and cannot be easily deleted.';
+    }
+    if (scalar(@{$self->get_field_trials_source_of_genotyping_trial}) > 0) {
+        return 'This genotyping trial has been linked to field trials already, and cannot be easily deleted.';
+    }
+    if (scalar(@{$self->get_crossing_trials_from_field_trial}) >0) {
+        return 'This field trial has been linked to crossing trials already, and cannot be easily deleted.';
+    }
+    if (scalar(@{$self->get_field_trials_source_of_crossing_trial}) >0) {
+        return 'This crossing trial has been linked to field trials already, and cannot be easily deleted.';
+    }
+
     # Note: metadata entries need to be deleted separately using delete_metadata()
     #
     my $error = '';
@@ -1516,6 +1552,19 @@ sub delete_metadata {
 
     my $trial_id = $self->get_trial_id();
 
+    if (scalar(@{$self->get_genotyping_trials_from_field_trial}) > 0) {
+        return 'This field trial has been linked to genotyping trials already, and cannot be easily deleted.';
+    }
+    if (scalar(@{$self->get_field_trials_source_of_genotyping_trial}) > 0) {
+        return 'This genotyping trial has been linked to field trials already, and cannot be easily deleted.';
+    }
+    if (scalar(@{$self->get_crossing_trials_from_field_trial}) >0) {
+        return 'This field trial has been linked to crossing trials already, and cannot be easily deleted.';
+    }
+    if (scalar(@{$self->get_field_trials_source_of_crossing_trial}) >0) {
+        return 'This crossing trial has been linked to field trials already, and cannot be easily deleted.';
+    }
+
     #print STDERR "Deleting metadata for trial $trial_id...\n";
 
     # first, deal with entries in the md_metadata table, which may reference nd_experiment (through linking table)
@@ -1626,7 +1675,9 @@ sub _delete_field_layout_experiment {
 
     #print STDERR Dumper \@all_stock_ids;
     my $stock_delete_rs = $self->bcs_schema->resultset('Stock::Stock')->search({stock_id=>{'-in'=>\@all_stock_ids}});
-    $stock_delete_rs->delete();
+    while (my $r = $stock_delete_rs->next){
+        $r->delete();
+    }
 
     my $has_plants = $self->has_plant_entries();
     my $has_subplots = $self->has_subplot_entries();
@@ -1710,6 +1761,19 @@ sub delete_project_entry {
     if (my $count = $self->get_experiment_count() > 0) {
 	print STDERR "Cannot delete trial with associated experiments ($count)\n";
 	return "Cannot delete entry because of associated experiments";
+    }
+
+    if (scalar(@{$self->get_genotyping_trials_from_field_trial}) > 0) {
+        return 'This field trial has been linked to genotyping trials already, and cannot be easily deleted.';
+    }
+    if (scalar(@{$self->get_field_trials_source_of_genotyping_trial}) > 0) {
+        return 'This genotyping trial has been linked to field trials already, and cannot be easily deleted.';
+    }
+    if (scalar(@{$self->get_crossing_trials_from_field_trial}) >0) {
+        return 'This field trial has been linked to crossing trials already, and cannot be easily deleted.';
+    }
+    if (scalar(@{$self->get_field_trials_source_of_crossing_trial}) >0) {
+        return 'This crossing trial has been linked to field trials already, and cannot be easily deleted.';
     }
 
     eval {
@@ -2707,7 +2771,7 @@ sub has_col_and_row_numbers {
             push @col_numbers, $col_number;
         }
     }
-    
+
     if (scalar(@row_numbers) ne '0' && scalar(@col_numbers) ne '0'){
 		return 1;
 	} else {
@@ -3290,7 +3354,7 @@ sub get_trial_contacts {
 
 	Usage:        $trial->get_data_agreement();
 	Desc:         return data agreement saved for trial.
-	Ret:          
+	Ret:
 	Args:
 	Side Effects:
 	Example:
@@ -3322,9 +3386,9 @@ sub get_data_agreement {
 				   $c->stash->{rest} = { error => $suppress_return_error };
 				   return;
 				 }
- 
+
  Desc:         Suppresses plot phenotype
- Ret:          
+ Ret:
  Args:
  Side Effects:
  Example:
@@ -3345,24 +3409,24 @@ sub suppress_plot_phenotype {
 	my $phenotype_outlier_type_id = SGN::Model::Cvterm->get_cvterm_row($schema, 'phenotype_outlier', 'phenotype_property')->cvterm_id();
 	my $error;
 	my $json_string = { value => 1, username=>$username, timestamp=>$timestamp };
-	
+
 	my $prop_rs = $self->bcs_schema->resultset('Phenotype::Phenotypeprop')->search(
 		{ 'phenotype_id' => $phenotype_id, 'type_id'=>$phenotype_outlier_type_id }
 	);
-	
+
 	if ($prop_rs->count == 0) {
 		my $suppress_plot_pheno = $schema->resultset("Phenotype::Phenotypeprop")->create({
 			phenotype_id => $phenotype_id,
 			type_id       => $phenotype_outlier_type_id,
 			value => encode_json $json_string,
 		});
-	} 
+	}
 	else {
 		$error = "This plot phenotype has already been suppressed.";
 	}
-	
+
 	return $error;
-	
+
 }
 
 =head2 delete_assayed_trait
@@ -3372,9 +3436,9 @@ sub suppress_plot_phenotype {
    					$c->stash->{rest} = { error => $delete_trait_return_error };
    					return;
  				}
- 
+
  Desc:         Delete Assayed Traits
- Ret:          
+ Ret:
  Args:
  Side Effects:
  Example:
@@ -3420,20 +3484,20 @@ sub delete_assayed_trait {
 		while (my $res = $delete_nd_expt_md_files_id_rs->next()){
 			$res->delete;
 		}
-		
+
 		my $delete_nd_expt_id_rs = $schema->resultset("NaturalDiversity::NdExperiment")->search({
 			nd_experiment_id => { '-in' => \@nd_expt_ids },
 		});
 		while (my $res = $delete_nd_expt_id_rs->next()){
 			$res->delete;
-		}			
+		}
 	}
 	else {
 		$error = "List of trait or phenotype ids was not provided for deletion.";
 	}
-	
+
 	return $error;
-	
+
 }
 
 1;
