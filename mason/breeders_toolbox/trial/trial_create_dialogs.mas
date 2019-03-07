@@ -309,6 +309,11 @@ rect.bordered {
                                         <div class="col-sm-5" id="select_list" name="select_list">
                                         </div>
                                     </div>
+                                    <div class="form-group form-group-sm" id="show_list_of_cross_section" style="display: none">
+                                        <label class="col-sm-7 control-label">List of crosses to include (required):</label>
+                                        <div class="col-sm-5" id="select_cross_list" name="select_cross_list">
+                                        </div>
+                                    </div>
                                     <div class="form-group" id="westcott_check_1_section" style="display: none">
                                       <label class="col-sm-3 control-label">Name of Check 1: </label>
                                       <div class="col-sm-9" >

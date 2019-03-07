@@ -111,6 +111,15 @@ jQuery(document).ready(function ($) {
         }
     });
 
+    $(document).on('focusout', '#select_cross_list_list_select', function() {
+        if ($('#select_cross_list_list_select').val()) {
+            cross_list_id = $('#select_cross_list_list_select').val();
+            cross_list = JSON.stringify(list.getList(cross_list_id));
+            verify_cross_list(cross_list);
+            accession_list_seedlot_hash = {};
+        }
+    });
+
     $(document).on('focusout', '#list_of_checks_section_list_select', function() {
         if ($('#list_of_checks_section_list_select').val()) {
             check_stock_list_id = $('#list_of_checks_section_list_select').val();
@@ -283,6 +292,38 @@ jQuery(document).ready(function ($) {
                 jQuery('#working_modal').modal('hide');
                 alert('An error occurred. sorry');
                 seedlot_list_verified = 0;
+            }
+        });
+    }
+
+    var cross_list_verified = 0;
+    function verify_cross_list(cross_list) {
+        $.ajax({
+            type: 'POST',
+            timeout: 3000000,
+            url: '/ajax/trial/verify_cross_list',
+            beforeSend: function(){
+                jQuery('#working_modal').modal('show');
+            },
+            dataType: "json",
+            data: {
+                'cross_list': cross_list,
+            },
+            success: function (response) {
+                //console.log(response);
+                jQuery('#working_modal').modal('hide');
+                if (response.error) {
+                    alert(response.error);
+                    cross_list_verified = 0;
+                }
+                if (response.success){
+                    cross_list_verified = 1;
+                }
+            },
+            error: function () {
+                jQuery('#working_modal').modal('hide');
+                alert('An error occurred. sorry');
+                cross_list_verified = 0;
             }
         });
     }
@@ -1022,6 +1063,8 @@ jQuery(document).ready(function ($) {
             $("#westcott_check_1_section").hide();
             $("#westcott_check_2_section").hide();
             $("#FieldMap_westcott").hide();
+            $("#select_list_list_select").hide();
+            $("#seelct_cross_list_list_select").show();
             greenhouse_show_num_plants_section();
         }
 
@@ -1341,6 +1384,7 @@ jQuery(document).ready(function ($) {
 
         //add lists to the list select and list of checks select dropdowns.
         document.getElementById("select_list").innerHTML = list.listSelect("select_list", [ 'accessions' ], '', 'refresh');
+        document.getElementById("select_cross_list").innerHTML = list.listSelect("select_cross_list", [ 'crosses' ], '', 'refresh');
         document.getElementById("select_seedlot_list").innerHTML = list.listSelect("select_seedlot_list", [ 'seedlots' ], 'none', 'refresh');
         document.getElementById("list_of_checks_section").innerHTML = list.listSelect("list_of_checks_section", [ 'accessions' ], '', 'refresh');
 
