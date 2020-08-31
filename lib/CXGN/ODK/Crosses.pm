@@ -460,10 +460,10 @@ sub save_ona_cross_info {
                                     $plant_status_info{$a->{$status_identifier}}->{'status'}->{attachment_display_thumb} = '<a href="/image/view/'.$image_id.'" target="_blank">'.$image_source_tag_thumb.'</a>';
                                 }
                             }
-                        } elsif ($a->{'FieldActivities/fieldActivity'} eq 'flowering'){
-                            my $plot_name = $a->{'FieldActivities/Flowering/flowersID'} || $a->{'FieldActivities/Flowering/floweringID'};
-                            $plot_name = _get_plot_name_from_barcode_id($plot_name);
-                            $plant_status_info{$plot_name}->{'flowering'} = $a;
+#                        } elsif ($a->{'FieldActivities/fieldActivity'} eq 'flowering'){
+#                            my $plot_name = $a->{'FieldActivities/Flowering/flowersID'} || $a->{'FieldActivities/Flowering/floweringID'};
+#                            $plot_name = _get_plot_name_from_barcode_id($plot_name);
+#                            $plant_status_info{$plot_name}->{'flowering'} = $a;
                         } elsif ($a->{'FieldActivities/fieldActivity'} eq 'firstPollination'){
 #                        print STDERR "CHECKING FIRST POLLINATION =".Dumper($a)."\n";
                             push @{$cross_info{$a->{'FieldActivities/FirstPollination/print_crossBarcode/crossID'}}->{$a->{'FieldActivities/fieldActivity'}}}, $a;
@@ -959,6 +959,9 @@ sub create_odk_cross_progress_tree {
 
     print STDERR "ONA ODK CROSS SUMMARY 2\n";
 
+    my $plot_cvterm_id = SGN::Model::Cvterm->get_cvterm_row($bcs_schema, 'plot', 'stock_type')->cvterm_id();
+
+
     my %cross_wishlist_hash;
     foreach (@wishlist_file_lines){
         my $female_accession_name = $_->[5];
@@ -1019,7 +1022,15 @@ sub create_odk_cross_progress_tree {
                                     $combined{$top_level}->{$female_accession_name}->{$planned_female_plot_name}->{$male_accession_name}->{$cycle}->{$cross_name} = $cross_info;
                                     if ($cross_info->{'firstPollination'}){
                                         foreach my $first_pollination (@{$cross_info->{'firstPollination'}}){
-                                            my $female_plot_name = _get_plot_name_from_barcode_id($first_pollination->{'FieldActivities/FirstPollination/femID'});
+#                                            my $female_plot_name = _get_plot_name_from_barcode_id($first_pollination->{'FieldActivities/FirstPollination/femID'});
+                                            my $female_plot_name;
+                                            my $odk_female_plot_data = $first_pollination->{'FieldActivities/FirstPollination/femaleID'};
+                                            if (looks_like_number($odk_female_plot_data)) {
+                                                my $female_plot_rs = $bcs_schema->resultset("Stock::Stock")->find( { stock_id => $odk_female_plot_data, 'me.type_id' => $plot_cvterm_id} );
+                                                $female_plot_name = $female_plot_rs->uniquename;
+                                            } else {
+                                                $female_plot_name = $odk_female_plot_data;
+                                            }
                                             if ($planned_female_plot_name eq $female_plot_name){
                                                 $combined{$top_level}->{'wishlist_female_plot_match'} = $female_plot_name;
                                                 $cross_combinations{$top_level}->{$female_accession_name}->{$planned_female_plot_name}->{$female_plot_name}->{$male_accession_name}->{$cycle}->{$cross_name} = 1;
@@ -1267,15 +1278,15 @@ sub create_odk_cross_progress_tree {
                                                             };
                                                             push @{$summary_info{$top_level}->{$cross_name}->{$activity_name}}, $activity_summary;
                                                         }
-                                                        if ($activity_name eq 'repeatPollination'){
-                                                            my $activity_summary = {
-                                                                femaleAccessionName => $action_hash->{'FieldActivities/RepeatPollination/getRptFemaleAccName'},
-                                                                maleAccessionName => $action_hash->{'FieldActivities/RepeatPollination/getRptMaleAccName'},
-                                                                malePlotName => _get_plot_name_from_barcode_id($action_hash->{'FieldActivities/RepeatPollination/rptMalID'}),
-                                                                date => $action_hash->{'FieldActivities/RepeatPollination/rptpollination_date'},
-                                                            };
-                                                            push @{$summary_info{$top_level}->{$cross_name}->{$activity_name}}, $activity_summary;
-                                                        }
+#                                                        if ($activity_name eq 'repeatPollination'){
+#                                                            my $activity_summary = {
+#                                                                femaleAccessionName => $action_hash->{'FieldActivities/RepeatPollination/getRptFemaleAccName'},
+#                                                                maleAccessionName => $action_hash->{'FieldActivities/RepeatPollination/getRptMaleAccName'},
+#                                                                malePlotName => _get_plot_name_from_barcode_id($action_hash->{'FieldActivities/RepeatPollination/rptMalID'}),
+#                                                                date => $action_hash->{'FieldActivities/RepeatPollination/rptpollination_date'},
+#                                                            };
+#                                                            push @{$summary_info{$top_level}->{$cross_name}->{$activity_name}}, $activity_summary;
+#                                                        }
                                                         if ($activity_name eq 'harvesting'){
                                                             my $activity_summary = {
                                                                 taken_ripening_shed => $action_hash->{'FieldActivities/harvesting/taken_ripening_shed'},
