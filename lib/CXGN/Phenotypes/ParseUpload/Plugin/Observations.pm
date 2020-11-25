@@ -55,7 +55,7 @@ sub check_unique_var_unit_time {
         #print STDERR "Found id $id and value $value\n";
         $check_result{'error'} = "The combination of observationVariableDbId $variable_id with observationUnitDbId $unit at observationTimeStamp $timestamp already exists in the database with value $value and observationDbId $id. To update this measurement includes its observationDbId in your request";
         return \%check_result;
-	}
+    }
 
     $check_result{'success'} = "This combination is unique";
     return \%check_result;
@@ -129,7 +129,8 @@ sub parse {
         my $collector = $obs->{'collector'} ? $obs->{'collector'} : '';
         my $obs_db_id = $obs->{'observationDbId'} ? $obs->{'observationDbId'} : '';
         my $value = $obs->{'value'};
-        my $trait_name = SGN::Model::Cvterm::get_trait_from_cvterm_id($schema, $variable_db_id,"extended");
+        # my $trait_name = SGN::Model::Cvterm::get_trait_from_cvterm_id($schema, $variable_db_id,"extended");
+        my $trait_name = $variable_db_id;
         my $trait_cvterm = SGN::Model::Cvterm->get_cvterm_row_from_trait_name($schema, $trait_name);
 
         my $unique_combo = $obsunit_db_id.$variable_db_id.$timestamp;
